@@ -1,7 +1,7 @@
 ---
 name: Vall d'Hebron Institute of Oncology - Pancreatic Cancer
 abbreviation: VHIO-PC
-logo: /cancer-models/img/providers/VHIO-PC.png
+logo: /cancer-models-pages/img/providers/VHIO-PC.png
 ---
 
 The growth factors laboratory at Vall d’Hebron Institute of Oncology (VHIO) in Barcelona, Spain, has generated an extensive collection of patient-derived PDX (PDX) of different tumor types with main focus in Breast and Pancreatic Cancer. In addition, we are interested in the development and characterization of immunotherapies for which we have developed a platform for Humanized PDX models (Sci Transl. Med, 2018). These models and the developed expertise in humanized models have shown to be instrumental to contribute to the discovery and characterization of novel factors and mechanisms governing malit progression.

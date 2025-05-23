@@ -1,7 +1,7 @@
 ---
 name: Vall d'Hebron Institute of Oncology - Pseudomyxoma peritonei
 abbreviation: VHIO-PMP
-logo: /cancer-models/img/providers/VHIO-PMP.png
+logo: /cancer-models-pages/img/providers/VHIO-PMP.png
 ---
 
 Héctor G. Palmer’s Stem Cells & Cancer Group studies the mechanisms that enable tumors to persist by evading effective treatments and progressing to advanced stages of disease.

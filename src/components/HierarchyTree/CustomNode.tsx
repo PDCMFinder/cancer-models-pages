@@ -28,7 +28,7 @@ const NodeContent = ({
 	return type ? (
 		<a
 			className={containerClassName}
-			href={`/cancer-models/data/models/${provider}/${label}`}
+			href={`/cancer-models-pages/data/models/${provider}/${label}`}
 			style={{ lineHeight: "2rem" }}
 		>
 			{content}

@@ -1,7 +1,7 @@
 ---
 name: The Jackson laboratory
 abbreviation: JAX
-logo: /cancer-models/img/providers/JAX.png
+logo: /cancer-models-pages/img/providers/JAX.png
 ---
 
 Over 450 patient-derived PDX (PDX) models for more than 20 different cancer types engrafted in immunodeficient NSG™ mice are available for shipment to your facility or for dosing studies conducted by the JAX In Vivo Pharmacology Services team.

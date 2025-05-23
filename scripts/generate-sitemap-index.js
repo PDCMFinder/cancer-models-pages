@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const BASE_URL = "https://mriios.github.io/cancer-models";
+const BASE_URL = "https://PDCMFinder.github.io/cancer-models-pages";
 
 function generateSitemapIndex() {
 	return `<?xml version="1.0" encoding="UTF-8"?>

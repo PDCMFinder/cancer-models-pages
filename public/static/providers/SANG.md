@@ -1,7 +1,7 @@
 ---
 name: Wellcome Sanger Institute
 abbreviation: SANG
-logo: /cancer-models/img/providers/SANG.png
+logo: /cancer-models-pages/img/providers/SANG.png
 ---
 
 Organoids are a long-term culture system which allow cells to be grown in specialised 3D culture conditions that maintain the stem cell population as well as much of the cell/tissue architecture found in vivo. Cancer organoid models have been shown to recapitulate features of the original tissue/tumour and can model clinically relevant drug responses. Through generating large numbers of molecularly characterised organoid models, and performing drug sensitivity screens, we aim to identify new cancer treatments.

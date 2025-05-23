@@ -1,7 +1,7 @@
 ---
 name: Fondazione IRCCS Casa Sollievo della Sofferenza
 abbreviation: IRCCS-CSS
-logo: /cancer-models/img/providers/IRCCS-CSS.png
+logo: /cancer-models-pages/img/providers/IRCCS-CSS.png
 ---
 
 The Cancer Biomarkers Laboratory at the Fondazione IRCCS Casa Sollievo della Sofferenza (CSS) uses a combination of genomic (e.g., RNA-seq, scRNA seq, miRNA-seq, qRT-PCR array plates), computational and functional approaches (high-throughput genetic screening, shMIMICS library) to analyze lung cancer transcriptome in primary and commercial cell lines as well as in human tumor samples (fresh and FFPE), and to identify tumor and circulating (plasma) biomarkers to explore molecular mechanisms of lung cancer progression and improve diagnosis and prognosis.

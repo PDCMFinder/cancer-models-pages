@@ -1,7 +1,7 @@
 ---
 name: The Istituto Romagnolo per lo Studio dei Tumori "Dino Amadori"
 abbreviation: IRCCS-IRST
-logo: /cancer-models/img/providers/IRCCS-IRST.png
+logo: /cancer-models-pages/img/providers/IRCCS-IRST.png
 ---
 IRCCS-IRST
 The Istituto Romagnolo per lo Studio dei Tumori "Dino Amadori" - IRST is an IRCCS (institute for hospitalisation and care of a scientific nature) dedicated to treatment, research, and training in the field of oncology. Although IRST is a subject of the Health Service in the Emilia-Romagna Region and operates following the most accredited international experiences, it adopts the "population" organisational and managerial approach, promoting a centralised coordination of oncological functions and activities with its primary focus on meeting the needs of citizens.

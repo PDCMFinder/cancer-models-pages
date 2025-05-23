@@ -1,7 +1,7 @@
 ---
 name: The Childhood Cancer Repository
 abbreviation: CCC
-logo: /cancer-models/img/providers/CCC.png
+logo: /cancer-models-pages/img/providers/CCC.png
 ---
 
 The Childhood Cancer Repository, powered by Alex's Lemonade Stand Foundation, is a resource laboratory of the Children's Oncology Group. The laboratory is located at Texas Tech University Health Sciences Center in Lubbock, TX and is under the direction of C Patrick Reynolds, MD PhD. The repository is generously supported by Alex's Lemonade Stand Foundation. Support for the animal facilities used by the repository is provided by the Cancer Prevention & Research Institute of Texas. Support for genomic and biological characterization of cell lines and PDXs in the repository comes from the National Cancer Institute and the Department of Defense.

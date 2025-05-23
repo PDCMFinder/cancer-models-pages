@@ -1,7 +1,7 @@
 ---
 name: Istituto Nazionale Tumori-IRCCS Fondazione G. Pascale
 abbreviation: IRCCS-PAS
-logo: /cancer-models/img/providers/IRCCS-PAS.png
+logo: /cancer-models-pages/img/providers/IRCCS-PAS.png
 ---
 
 The Istituto Nazionale Tumori-IRCCS Fondazione G. Pascale is a highly specialized hospital and research institute in the field of oncology.

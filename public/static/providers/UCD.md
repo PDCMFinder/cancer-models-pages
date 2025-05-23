@@ -1,7 +1,7 @@
 ---
 name: University of California - Davis
 abbreviation: UCD
-logo: /cancer-models/img/providers/UCD.png
+logo: /cancer-models-pages/img/providers/UCD.png
 ---
 
 The particular focus of University of California - Davis is on gastric and liver cancers that disproportionately affect HLAs and AANHPIs as well as all populations of color (Research Project 1), and lung and bladder cancers that have smoking as a common risk factor and share common genetic alterations (Research Project 2). 

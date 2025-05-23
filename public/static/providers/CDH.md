@@ -1,7 +1,7 @@
 ---
 name: The Cancer Discovery Hub
 abbreviation: CDH
-logo: /cancer-models/img/providers/CDH.png
+logo: /cancer-models-pages/img/providers/CDH.png
 ---
 
 The [Cancer Discovery Hub](https://www.cancerdiscoveryhub.com/) (CDH) is a one-stop pan-omics diagnostic and research core laboratory housed at [the National Cancer Centre Singapore](https://www.nccs.com.sg/). We specialise in state-of-the-art research-grade technologies and provide expert support to investigators on all cancer related projects.

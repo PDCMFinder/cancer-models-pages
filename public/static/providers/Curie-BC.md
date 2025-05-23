@@ -1,7 +1,7 @@
 ---
 name: Institut Curie - LIP - Breast Cancer
 abbreviation: Curie-BC
-logo: /cancer-models/img/providers/Curie-BC.png
+logo: /cancer-models-pages/img/providers/Curie-BC.png
 ---
 
 The Pre-clinical investigation laboratory at the Curie Institute (LIP) has 25 years experience in developing patient-derived PDXs of a wide range of cancers including breast, colon, lung, ovary, uveal melanoma, retinoblastoma, Head and Neck cancers.

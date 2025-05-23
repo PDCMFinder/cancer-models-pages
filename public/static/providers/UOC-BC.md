@@ -1,7 +1,7 @@
 ---
 name: Cancer Research UK Cambridge Institute
 abbreviation: UOC-BC
-logo: /cancer-models/img/providers/UOC-BC.png
+logo: /cancer-models-pages/img/providers/UOC-BC.png
 ---
 
 The Cancer Research UK Cambridge Institute aims to bring the scientific strengths of Cambridge to bear on practical questions of cancer diagnosis, treatment and prevention. The Institute focuses specifically on the practical application of high-quality basic research.

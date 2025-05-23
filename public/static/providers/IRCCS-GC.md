@@ -1,7 +1,7 @@
 ---
 name: Candiolo Cancer Institute - Gastric
 abbreviation: IRCCS-GC
-logo: /cancer-models/img/providers/IRCCS-GC.png
+logo: /cancer-models-pages/img/providers/IRCCS-GC.png
 ---
 
 Researchers at the University of Torino, Italy, aim at identifying new molecular target in gastric cancer.

@@ -1,7 +1,7 @@
 ---
 name: Columbia University Irving Medical Center
 abbreviation: CUIMC
-logo: /cancer-models/img/providers/CUIMC.png
+logo: /cancer-models-pages/img/providers/CUIMC.png
 ---
 
 Columbia University Irving Medical Center (CUIMC) and NewYork-Presbyterian researchers have created patient-specific bladder cancer organoids that mimic many of the characteristics of actual tumors. The use of organoids, tiny 3-D spheres derived from a patient’s own tumor, may be useful in the future to guide treatment of patients.

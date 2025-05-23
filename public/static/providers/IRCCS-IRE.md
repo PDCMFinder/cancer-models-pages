@@ -1,7 +1,7 @@
 ---
 name: IRCCS Regina Elena National Cancer Institute
 abbreviation: IRCCS-IRE
-logo: /cancer-models/img/providers/IRCCS-IRE.png
+logo: /cancer-models-pages/img/providers/IRCCS-IRE.png
 ---
 
 The mission of the IRCCS Regina Elena National Cancer Institute (IRCCS-IRE)  is to generate synergy and integration between clinical activity and experimental research.

@@ -1,7 +1,7 @@
 ---
 name: Broad Institute
 abbreviation: BROD
-logo: /cancer-models/img/providers/BROD.png
+logo: /cancer-models-pages/img/providers/BROD.png
 ---
 
 Broad Institute of MIT and Harvard was launched in 2004 to empower this generation of creative scientists to transform medicine. The Broad Institute seeks to describe all the molecular components of life and their connections; discover the molecular basis of major human diseases; develop effective new approaches to diagnostics and therapeutics; and disseminate discoveries, tools, methods, and data openly to the entire scientific community.

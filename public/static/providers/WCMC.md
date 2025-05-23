@@ -1,7 +1,7 @@
 ---
 name: Weill Cornell Medical College
 abbreviation: WCMC
-logo: /cancer-models/img/providers/WCMC.png
+logo: /cancer-models-pages/img/providers/WCMC.png
 ---
 
 The [Englander Institute for Precision Medicine](https://eipm.weill.cornell.edu/) (EIPM) develops organoids, also known as patient-derived ex-vivo models, used to study disease progression and develop effective drug treatments. These miniature three-dimensional cellular structures are grown from a patient’s tumor sample and are highly useful in studying how different cancers develop, change, and might respond to various treatment options.

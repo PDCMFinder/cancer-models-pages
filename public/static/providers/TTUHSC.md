@@ -1,7 +1,7 @@
 ---
 name: Texas Tech University Health Sciences Center
 abbreviation: TTUHSC
-logo: /cancer-models/img/providers/TTUHSC.png
+logo: /cancer-models-pages/img/providers/TTUHSC.png
 ---
 
 The Children's Oncology Group laboratory is located at Texas Tech University Health Sciences Center in Lubbock, TX and is under the direction of C Patrick Reynolds, MD PhD. The Childhood Cancer Repository is generously supported by Alex's Lemonade Stand Foundation. Support for the animal facilities used by the repository is provided by the Cancer Prevention & Research Institute of Texas. Support for genomic and biological characterization of cell lines and PDXs in the repository comes from the National Cancer Institute and the Department of Defense.

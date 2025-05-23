@@ -1,7 +1,7 @@
 ---
 name: TRACE-PDTX
 abbreviation: TRACE
-logo: /cancer-models/img/providers/TRACE.png
+logo: /cancer-models-pages/img/providers/TRACE.png
 ---
 
 [TRACE](https://www.uzleuven-kuleuven.be/lki/trace/), a multidisciplinary project focused on the development of Patient-Derived PDXs (PDXs), was set up in 2012 within the [KU Leuven and Leuvens Kanker institute](http://uzleuven-kuleuven.be/lki/en) to provide a more reliable and predictive in vivo oncology model for testing innovative treatment therapies, investigating new and existing pathways and define biomarkers.

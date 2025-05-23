@@ -1,7 +1,7 @@
 ---
 name: Vall d’Hebron Institute of Oncology - Colorectal cancer
 abbreviation: VHIO-CRC
-logo: /cancer-models/img/providers/VHIO-CRC.png
+logo: /cancer-models-pages/img/providers/VHIO-CRC.png
 ---
 
 Established in 2006, the Vall d’Hebron Institute of Oncology (VHIO) is a leading comprehensive cancer center of excellence where its scientists and research physicians adopt a purely translational research model, working together as multidisciplinary teams to both accelerate and advance personalized and targeted therapies against cancer. Undertaking one of Spain´s most dynamic cancer research programs, VHIO is dedicated to delivering on the promise of precision medicine in oncology – turning cancer discovery into more effective treatments and better practice for the care of our patients.

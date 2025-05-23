@@ -1,7 +1,7 @@
 ---
 name: Washington University in St. Louis
 abbreviation: WUSTL
-logo: /cancer-models/img/providers/WUSTL.png
+logo: /cancer-models-pages/img/providers/WUSTL.png
 ---
 
 The National Cancer Institute (NCI) launched the PDX (patient-derived PDXs) Development and Trial Centers Research Network (PDXNet) in September, 2017 to accelerate translational research using PDX datasets. The PDXNet comprises of four PDX Development and Trial Centers (PDTCs) and the PDX Data Commons and Coordinating Center (PDCCC).

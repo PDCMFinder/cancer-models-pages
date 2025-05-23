@@ -1,7 +1,7 @@
 ---
 name: NCI Patient-Derived Models Repository
 abbreviation: PDMR
-logo: /cancer-models/img/providers/PDMR.png
+logo: /cancer-models-pages/img/providers/PDMR.png
 ---
 
 The NCI Patient-Derived Models Repository is a national repository of patient-derived PDXs developed from patients with solid tumors.

@@ -1,7 +1,7 @@
 ---
 name: IRCCS Istituto di ricovero e cura a carattere scientifico
 abbreviation: IRCCS-CRO
-logo: /cancer-models/img/providers/IRCCS-CRO.png
+logo: /cancer-models-pages/img/providers/IRCCS-CRO.png
 ---
 The Centro di Riferimento Oncologico di Aviano is a National Cancer Institute, reference center for clinicians and researchers in the field of cancer research and cure, and nationally recognized as “Istituto di ricovero e cura a carattere scientifico” (CRO IRCCS) from the Ministry of Health, since 1990.
 

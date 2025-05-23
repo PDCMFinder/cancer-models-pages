@@ -1,7 +1,7 @@
 ---
 name: The Center for Patient Derived Models at Dana Farber Cancer Institute
 abbreviation: DFCI-CPDM
-logo: /cancer-models/img/providers/DFCI-CPDM.png
+logo: /cancer-models-pages/img/providers/DFCI-CPDM.png
 ---
 
 The Center for Patient Derived Models (CPDM) at Dana-Farber Cancer Institute (DFCI) is a strategic collaborative research center with the expertise to generate and characterize patient derived PDXs (PDX), patient derived cell lines (PDCL - 3D organoid/spheroid and 2D adherent cultures), and acute cell models drug testing.

@@ -3,7 +3,7 @@ import path from "path";
 
 const BASE_API_URL = "https://dev.cancermodels.org/api";
 const OUTPUT_FILE = path.join(process.cwd(), "public", "sitemap1.xml");
-const BASE_URL = "https://mriios.github.io/cancer-models";
+const BASE_URL = "https://PDCMFinder.github.io/cancer-models-pages";
 
 function generateSiteMap(modelProviderMixes) {
 	return `<?xml version="1.0" encoding="UTF-8"?>

@@ -1,7 +1,7 @@
 ---
 name: IRCCS Istituto Clinico Humanitas
 abbreviation: IRCCS-ICH
-logo: /cancer-models/img/providers/IRCCS-ICH.png
+logo: /cancer-models-pages/img/providers/IRCCS-ICH.png
 ---
 
 Humanitas Research Hospital is a highly-specialized research and university hospital, the first in Italy to be certified for its excellence by the Joint Commission International as Academic Hospital. It hosts the residency and PhD programs of Humanitas University, a life science university that stands out for its real- world simulation-based approach to medical training and its international outlook, and a state-of-the-art translational research center.

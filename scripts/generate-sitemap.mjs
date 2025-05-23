@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "path";
 import { routes } from "../src/utils/routes.js";
 
-const BASE_URL = "https://mriios.github.io/cancer-models";
+const BASE_URL = "https://PDCMFinder.github.io/cancer-models-pages";
 
 function generateSiteMap(providers) {
 	return `<?xml version="1.0" encoding="UTF-8"?>

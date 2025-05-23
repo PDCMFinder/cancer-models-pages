@@ -1,7 +1,7 @@
 ---
 name: Monash Biomedicine Discovery Institute
 abbreviation: MBDI
-logo: /cancer-models/img/providers/MBDI.png
+logo: /cancer-models-pages/img/providers/MBDI.png
 ---
 
 Our approach relies on our expertise in obtaining clinical specimens to use for patient-derived models. We recently established the Melbourne Urology Research Alliance (MURAL) platform of preclinical models and have world class facilities to support our specific projects. We are leading contributors to national and international networks and collaborations, integrating and co-ordinating our outcomes worldwide.

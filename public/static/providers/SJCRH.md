@@ -1,7 +1,7 @@
 ---
 name: St. Jude Children's Research Hospital
 abbreviation: SJCRH
-logo: /cancer-models/img/providers/SJCRH.png
+logo: /cancer-models-pages/img/providers/SJCRH.png
 ---
 
 The Developmental Biology and Solid Tumor Program created the Childhood Solid Tumor Network (CSTN) to accelerate discovery and improve outcomes for children with solid tumors. All samples and data are shared free of charge with no obligation to collaborate even for unpublished samples and data.

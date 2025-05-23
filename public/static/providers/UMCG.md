@@ -1,7 +1,7 @@
 ---
 name: University Medical Center Groningen
 abbreviation: UMCG
-logo: /cancer-models/img/providers/UMCG.png
+logo: /cancer-models-pages/img/providers/UMCG.png
 ---
 
 Researchers at the University Medical Center Groningen (UMCG), the Netherlands, aim to identify and validate genes/pathways and their relation to targeted drug and chemotherapy responses in ovarian cancer. In addition, interference in genes and pathways are being explored to enhance drug sensitivity.

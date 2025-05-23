@@ -1,7 +1,7 @@
 ---
 name: Istituto di Ricerche Farmacologiche Mario Negri IRCCS
 abbreviation: IRCCS-IRFMN
-logo: /cancer-models/img/providers/IRCCS-IRFMN.png
+logo: /cancer-models-pages/img/providers/IRCCS-IRFMN.png
 ---
 
 The Mario Negri Institute of Pharmacological Research IRCCS comprises 12 departments: 8 are locatedat the headquarters in Milan and 4 are in the headquarters in Bergamo and Ranica (BG). In addition to its experimental research, the institute carries out intensive clinical research that involves designing, coordinating and participating in numerous clinical trials and creating and managing disease registers.

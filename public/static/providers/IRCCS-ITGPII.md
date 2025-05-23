@@ -1,7 +1,7 @@
 ---
 name: IRCCS Istituto Tumori Giovanni Paolo II
 abbreviation: IRCCS-ITGPII
-logo: /cancer-models/img/providers/IRCCS-ITGPII.png
+logo: /cancer-models-pages/img/providers/IRCCS-ITGPII.png
 ---
 
 The IRCCS Istituto Tumori Giovanni Paolo II in Bari (Italy) is an oncology reference center responsible for the diagnosis, treatment, and research in oncology. Integrated into the regional health service, the Institute aims to ensure comprehensive cancer care and research, coordinate diagnostic and therapeutic pathways, monitor their effectiveness, and update them as necessary.
