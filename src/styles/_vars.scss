@@ -1,0 +1,78 @@
+// Colors
+$color-white: #ffffff;
+$color-black: #000000;
+$color-lightGray: #f8f8f8;
+$color-gray: #ebebeb;
+$color-primary-primary: #003e48;
+$color-primary-secondary: #005363;
+$color-primary-tertiary: #47938a;
+$color-primary-quaternary: #c0ede6;
+$color-primary-quaternary-lighter: lighten($color-primary-quaternary, 12%);
+$color-secondary-primary: #e9b114;
+$color-secondary-secondary: #ffd86b;
+$color-secondary-tertiary: #ffe6a6;
+$color-secondary-quaternary: #f7f5e2;
+$color-focused: #426a8e;
+$color-focused-light: #d4f0fb;
+$color-textLink: #6e550c;
+
+// Spacing
+$spacing-main-margin-x: var(--main-margin-x);
+$spacing-5: 5rem;
+$spacing-4: 3.5rem;
+$spacing-3: 2.5rem;
+$spacing-2: 1.5rem;
+$spacing-1: 1rem;
+
+// Typography
+$type-primary: var(--type-primary);
+$type-secondary: var(--type-secondary);
+
+// Font weight
+$fw-normal: 400;
+$fw-bold: 700;
+
+// Grid
+$col-amount: 12;
+$col-gutter-x: var(--col-gutter-x);
+$col-gutter-y: var(--col-gutter-y);
+
+// Breakpoints
+// If these change, update in JS variables too
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+$bp-xxl: 1440px;
+$bp-xxx: 1660px;
+$bp-names: "xs", "sm", "md", "lg", "xl", "xxl", "xxx";
+$breakpointsMediaOver: (
+	"sm": (
+		min-width: $bp-sm,
+	),
+	"md": (
+		min-width: $bp-md,
+	),
+	"lg": (
+		min-width: $bp-lg,
+	),
+	"xl": (
+		min-width: $bp-xl,
+	),
+	"xxl": (
+		min-width: $bp-xxl,
+	),
+	"xxx": (
+		min-width: $bp-xxx,
+	),
+) !default;
+
+// Utils
+$focusShadow: 0 0 0 2px $color-focused, inset 0 0 0 2px $color-focused-light;
+$br-common: 7px;
+
+// Graph
+$color-graph: #085154;
+$color-graph2: #1da8d2;
+$color-graph3: #1694b1;
+$color-graph4: #085154;

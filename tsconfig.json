@@ -1,0 +1,34 @@
+{
+	"compilerOptions": {
+		"target": "es2017",
+		"lib": ["dom", "dom.iterable", "esnext", "es2021"],
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmit": true,
+		"esModuleInterop": true,
+		"module": "esnext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"baseUrl": "http://localhost:3000/",
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"noImplicitAny": true
+	},
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"cypress-real-events",
+		"./src/jest-setup.ts",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules", "./cypress.config.ts"]
+}

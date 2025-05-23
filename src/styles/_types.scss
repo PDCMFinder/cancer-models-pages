@@ -1,0 +1,174 @@
+@import "_vars";
+@import "_mixins";
+
+body,
+.p {
+	font-size: 1.8rem;
+	font-family: $type-secondary;
+	color: $color-primary-primary;
+}
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4 {
+	letter-spacing: 0.02rem;
+	font-family: $type-primary;
+	font-weight: $fw-normal;
+	line-height: 126%;
+	margin-bottom: $spacing-2;
+}
+h1,
+.h1 {
+	font-size: 4rem;
+}
+h2,
+.h2 {
+	font-size: 3.4rem;
+}
+h3,
+.h3 {
+	font-size: 2.4rem;
+}
+h4,
+.h4 {
+	font-size: 2rem;
+}
+@include mediaOver("sm") {
+	h1,
+	.h1 {
+		font-size: 6rem;
+	}
+	h2,
+	.h2 {
+		font-size: 4.4rem;
+	}
+	h3,
+	.h3 {
+		font-size: 2.6rem;
+	}
+	h4,
+	.h4 {
+		font-size: 2.2rem;
+	}
+}
+b,
+strong {
+	font-weight: $fw-bold;
+}
+a,
+.link-text {
+	color: $color-secondary-primary;
+	text-decoration: underline;
+	&:hover {
+		color: $color-black;
+	}
+	&.link-text-light {
+		color: $color-secondary-quaternary;
+		&:hover {
+			color: $color-white;
+		}
+	}
+}
+.text {
+	&-white {
+		color: $color-white !important;
+	}
+	&-link {
+		color: $color-textLink !important;
+		&:hover {
+			color: lighten($color-secondary-primary, 1%) !important;
+		}
+	}
+	&-primary-primary {
+		color: $color-primary-primary !important;
+	}
+	&-primary-tertiary {
+		color: $color-primary-tertiary !important;
+	}
+	&-red {
+		color: red;
+	}
+	&-left {
+		text-align: left !important;
+	}
+	&-right {
+		text-align: right !important;
+	}
+	&-center {
+		text-align: center !important;
+	}
+	&-small {
+		font-size: 1.4rem !important;
+		line-height: 2rem !important;
+	}
+	&-smaller {
+		font-size: 1.2rem !important;
+		line-height: 2rem !important;
+	}
+	&-muted {
+		color: #595959;
+	}
+	&-bold {
+		font-weight: $fw-bold !important;
+	}
+	&-family {
+		&-primary {
+			font-family: $type-primary !important;
+		}
+		&-secondary {
+			font-family: $type-secondary !important;
+		}
+	}
+	&-noTransform {
+		text-transform: none;
+	}
+	&-capitalize {
+		text-transform: capitalize;
+	}
+	&-uppercase {
+		text-transform: uppercase;
+	}
+	&-noDecoration {
+		text-decoration: none !important;
+	}
+	&-underline {
+		text-decoration: underline !important;
+	}
+	@include mediaOver("md") {
+		&-md {
+			&-left {
+				text-align: left !important;
+			}
+		}
+	}
+	@include mediaOver("lg") {
+		&-lg {
+			&-left {
+				text-align: left !important;
+			}
+		}
+	}
+}
+p,
+.p,
+ul,
+ol,
+a {
+	line-height: 2.4rem;
+}
+a {
+	color: $color-textLink;
+	text-decoration: underline;
+	transition: 0.3s;
+	&:hover {
+		transition: 0.3s;
+	}
+	&:not([class^="Button"]):hover {
+		transition: 0.3s;
+		color: lighten($color-secondary-primary, 1%) !important;
+	}
+}

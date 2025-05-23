@@ -1,0 +1,9 @@
+@import "../../styles/vars";
+
+button.Accordion_label {
+	text-align: left;
+	&-active {
+		background-color: $color-white !important;
+		border-color: currentColor !important;
+	}
+}

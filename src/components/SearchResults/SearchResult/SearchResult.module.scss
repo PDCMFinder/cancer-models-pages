@@ -1,0 +1,46 @@
+@import "../../../styles/vars";
+@import "../../../styles/mixins";
+
+.SearchResult {
+	background-color: $color-white;
+	transition: color 0.05s, background-color 0.4s;
+	h2 {
+		a {
+			color: $color-primary-primary;
+		}
+	}
+	a {
+		color: #426a8e;
+		&:hover {
+			color: $color-primary-primary;
+		}
+	}
+	> div {
+		padding: $spacing-2;
+	}
+	&:hover {
+		background-color: $color-primary-quaternary-lighter;
+	}
+	&_metadata span,
+	&_availableData_title {
+		font-size: 1.3rem;
+		color: $color-primary-secondary;
+		font-family: $type-primary;
+		line-height: 1.2;
+	}
+	&_availableData_title {
+		@include mediaOver("md") {
+			width: 80%;
+		}
+	}
+}
+.dataAvailable_grid {
+	row-gap: 15px;
+	@include mediaOver("lg") {
+		row-gap: 0;
+		flex-grow: 1;
+	}
+}
+.modelNotAvailable {
+	background-color: rgba(255, 242, 242, 0.7) !important;
+}

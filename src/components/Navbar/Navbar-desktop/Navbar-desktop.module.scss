@@ -1,0 +1,45 @@
+@import "../../../styles/vars";
+@import "../../../styles/mixins";
+
+.Navbar-desktop {
+	&_logotype-link svg {
+		height: 100%;
+		width: 100%;
+		max-height: 4rem;
+		@include mediaOver("xl") {
+			max-height: unset;
+		}
+	}
+	.Navbar_item {
+		text-decoration: none;
+		color: $color-black;
+		&:hover {
+			color: $color-primary-secondary;
+			text-decoration: underline;
+		}
+		&_link {
+			&-active {
+				text-decoration: underline;
+				pointer-events: none;
+			}
+		}
+		&-firstSecondary {
+			@include mediaOver("xl") {
+				margin-left: 8.3333333%;
+			}
+		}
+		&-secondary {
+			color: currentColor;
+		}
+	}
+	ul {
+		display: flex;
+		flex-direction: row;
+	}
+	.Navbar_dropdown {
+		flex-direction: column;
+		li:not(:last-of-type) {
+			margin-bottom: $spacing-2;
+		}
+	}
+}

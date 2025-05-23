@@ -1,0 +1,18 @@
+@import "../styles/vars";
+
+.Search {
+	&_header {
+		background-color: $color-primary-primary;
+		background-image: url("../../public/national-cancer-institute-cT0SCB8pb04.jpg");
+		background-blend-mode: soft-light;
+	}
+	&_filterNotification {
+		height: 0.8em;
+		width: 0.8em;
+		background-color: $color-primary-tertiary;
+		border-radius: 500px;
+	}
+}
+.driver-popover {
+	font-family: $type-primary !important;
+}
