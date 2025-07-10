@@ -26,12 +26,11 @@ export type AllModelData = {
 	publications: Publication[];
 };
 
-type ParsedModelMetadata = {
+export type ParsedModelMetadata = {
 	histology: string;
 	providerName: string;
 	cancerSystem: string;
 	modelType: string;
-	modelAvailable: boolean;
 	patientSex: string;
 	patientAge: string;
 	patientEthnicity: string;
@@ -42,32 +41,9 @@ type ParsedModelMetadata = {
 	collectionSite: string;
 	licenseName: string;
 	licenseUrl: string;
-	score: number;
-	pdcmModelId: number;
 	modelId: string;
 	providerId: string;
-	externalModelId: string;
-	projectName: string;
-	datasetAvailable: string[];
-	cancerGradingSystem: string;
-	cancerStagingSystem: string;
 	dateSubmitted: string;
-	patientHistory: string;
-	patientId: string;
-	patientEthnicityAssessmentMethod: string;
-	patientInitialDiagnosis: string;
-	patientAgeAtInitialDiagnosis: string;
-	patientSampleId: string;
-	patientSampleCollectionDate: string;
-	patientSampleCollectionEvent: string;
-	patientSampleMonthsSinceCollection: string;
-	patientSampleVirologyStatus: string;
-	patientSampleSharable: string;
-	patientSampleTreatedAtCollection: string;
-	patientSampleTreatedPriorToCollection: string;
-	pdxModelPublications: string;
-	modelGenerator?: boolean;
-	viewDataAt?: string;
 };
 
 export type ModelMetadata = {
@@ -298,16 +274,12 @@ export type APIExtLinks = {
 export type MolecularData = {
 	modelId: string;
 	dataSource: string;
-	source: string;
 	sampleId: string;
-	xenograftPassage: string;
-	rawDataUrl: string;
+  sampleType: string;
+  engraftedTumourPassage: string;
 	dataType: string;
 	platformName: string;
-	molecularCharacterizationId: number;
 	externalDbLinks: ExternalDbLink[];
-	dataExists: string;
-	dataRestricted: string;
 };
 
 export type ExternalDbLink = {

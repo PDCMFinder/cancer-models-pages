@@ -11,16 +11,15 @@ import {
   Engraftment,
   ExternalModelLinkByType,
   ExtLinks,
-  ImmuneMarker,
-  ImmuneMarkerAPI,
   KnowledgeGraph,
-  Marker,
   ModelImage,
   MolecularData,
+  ParsedModelMetadata,
   Publication,
   QualityData
 } from "../types/ModelData.model";
 import { camelCase } from "../utils/dataUtils";
+import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
 export async function getCellModelData(pdcmModelId: number): Promise<any> {
 	let response = await fetch(
@@ -432,173 +431,326 @@ export async function getModelDrugDosing(pdcmModelId: number) {
 	});
 }
 
-async function getModelImmuneMarkers(modelId: string): Promise<ImmuneMarker[]> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/immunemarker_data_extended?model_id=eq.${modelId}`
+const getBioStudiesTitleSearchResults = async (
+	modelId: string
+): Promise<Record<string, string>> => {
+	if (!modelId) return {};
+
+	const searchResultsResponse = await fetch(
+		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/search?title=${modelId}`
 	);
-	if (!response.ok) {
+
+	if (!searchResultsResponse.ok) {
 		throw new Error("Network response was not ok");
 	}
 
-	return response.json().then((d) => {
-		const parsedImmuneMarkers: ImmuneMarker[] = d.reduce(
-			(result: ImmuneMarker[], current: ImmuneMarkerAPI) => {
-				// Check for sample id and type, since there might be a marker of different type but same id
-				const existingSampleId = result.find(
-					(item: ImmuneMarker) =>
-						item.sampleId === current.sample_id &&
-						item.type === current.marker_type
+	// we're assuming the model ID is the first result of searching the id on biostudies
+	// this is the best way to do it right now
+	const accessionId = await searchResultsResponse
+		.json()
+		.then((d) => (d.hits.length > 0 ? d.hits[0].accession : ""));
+	const modelDataResponse = await fetch(
+		`https://ftp.ebi.ac.uk/pub/databases/biostudies/.beta/CMO-/${accessionId.slice(
+			-3
+		)}/${accessionId}/${accessionId}.json`
+	);
+
+	if (!modelDataResponse.ok) {
+		throw new Error("Network response was not ok");
+	}
+
+	return modelDataResponse.json();
+};
+
+const parseMetadata = (allData: any): ParsedModelMetadata => {
+	//we get/return these pieces of data
+	// case sensitive
+	const criteria = [
+		{ key: "name", value: "Cancer Grade" },
+		{ key: "name", value: "Cancer Stage" },
+		{ key: "name", value: "Cancer System" },
+		{ key: "name", value: "Collection Site" },
+		{ key: "name", value: "Histology" },
+		{ key: "name", value: "License" },
+		{ key: "name", value: "Model ID" },
+		{ key: "name", value: "Study type" },
+		{ key: "name", value: "Patient Age" },
+		{ key: "name", value: "Patient Ethnicity" },
+		{ key: "name", value: "Patient Sex" },
+		{ key: "name", value: "Primary Site" },
+		{ key: "name", value: "Title" },
+		{ key: "type", value: "Organization" },
+		{ key: "name", value: "Tumour Type" },
+		{ key: "name", value: "ReleaseDate" }
+	];
+
+	// find the key value pairs inside the [deep?] object
+	const data = findMultipleByKeyValues(allData, criteria);
+
+	// here we access the piece of data we need
+	// returns objects
+	const cancerGrade = data["name:Cancer Grade"][0]?.value;
+	const cancerStage = data["name:Cancer Stage"][0]?.value;
+	const cancerSystem = data["name:Cancer System"][0]?.value;
+	const collectionSite = data["name:Collection Site"][0]?.value;
+	const histology = data["name:Histology"][0]?.value;
+	const licenseName = data["name:License"][0]?.value;
+	const licenseUrl = data["name:License"][0]?.valqual?.[0].value;
+	const modelId = data["name:Model ID"][0]?.value;
+	const modelType = data["name:Study type"][0]?.value;
+	const patientAge = data["name:Patient Age"][0]?.value;
+	const patientEthnicity = data["name:Patient Ethnicity"][0]?.value;
+	const patientSex = data["name:Patient Sex"][0]?.value;
+	const primarySite = data["name:Primary Site"][0]?.value;
+	const title = data["name:Title"][0]?.value; //  "[providerId] [modelType] [modelId] Histology"
+	const providerId = title.match(/\[(.*?)\]/)[1]; // first match is provider id
+	const providerName = data["type:Organization"][0]?.attributes[0].value;
+	const tumourType = data["name:Tumour Type"][0]?.value;
+	const dateSubmitted = data["name:ReleaseDate"][0]?.value;
+
+	return {
+		cancerGrade,
+		cancerStage,
+		cancerSystem,
+		collectionSite,
+		histology,
+		licenseName,
+		licenseUrl,
+		modelId,
+		modelType,
+		patientAge,
+		patientEthnicity,
+		patientSex,
+		primarySite,
+		providerId,
+		providerName,
+		tumourType,
+		dateSubmitted
+	};
+};
+
+type Attribute = {
+	name: string;
+	value: string;
+};
+
+type Subsection = {
+	type?: string;
+	attributes: Attribute[];
+};
+
+type BsImmuneMarkers = {
+	subsections: Subsection[][];
+};
+
+type ImmuneMarker = {
+	sampleId: string;
+	type: string;
+	markers: {
+		name: string;
+		value: string[];
+		details: string | null;
+	}[];
+};
+
+const parseImmuneMarkers = (allData: any): ImmuneMarker[] => {
+	const data = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Immune markers" }
+	]);
+	const bsImmuneMarkers: BsImmuneMarkers = data["type:Immune markers"]?.[0];
+	const immuneMarkers: ImmuneMarker[] = [];
+
+	if (bsImmuneMarkers) {
+		for (const group of bsImmuneMarkers.subsections) {
+			for (const item of group) {
+				const sampleIdAttr = item.attributes.find(
+					(attr) => attr.name === "Sample ID"
 				);
-				const marker = {
-					details: current.essential_or_additional_details,
-					name: current.marker_name,
-					value: [current.marker_value]
-				};
+				const sampleId = sampleIdAttr ? sampleIdAttr.value : "Unknown";
 
-				if (existingSampleId) {
-					// Check if column exists in sample id
-					const existingName = existingSampleId.markers.find(
-						(item: Marker) => item.name === current.marker_name
-					);
+				const isHla = item.type === "HLA";
+				const markerType = isHla ? "HLA type" : "Model Genomics";
 
-					// push to same (marker), add value
-					if (existingName && existingName.value) {
-						existingName.value.push(current.marker_value);
-					} else {
-						// new name (marker)
-						existingSampleId.markers.push(marker);
-					}
-				} else {
-					result.push({
-						sampleId: current.sample_id,
-						type: current.marker_type,
-						markers: [marker]
+				const markers = item.attributes
+					.filter((attr) => attr.name !== "Sample ID")
+					.map((attr) => {
+						const [mainValue, ...detailParts] =
+							attr.value.split(/\s*\((.*?)\)\s*/);
+						const valueList = mainValue
+							.split("\n")
+							.map((s) => s.trim())
+							.filter(Boolean);
+
+						const detailsMatch = attr.value.match(/\(([^)]+)\)/);
+						const details = detailsMatch ? detailsMatch[1].trim() : "";
+
+						return {
+							name: attr.name,
+							value: valueList.length > 0 ? valueList : [mainValue.trim()],
+							details: valueList.length > 1 || !details ? details : ""
+						};
 					});
-				}
 
-				return result;
-			},
-			[]
+				immuneMarkers.push({
+					sampleId,
+					type: markerType,
+					markers
+				});
+			}
+		}
+	}
+
+	return immuneMarkers;
+};
+
+type BioStudiesDataAttribute = {
+	name: string;
+	value: string | number | null;
+	valqual: any;
+};
+
+type ExternalDbLink = {
+	column: string;
+	resource: string;
+	link: string;
+};
+
+const parseMolecularData = (
+	allData: any,
+	modelId: string,
+	providerId: string
+) => {
+	const data = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Molecular data" }
+	]);
+	const molecularData = data["type:Molecular data"];
+
+	return molecularData.map((entry) => {
+		const attrMap: Map<string, BioStudiesDataAttribute> = new Map(
+			entry.attributes.map((attr: BioStudiesDataAttribute) => [
+				attr.name,
+				attr
+			])
 		);
 
-		const addMissingNames = (immuneMarker: ImmuneMarker, type: string) => {
-			// create array with only unique names across all markers of x type
-			const uniqueNames = [
-				...new Set<string>(
-					d
-						.map(
-							(item: ImmuneMarkerAPI) =>
-								item.marker_type === type && item.marker_name
-						)
-						.filter((el: string) => el) // remove empty values
-				)
-			];
+		const sampleId = attrMap.get("Sample ID")?.value || null;
+		const sampleType = attrMap.get("Sample Type")?.value || null;
+		const engraftedTumourPassage =
+			attrMap.get("Engrafted Tumour Passage")?.value || null;
+		const dataType = attrMap.get("Data Type")?.value as string;
+		const platformName = attrMap.get("Platform Used")?.value as string;
+		const platformId = `${dataType.replace(/\s+/g, "_")}_${platformName.replace(
+			/\s+/g,
+			"_"
+		)}`;
 
-			// push "empty" objs so all rows have all columns
-			uniqueNames.forEach((uniqueName: string) => {
-				if (
-					!immuneMarker.markers.some(
-						(marker: Marker) => marker.name === uniqueName
-					) &&
-					immuneMarker.type === type
-				) {
-					immuneMarker.markers.push({
-						details: "",
-						name: uniqueName,
-						value: []
+		const dbNames = ["ENA", "EGA", "GEO", "dbGAP"];
+		const externalDbLinks: ExternalDbLink[] = [];
+
+		for (const db of dbNames) {
+			const attr = attrMap.get(db);
+			if (attr?.valqual) {
+				const url = attr.valqual.find((v: any) => v.name === "url")?.value;
+				if (url) {
+					externalDbLinks.push({
+						column: "raw_data_url",
+						resource: db,
+						link: url
 					});
 				}
-			});
+			}
+		}
+
+		return {
+			modelId,
+			dataSource: providerId,
+			sampleId,
+			sampleType,
+			engraftedTumourPassage,
+			dataType,
+			platformId,
+			platformName,
+			externalDbLinks: externalDbLinks.length > 0 ? externalDbLinks : null
 		};
-
-		// Add all missing names for table structure
-		parsedImmuneMarkers.forEach((immuneMarker: ImmuneMarker) => {
-			addMissingNames(immuneMarker, "HLA type");
-			addMissingNames(immuneMarker, "Model Genomics");
-
-			immuneMarker.markers.sort((a, b) => a.name.localeCompare(b.name));
-		});
-
-		return parsedImmuneMarkers;
 	});
-}
+};
+
+const parseExtLinks = (allData: any) => {
+	const identifiers = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Identifiers" }
+	])["type:Identifiers"];
+	const supplier = findMultipleByKeyValues(allData, [
+		{ key: "name", value: "Supplier" }
+	])["name:Supplier"]?.[0];
+  const supplierRegex = /^(.+?)\s*\((.+?)\)$/;
+  const supplierValues = supplier?.value?.match(supplierRegex);
+  const supplierUrl = supplier.valqual?.find((qual: BioStudiesDataAttribute) => qual.name === "url")?.value;
+
+	const parsedIdentifiers = identifiers.map((entry) => {
+		const resourceLabel = entry.attributes.find(
+			(attr: BioStudiesDataAttribute) => attr.name === "Resource"
+		)?.value;
+		const linkAttr = entry.attributes.find(
+			(attr: BioStudiesDataAttribute) => attr.name === "Link"
+		);
+		const linkLabel = linkAttr?.value;
+		const url = linkAttr?.valqual?.find(
+			(qual: BioStudiesDataAttribute) => qual.name === "url"
+		)?.value;
+
+		return {
+			type: "external_id",
+			link: url,
+			resourceLabel,
+			linkLabel
+		};
+	});
+
+	return {
+		externalModelLinksByType: {
+			external_id: parsedIdentifiers,
+			supplier: supplier ? [
+				{
+          type: "supplier",
+					link: supplierUrl,
+          resourceLabel: supplierValues[2], // value outside parenthesis
+          linkLabel:  supplierValues[1], // value inside parenthesis
+				}
+			] : null
+		}
+	};
+};
 
 export const getAllModelData = async (
 	modelId: string,
 	providerId?: string
 ): Promise<AllModelData> => {
 	const modelProviderId = providerId ?? (await getProviderId(modelId));
-	const metadata = await getModelDetailsMetadata(modelId, modelProviderId);
-	const immuneMarkers = await getModelImmuneMarkers(modelId);
-	const pdcmModelId: number = metadata.pdcmModelId;
-	const extLinks = await getModelExtLinks(pdcmModelId, modelId);
-	const molecularData = await getMolecularData(modelId);
-	const modelType = metadata.modelType;
-	const engraftments = await getModelEngraftments(pdcmModelId, modelType);
-	const drugDosing = await getModelDrugDosing(pdcmModelId);
-	const patientTreatment = await getPatientTreatment(pdcmModelId);
-	const qualityData = await getModelQualityData(pdcmModelId);
-	const modelImages = await getModelImages(modelId);
-	const knowledgeGraph = await getModelKnowledgeGraph(modelId);
-	let score: number = metadata.scores.pdxMetadataScore,
-		cellModelData = {} as CellModelData;
+	const modelData = await getBioStudiesTitleSearchResults(modelId);
+	console.log({ modelData });
+	const metadata = parseMetadata(modelData);
+	const metadataa = await getModelDetailsMetadata(modelId, modelProviderId);
+	const immuneMarkers = parseImmuneMarkers(modelData);
+	const molecularData = parseMolecularData(modelData, modelId, modelProviderId);
+	const pdcmModelId: number = metadataa.pdcmModelId;
+	const bsExtLinks = parseExtLinks(modelData);
+	const extLinks = await getModelExtLinks(pdcmModelId, modelId); // todo
+	console.log({ bsExtLinks, extLinks });
+	const modelType = metadataa.modelType;
+	const engraftments = await getModelEngraftments(pdcmModelId, modelType); // todo
+	const drugDosing = await getModelDrugDosing(pdcmModelId); // todo
+	const patientTreatment = await getPatientTreatment(pdcmModelId); // todo
+	const qualityData = await getModelQualityData(pdcmModelId); // todo
+	const modelImages = await getModelImages(modelId); // todo
+	const knowledgeGraph = await getModelKnowledgeGraph(modelId); // todo
+	let cellModelData = {} as CellModelData;
 
 	if (modelType !== "PDX") {
 		cellModelData = await getCellModelData(pdcmModelId);
-		score = metadata.scores.inVitroMetadataScore;
 	}
 
 	return {
-		// deconstruct metadata object so we dont pass more props than we need/should
-		metadata: {
-			cancerGrade: metadata.cancerGrade,
-			cancerStage: metadata.cancerStage,
-			cancerSystem: metadata.cancerSystem,
-			collectionSite: metadata.collectionSite,
-			histology: metadata.histology,
-			licenseName: metadata.licenseName ?? "",
-			licenseUrl: metadata.licenseUrl ?? "",
-			modelId,
-			modelType: metadata.modelType,
-			modelAvailable: metadata.modelAvailabilityBoolean,
-			patientAge: metadata.patientAge,
-			patientEthnicity: metadata.patientEthnicity,
-			patientSex: metadata.patientSex,
-			patientId: metadata.patientId,
-			pdcmModelId,
-			primarySite: metadata.primarySite,
-			providerId: modelProviderId,
-			providerName: metadata.providerName,
-			score: score ?? 0,
-			tumourType: metadata.tumourType,
-			dateSubmitted: metadata.dateSubmitted,
-			// Extras for metadata file
-			cancerGradingSystem: metadata.cancerGradingSystem,
-			cancerStagingSystem: metadata.cancerStagingSystem,
-			datasetAvailable: Array.isArray(metadata.datasetAvailable)
-				? metadata.datasetAvailable
-				: [],
-			externalModelId: metadata.externalModelId,
-			patientAgeAtInitialDiagnosis: metadata.patientAgeAtInitialDiagnosis,
-			patientEthnicityAssessmentMethod:
-				metadata.patientEthnicityAssessmentMethod,
-			patientHistory: metadata.patientHistory,
-			patientInitialDiagnosis: metadata.patientInitialDiagnosis,
-			patientSampleCollectionDate: metadata.patientSampleCollectionDate,
-			patientSampleCollectionEvent: metadata.patientSampleCollectionEvent,
-			patientSampleId: metadata.patientSampleId,
-			patientSampleMonthsSinceCollection:
-				metadata.patientSampleMonthsSinceCollection1,
-			patientSampleSharable: metadata.patientSampleSharable,
-			patientSampleTreatedAtCollection:
-				metadata.patientSampleTreatedAtCollection,
-			patientSampleTreatedPriorToCollection:
-				metadata.patientSampleTreatedPriorToCollection,
-			patientSampleVirologyStatus: metadata.patientSampleVirologyStatus,
-			pdxModelPublications: metadata.pdxModelPublications,
-			projectName: metadata.projectName,
-      viewDataAt: metadata.viewDataAt
-		},
+		metadata,
 		extLinks,
 		molecularData,
 		immuneMarkers,
