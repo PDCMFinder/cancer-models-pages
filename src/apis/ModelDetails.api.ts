@@ -2,17 +2,16 @@ import { CamelCaseKeys } from "../../types/globalTypes";
 import {
   AllModelData,
   APIEngraftment,
-  APIExternalModelLink,
-  APIExtLinks,
   APIKnowledgeGraph,
   APIModelMetadata,
   APITreatment,
   CellModelData,
   Engraftment,
-  ExternalModelLinkByType,
   ExtLinks,
+  ImmuneMarker,
   KnowledgeGraph,
   ModelImage,
+  MolecularData,
   ParsedModelMetadata,
   Publication,
   QualityData
@@ -146,57 +145,6 @@ export async function getPublicationData(pubmedId: string) {
 				)
 			);
 	}
-}
-
-export async function getModelExtLinks(
-	pdcmModelId: number,
-	modelId: string
-): Promise<ExtLinks> {
-	if (pdcmModelId !== 0 && !pdcmModelId) {
-		return {} as ExtLinks;
-	}
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/model_information?id=eq.${pdcmModelId}&select=contact_people(email_list),contact_form(form_url),source_database(database_url),other_model_links`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		const extLinks = d[0] as APIExtLinks;
-
-		const externalModelLinks =
-			extLinks.other_model_links ?? ([] as APIExternalModelLink[]);
-
-		const externalModelLinksByType = externalModelLinks.reduce(
-			(acc: ExternalModelLinkByType, link: APIExternalModelLink) => {
-				if (!acc[link.type]) {
-					acc[link.type] = [];
-				}
-				acc[link.type].push({
-					...link,
-					resourceLabel: link.resource_label,
-					linkLabel: link.link_label
-				});
-
-				return acc;
-			},
-			{} as ExternalModelLinkByType
-		);
-
-		const contactLink = extLinks.contact_form?.form_url
-			? extLinks.contact_form.form_url
-			: `mailto:${
-					extLinks.contact_people?.email_list ?? ""
-			  }?subject=${encodeURIComponent(modelId)}`;
-
-		const sourceDatabaseUrl = extLinks.source_database?.database_url ?? "";
-
-		return {
-			contactLink,
-			sourceDatabaseUrl,
-			externalModelLinksByType
-		} as ExtLinks;
-	});
 }
 
 export async function getModelQualityData(
@@ -513,16 +461,6 @@ type BsImmuneMarkers = {
 	subsections: Subsection[][];
 };
 
-type ImmuneMarker = {
-	sampleId: string;
-	type: string;
-	markers: {
-		name: string;
-		value: string[];
-		details: string | null;
-	}[];
-};
-
 const parseImmuneMarkers = (allData: any): ImmuneMarker[] => {
 	const data = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Immune markers" }
@@ -589,7 +527,7 @@ const parseMolecularData = (
 	allData: any,
 	modelId: string,
 	providerId: string
-) => {
+): MolecularData[] => {
 	const data = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Molecular data" }
 	]);
@@ -603,10 +541,10 @@ const parseMolecularData = (
 			])
 		);
 
-		const sampleId = attrMap.get("Sample ID")?.value || null;
-		const sampleType = attrMap.get("Sample Type")?.value || null;
+		const sampleId = attrMap.get("Sample ID")?.value as string;
+		const sampleType = attrMap.get("Sample Type")?.value as string;
 		const engraftedTumourPassage =
-			attrMap.get("Engrafted Tumour Passage")?.value || null;
+			attrMap.get("Engrafted Tumour Passage")?.value as string;
 		const dataType = attrMap.get("Data Type")?.value as string;
 		const platformName = attrMap.get("Platform Used")?.value as string;
 		const platformId = `${dataType.replace(/\s+/g, "_")}_${platformName.replace(
@@ -640,12 +578,12 @@ const parseMolecularData = (
 			dataType,
 			platformId,
 			platformName,
-			externalDbLinks: externalDbLinks.length > 0 ? externalDbLinks : null
+			externalDbLinks: externalDbLinks.length > 0 ? externalDbLinks : []
 		};
 	});
 };
 
-const parseExtLinks = (allData: any) => {
+const parseExtLinks = (allData: any): ExtLinks => {
 	const identifiers = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Identifiers" }
 	])["type:Identifiers"];
@@ -669,7 +607,7 @@ const parseExtLinks = (allData: any) => {
 		)?.value;
 
 		return {
-			type: "external_id",
+			type: "external_id" as const,
 			link: url,
 			resourceLabel,
 			linkLabel
@@ -679,14 +617,14 @@ const parseExtLinks = (allData: any) => {
 	return {
 		externalModelLinksByType: {
 			external_id: parsedIdentifiers,
-			supplier: supplier ? [
+			supplier: [
 				{
           type: "supplier",
 					link: supplierUrl,
           resourceLabel: supplierValues[2], // value outside parenthesis
           linkLabel:  supplierValues[1], // value inside parenthesis
 				}
-			] : null
+			]
 		}
 	};
 };
@@ -703,9 +641,8 @@ export const getAllModelData = async (
 	const immuneMarkers = parseImmuneMarkers(modelData);
 	const molecularData = parseMolecularData(modelData, modelId, modelProviderId);
 	const pdcmModelId: number = metadataa.pdcmModelId;
-	const bsExtLinks = parseExtLinks(modelData);
-	const extLinks = await getModelExtLinks(pdcmModelId, modelId); // todo
-	console.log({ bsExtLinks, extLinks });
+	const extLinks = parseExtLinks(modelData);
+	// const extLinks = await getModelExtLinks(pdcmModelId, modelId); // todo
 	const modelType = metadataa.modelType;
 	const engraftments = await getModelEngraftments(pdcmModelId, modelType); // todo
 	const drugDosing = await getModelDrugDosing(pdcmModelId); // todo

@@ -259,8 +259,6 @@ export type APIExternalModelLink = {
 };
 
 export type ExtLinks = {
-	contactLink: string;
-	sourceDatabaseUrl: string;
 	externalModelLinksByType: ExternalModelLinkByType;
 };
 
