@@ -13,7 +13,6 @@ import {
   ExtLinks,
   KnowledgeGraph,
   ModelImage,
-  MolecularData,
   ParsedModelMetadata,
   Publication,
   QualityData
@@ -301,35 +300,6 @@ export async function getModelMolecularDataDetails(
 				return item;
 			})
 		];
-	});
-}
-
-export async function getMolecularDataDownload(
-	molecularCharacterization: MolecularData
-) {
-	if (!molecularCharacterization.molecularCharacterizationId) {
-		return [];
-	}
-	const typeEndpointMap: any = {
-		mutation: "mutation_data_table",
-		expression: "expression_data_table",
-		"copy number alteration": "cna_data_table",
-		"bio markers": "biomarker_data_table"
-	};
-	const endpoint = typeEndpointMap[molecularCharacterization.dataType];
-	let request = `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}?molecular_characterization_id=eq.${molecularCharacterization.molecularCharacterizationId}`;
-	let response = await fetch(request, { headers: { Prefer: "count=exact" } });
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return d.map((item: any) => {
-			delete item.molecular_characterization_id;
-			delete item.text;
-			delete item.external_db_links;
-			item["sampleID"] = molecularCharacterization.sampleId;
-			return item;
-		});
 	});
 }
 
