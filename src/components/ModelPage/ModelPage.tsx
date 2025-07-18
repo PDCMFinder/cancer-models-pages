@@ -5,12 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
-import { useQueries, useQuery } from "react-query";
 import { ReactFlowProvider } from "reactflow";
-import {
-	getModelPubmedIds,
-	getPublicationData
-} from "../../../src/apis/ModelDetails.api";
 import FloatingButton from "../../components/FloatingWidget/FloatingButton";
 import ModelTypeIcon from "../../components/Icons/ModelTypeIcon";
 import ImageChecker from "../../components/ImageChecker/ImageChecker";
@@ -22,18 +17,13 @@ import {
 	AllModelData,
 	ExternalDbLink,
 	ModelImage,
-	MolecularData,
-	Publication
+	MolecularData
 } from "../../types/ModelData.model";
 import breakPoints from "../../utils/breakpoints";
 import imageIsBrokenChecker from "../../utils/imageIsBrokenChecker";
 import { modelTourSteps } from "../../utils/tourSteps";
 import ModelIdentifiers from "../ModelIdentifiers/ModelIdentifiers";
 import styles from "./Model.module.scss";
-
-const DynamicModal = dynamic(() => import("../../components/Modal/Modal"), {
-	loading: () => <Loader />
-});
 
 const DynamicHierarchyTree = dynamic(
 	() => import("../../components/HierarchyTree/HierarchyTree"),
@@ -53,7 +43,6 @@ export type TypesMap = {
 	biomarker_molecular_data: string;
 };
 
-type DataFileConfig = { data: MolecularData; filename: string; id: string };
 const ModelPage = ({
 	metadata,
 	extLinks,
@@ -65,13 +54,13 @@ const ModelPage = ({
 	cellModelData,
 	engraftments,
 	modelImages,
-	knowledgeGraph
+	knowledgeGraph,
+	publications
 }: AllModelData) => {
 	const NA_STRING = "N/A",
 		MODEL_GENOMICS_STRING = "Model Genomics",
 		HLA_TYPE_STRING = "HLA type",
 		PDX_STRING = "PDX";
-	const isHCMI = false;
 
 	const { windowWidth } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
@@ -140,29 +129,6 @@ const ModelPage = ({
 		}
 	});
 
-	const pubmedIdsQuery = useQuery(
-		[
-			"pubmed-ids-data",
-			{ modelId: metadata.modelId, providerId: metadata.providerId }
-		],
-		() => getModelPubmedIds(metadata.modelId, metadata.providerId)
-	);
-
-	const pubmedIds = pubmedIdsQuery.data || [];
-
-	const publicationsQuery = useQueries<Publication[]>(
-		pubmedIds.map((p: string) => {
-			return {
-				queryKey: ["publication-data", p],
-				queryFn: () => getPublicationData(p)
-			};
-		})
-	);
-
-	const publications: Publication[] = publicationsQuery
-		.map((q) => q.data as Publication)
-		.filter((d) => d !== undefined);
-
 	const modelGenomicsImmuneMarkers = immuneMarkers.filter(
 		(markerRow) => markerRow.type === MODEL_GENOMICS_STRING
 	);
@@ -221,11 +187,11 @@ const ModelPage = ({
 									id="tour_model-type"
 								/>
 							</div>
-							{cellModelData?.modelName && (
+							{/* {cellModelData?.modelName && (
 								<p className="mt-2 mb-0">
 									<b>Aliases:</b> {cellModelData.modelName}
 								</p>
-							)}
+							)} */}
 							{Object.keys(extLinks.externalModelLinksByType).length > 0 && (
 								<ModelIdentifiers
 									externalModelLinks={extLinks.externalModelLinksByType}
@@ -282,7 +248,7 @@ const ModelPage = ({
 										</li>
 										<li className="mb-2">
 											{metadata.modelType !== PDX_STRING ? (
-												cellModelData?.id ? (
+												cellModelData?.growthProperties ? (
 													<Link
 														replace
 														href="#derivation"
@@ -538,66 +504,67 @@ const ModelPage = ({
 										</div>
 									</div>
 								)}
-							{metadata.modelType !== PDX_STRING && cellModelData?.id && (
-								<div id="derivation" className="row mb-5 pt-3">
-									<div className="col-12 mb-1">
-										<h2 className="mt-0">Model derivation</h2>
-										<div className="overflow-auto showScrollbar-vertical">
-											<table>
-												<caption>Model derivation</caption>
-												<thead>
-													<tr>
-														<th>GROWTH PROPERTIES</th>
-														<th>GROWTH MEDIA</th>
-														<th>PLATE COATING</th>
-														{qualityData.length > 0 &&
-															qualityData[0].tumourStatus && <th>STATUS</th>}
-														<th>PASSAGE</th>
-														<th>SUPPLEMENTS</th>
-														<th>CONTAMINATED</th>
-														<th>CONTAMINATION DETAILS</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<td>{cellModelData?.growthProperties}</td>
-														<td
-															className={
-																(
-																	cellModelData?.growthMedia ?? ""
-																).toLowerCase() !== "not provided"
-																	? "white-space-nowrap"
-																	: undefined
-															}
-														>
-															{cellModelData?.growthMedia}
-														</td>
-														<td>{cellModelData?.plateCoating}</td>
-														{qualityData.length > 0 &&
-															qualityData[0].tumourStatus && (
-																<td>{qualityData[0].tumourStatus}</td>
-															)}
-														<td>{cellModelData?.passageNumber}</td>
-														<td
-															className={
-																(
-																	cellModelData?.growthMedia ?? ""
-																).toLowerCase() !== "not provided"
-																	? "white-space-nowrap"
-																	: undefined
-															}
-														>
-															{cellModelData?.supplements}
-														</td>
-														<td>{cellModelData?.contaminated}</td>
-														<td>{cellModelData?.contaminationDetails}</td>
-													</tr>
-												</tbody>
-											</table>
+							{metadata.modelType !== PDX_STRING &&
+								cellModelData?.growthProperties && (
+									<div id="derivation" className="row mb-5 pt-3">
+										<div className="col-12 mb-1">
+											<h2 className="mt-0">Model derivation</h2>
+											<div className="overflow-auto showScrollbar-vertical">
+												<table>
+													<caption>Model derivation</caption>
+													<thead>
+														<tr>
+															<th>GROWTH PROPERTIES</th>
+															<th>GROWTH MEDIA</th>
+															<th>PLATE COATING</th>
+															{qualityData.length > 0 &&
+																qualityData[0].tumourStatus && <th>STATUS</th>}
+															<th>PASSAGE</th>
+															<th>SUPPLEMENTS</th>
+															<th>CONTAMINATED</th>
+															<th>CONTAMINATION DETAILS</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>{cellModelData?.growthProperties}</td>
+															<td
+																className={
+																	(
+																		cellModelData?.growthMedia ?? ""
+																	).toLowerCase() !== "not provided"
+																		? "white-space-nowrap"
+																		: undefined
+																}
+															>
+																{cellModelData?.growthMedia}
+															</td>
+															<td>{cellModelData?.plateCoating}</td>
+															{qualityData.length > 0 &&
+																qualityData[0].tumourStatus && (
+																	<td>{qualityData[0].tumourStatus}</td>
+																)}
+															<td>{cellModelData?.passageNumber}</td>
+															<td
+																className={
+																	(
+																		cellModelData?.growthMedia ?? ""
+																	).toLowerCase() !== "not provided"
+																		? "white-space-nowrap"
+																		: undefined
+																}
+															>
+																{cellModelData?.supplements}
+															</td>
+															<td>{cellModelData?.contaminated}</td>
+															<td>{cellModelData?.contaminationDetails}</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
 										</div>
 									</div>
-								</div>
-							)}
+								)}
 							{qualityData.length > 0 && (
 								<div id="quality-control" className="row mb-5 pt-3">
 									<div className="col-12 mb-1">
@@ -745,7 +712,7 @@ const ModelPage = ({
 																		<td>
 																			<Link
 																				className="m-0"
-																				href="£"
+																				href="#"
 																				onClick={() => {
 																					ReactGA.event("view_data", {
 																						category: "event"
@@ -1273,13 +1240,13 @@ const ModelPage = ({
 														{publication.authorString}
 													</p>
 													<p className="mb-3 text-small">
-														{publication.journalTitle} - {publication.pubYear}
+														{publication.pubYear}
 													</p>
 													<ul className="ul-noStyle text-small d-md-flex">
 														{publication.pmid && (
 															<li className="mr-md-3">
 																<Link
-																	href={`https://europepmc.org/article/MED/${publication.pmid}`}
+																	href={publication.pmid}
 																	target="_blank"
 																	rel="noreferrer noopener"
 																	onClick={() =>
@@ -1295,10 +1262,10 @@ const ModelPage = ({
 																</Link>
 															</li>
 														)}
-														{publication.doi && (
+														{publication.doi.id && (
 															<li className="mr-md-3">
 																<Link
-																	href={`https://doi.org/${publication.doi}`}
+																	href={publication.doi.url}
 																	target="_blank"
 																	rel="noreferrer noopener"
 																	onClick={() =>
@@ -1307,14 +1274,14 @@ const ModelPage = ({
 																		})
 																	}
 																>
-																	DOI:{publication.doi}
+																	DOI:{publication.doi?.id}
 																</Link>
 															</li>
 														)}
 														{publication.pmid && (
 															<li>
 																<Link
-																	href={`https://pubmed.ncbi.nlm.nih.gov/${publication.pmid}`}
+																	href={publication.pmid}
 																	target="_blank"
 																	rel="noreferrer noopener"
 																	onClick={() =>

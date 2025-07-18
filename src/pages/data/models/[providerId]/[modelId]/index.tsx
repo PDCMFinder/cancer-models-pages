@@ -25,7 +25,7 @@ const ModelDetails = () => {
 	if (isLoading)
 		return (
 			<div style={{ height: "300px" }} className="w-100">
-				<DynamicLoader />
+				<DynamicLoader message="Fetching data ..." />
 			</div>
 		);
 	if (isError || !data)

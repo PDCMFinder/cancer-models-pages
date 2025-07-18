@@ -18,8 +18,8 @@ export type AllModelData = {
 	immuneMarkers: ImmuneMarker[];
 	engraftments: Engraftment[];
 	cellModelData: CellModelData;
-	drugDosing: CamelCaseKeys<APITreatment>[number]["entries"][number][][];
-	patientTreatment: CamelCaseKeys<APITreatment>[number]["entries"][number][][];
+	drugDosing: Treatment[][];
+	patientTreatment: Treatment[][];
 	qualityData: QualityData[];
 	knowledgeGraph: KnowledgeGraph;
 	modelImages: ModelImage[];
@@ -329,23 +329,13 @@ export type Engraftment = {
 };
 
 export type CellModelData = {
-	id: number;
-	modelName: string;
-	modelNameAliases: string;
-	type: string;
 	growthProperties: string;
 	growthMedia: string;
-	mediaId: string;
-	parentId: string;
-	originPatientSampleId: string;
 	plateCoating: string;
-	otherPlateCoating: string;
 	passageNumber: string;
 	contaminated: string;
 	contaminationDetails: string;
 	supplements: string;
-	drug: string;
-	drugConcentration: string;
 };
 
 export type DrugDosing = {
@@ -354,32 +344,24 @@ export type DrugDosing = {
 	treatmentResponse: string;
 };
 
-export type APITreatment = {
-	model_id: number;
-	protocol_id: number;
-	treatment: string;
-	passage_range: string;
-	response: string;
+type TreatmentExternalDbLink = {
+	link: string;
+	resourceLabel: string;
+};
+
+export type Treatment = {
+	name: string;
 	dose: string;
-	entries: {
-		dose: string;
-		name: string;
-		passage_range?: string;
-		response?: string;
-		external_db_links?: {
-			link: string;
-			resource_label: string;
-		}[];
-	}[];
-}[];
+	passageRange?: string;
+	response?: string;
+	externalDbLinks?: TreatmentExternalDbLink[];
+};
 
 export type QualityData = {
-	id?: number;
 	description: string;
 	passagesTested: string;
 	validationTechnique: string;
 	validationHostStrainNomenclature: string;
-	modelId?: number | string;
 	morphologicalFeatures: string;
 	snpAnalysis: string;
 	strAnalysis: string;
@@ -395,7 +377,7 @@ export type ModelImage = {
 	passage: string;
 	magnification: string;
 	staining: string;
-	isBroken: boolean;
+	isBroken?: boolean;
 };
 
 export type APIKnowledgeGraph = {
@@ -420,9 +402,11 @@ export type KnowledgeGraph = CamelCaseKeys<APIKnowledgeGraph>;
 
 export type Publication = {
 	pmid: string;
-	doi: string;
+	doi: {
+    id: string,
+    url: string
+  };
 	pubYear: string;
 	title: string;
 	authorString: string;
-	journalTitle: string;
 };

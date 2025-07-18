@@ -1,10 +1,6 @@
-import { CamelCaseKeys } from "../../types/globalTypes";
 import {
   AllModelData,
-  APIEngraftment,
   APIKnowledgeGraph,
-  APIModelMetadata,
-  APITreatment,
   CellModelData,
   Engraftment,
   ExtLinks,
@@ -18,70 +14,6 @@ import {
 } from "../types/ModelData.model";
 import { camelCase } from "../utils/dataUtils";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
-
-export async function getCellModelData(pdcmModelId: number): Promise<any> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/cell_model?model_id=eq.${pdcmModelId}`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		delete d[0].model_id;
-		return camelCase(d[0]);
-	});
-}
-
-export async function getModelDetailsMetadata(
-	modelId: string,
-	providerId: string
-) {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/search_index?external_model_id=eq.${modelId}&data_source=eq.${providerId}`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-
-	return response.json().then((d) => {
-		if (!Array.isArray(d) || d.length === 0) {
-			throw new Error("No model metadata found");
-		}
-		const modelMetadata: APIModelMetadata = d[0];
-
-		return camelCase(modelMetadata);
-	});
-}
-
-export async function getProviderId(modelId: string): Promise<string> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/search_index?external_model_id=eq.${modelId}&select=data_source`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return d[0].data_source;
-	});
-}
-
-export async function getModelImages(modelId: string): Promise<ModelImage[]> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/search_index?external_model_id=eq.${modelId}&select=model_images`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		if (d[0].model_images?.length) {
-			return d[0].model_images.map((imageObj: ModelImage) =>
-				camelCase(imageObj)
-			);
-		} else {
-			return [];
-		}
-	});
-}
 
 export async function getModelKnowledgeGraph(
 	modelId: string
@@ -105,257 +37,14 @@ export async function getModelKnowledgeGraph(
 		});
 }
 
-export async function getModelPubmedIds(
-	modelId: string = "",
-	providerId: string
-): Promise<string[]> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/model_information?external_model_id=eq.${modelId}&data_source=eq.${providerId}&select=publication_group(pubmed_ids)`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-
-	const jsonContent = await response.json();
-
-	const publicationGroup = jsonContent[0]["publication_group"] || {};
-
-	const pubmedIds: string = publicationGroup["pubmed_ids"] || "";
-	return pubmedIds.replaceAll(" ", "").split(",");
-}
-
-export async function getPublicationData(pubmedId: string) {
-	if (pubmedId !== "") {
-		let response = await fetch(
-			`https://www.ebi.ac.uk/europepmc/webservices/rest/article/MED/${pubmedId.replace(
-				"PMID:",
-				""
-			)}?resultType=lite&format=json`
-		);
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
-		}
-		return response
-			.json()
-			.then((d) =>
-				Object.fromEntries(
-					["title", "pubYear", "authorString", "journalTitle", "pmid", "doi"]
-						.filter((key) => key in d.result)
-						.map((key) => [key, d.result[key]])
-				)
-			);
-	}
-}
-
-export async function getModelQualityData(
-	pdcmModelId: number
-): Promise<QualityData[]> {
-	if (pdcmModelId !== 0 && !pdcmModelId) {
-		return [];
-	}
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/quality_assurance?model_id=eq.${pdcmModelId}`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return d.map((item: QualityData) => camelCase(item));
-	});
-}
-
-export async function getMolecularData(modelId: string) {
-	if (!modelId) {
-		return [];
-	}
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/model_molecular_metadata?model_id=eq.${modelId}`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return d.map((item: any) => {
-			return camelCase(item);
-		});
-	});
-}
-
-export async function getAvailableDataColumns(
-	dataSource: string,
-	molecularCharacterizationType: string
-) {
-	switch (molecularCharacterizationType) {
-		case "copy number alteration":
-			molecularCharacterizationType = "cna";
-			break;
-		case "bio markers":
-			molecularCharacterizationType = "biomarker";
-			break;
-	}
-
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/available_molecular_data_columns?data_source=eq.${dataSource}&molecular_characterization_type=eq.${molecularCharacterizationType}`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return d[0].not_empty_cols;
-	});
-}
-
-export async function getModelMolecularDataDetails(
-	molecularCharacterizationId: number,
-	dataType: string,
-	filter: string,
-	page: number,
-	pageSize: number,
-	sortColumn: string,
-	sortDirection: string
-) {
-	if (!molecularCharacterizationId) {
-		return [];
-	}
-	const typeEndpointMap: any = {
-		mutation: "mutation_data_table",
-		expression: "expression_data_table",
-		"copy number alteration": "cna_data_table",
-		"bio markers": "biomarker_data_table"
-	};
-	const endpoint = typeEndpointMap[dataType];
-	let request = `${process.env.NEXT_PUBLIC_API_URL}/${endpoint}?molecular_characterization_id=eq.${molecularCharacterizationId}`;
-	if (filter) {
-		request += `&text=ilike.*${filter}*`;
-	}
-	request += `&limit=${pageSize}&offset=${(page - 1) * pageSize}`;
-	if (sortColumn) {
-		request += `&order=${sortColumn}`;
-		if (sortDirection) {
-			request += `.${sortDirection}`;
-		}
-	}
-	let response = await fetch(request, { headers: { Prefer: "count=exact" } });
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return [
-			parseInt(response.headers.get("Content-Range")?.split("/")[1] || "0"),
-			d.map((item: any) => {
-				delete item.molecular_characterization_id;
-				delete item.text;
-				return item;
-			})
-		];
-	});
-}
-
-export async function getModelEngraftments(
-	pdcmModelId: number,
-	modelType: string
-): Promise<Engraftment[]> {
-	if ((pdcmModelId !== 0 && !pdcmModelId) || modelType !== "PDX") {
-		return [];
-	}
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/xenograft_model_specimen?model_id=eq.${pdcmModelId}&select=host_strain(name, nomenclature),engraftment_site(name),engraftment_type(name),engraftment_sample_type(name),engraftment_sample_state(name),passage_number`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d) => {
-		return d.map((item: APIEngraftment) => {
-			const {
-				host_strain: hostStrain,
-				engraftment_site: engraftmentSite,
-				engraftment_type: engraftmentType,
-				engraftment_sample_type: engraftmentSampleType,
-				engraftment_sample_state: engraftmentSampleState,
-				...rest
-			} = item;
-
-			return {
-				...camelCase(rest),
-				hostStrain: hostStrain?.name ?? "",
-				hostStrainNomenclature: hostStrain?.nomenclature ?? "",
-				engraftmentSite: engraftmentSite.name,
-				engraftmentType: engraftmentType.name,
-				engraftmentSampleType: engraftmentSampleType.name,
-				engraftmentSampleState: engraftmentSampleState?.name ?? ""
-			};
-		});
-	});
-}
-
-const addDataToEntries = (
-	entry: APITreatment[number]["entries"][number],
-	response: string,
-	passageRange?: string
-) => {
-	entry.response = response;
-	passageRange && (entry.passage_range ??= passageRange);
-	entry.external_db_links?.sort((a, b) =>
-		a.resource_label.localeCompare(b.resource_label)
-	);
-};
-
-export const getPatientTreatment = async (pdcmModelId: number) => {
-	if (pdcmModelId !== 0 && !pdcmModelId) {
-		return [];
-	}
-
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/patient_treatment?model_id=eq.${pdcmModelId}&select=*`
-	);
-
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-
-	return response.json().then((d: APITreatment) =>
-		d.map((item) => {
-			item.entries.forEach((entry) => {
-				addDataToEntries(entry, item.response);
-			});
-
-			return camelCase(item.entries) as unknown as CamelCaseKeys<
-				APITreatment[number]["entries"]
-			>[number][];
-		})
-	);
-};
-
-export async function getModelDrugDosing(pdcmModelId: number) {
-	if (!pdcmModelId) {
-		return [];
-	}
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/dosing_studies?model_id=eq.${pdcmModelId}&select=*`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d: APITreatment) => {
-		return d.map((item) => {
-			item.entries.forEach((entry) => {
-				addDataToEntries(entry, item.response, item.passage_range);
-			});
-
-			return camelCase(item.entries) as unknown as CamelCaseKeys<
-				APITreatment[number]["entries"]
-			>[number][];
-		});
-	});
-}
-
 const getBioStudiesTitleSearchResults = async (
-	modelId: string
+	modelId: string,
+  providerId: string
 ): Promise<Record<string, string>> => {
 	if (!modelId) return {};
 
 	const searchResultsResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/search?title=${modelId}`
+		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?title=${modelId}+AND+${providerId}&type=study&isPublic=true`
 	);
 
 	if (!searchResultsResponse.ok) {
@@ -366,11 +55,14 @@ const getBioStudiesTitleSearchResults = async (
 	// this is the best way to do it right now
 	const accessionId = await searchResultsResponse
 		.json()
-		.then((d) => (d.hits.length > 0 ? d.hits[0].accession : ""));
+		.then((d) => (d.totalHits > 0 ? d.hits[0].accession : ""));
+
+	if (!accessionId) {
+		throw new Error("No model exists with that accession ID");
+	}
+
 	const modelDataResponse = await fetch(
-		`https://ftp.ebi.ac.uk/pub/databases/biostudies/.beta/CMO-/${accessionId.slice(
-			-3
-		)}/${accessionId}/${accessionId}.json`
+		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${accessionId}`
 	);
 
 	if (!modelDataResponse.ok) {
@@ -450,6 +142,7 @@ const parseMetadata = (allData: any): ParsedModelMetadata => {
 type Attribute = {
 	name: string;
 	value: string;
+	valqual?: { name: string; value: string }[];
 };
 
 type Subsection = {
@@ -511,13 +204,15 @@ const parseImmuneMarkers = (allData: any): ImmuneMarker[] => {
 	return immuneMarkers;
 };
 
+type BioStudiesDataValqual = { name: string; value: string };
+
 type BioStudiesDataAttribute = {
 	name: string;
 	value: string | number | null;
-	valqual: any;
+	valqual?: BioStudiesDataValqual[];
 };
 
-type ExternalDbLink = {
+type MolecularDataExternalDbLink = {
 	column: string;
 	resource: string;
 	link: string;
@@ -535,16 +230,13 @@ const parseMolecularData = (
 
 	return molecularData.map((entry) => {
 		const attrMap: Map<string, BioStudiesDataAttribute> = new Map(
-			entry.attributes.map((attr: BioStudiesDataAttribute) => [
-				attr.name,
-				attr
-			])
+			entry.attributes.map((attr: BioStudiesDataAttribute) => [attr.name, attr])
 		);
 
 		const sampleId = attrMap.get("Sample ID")?.value as string;
 		const sampleType = attrMap.get("Sample Type")?.value as string;
-		const engraftedTumourPassage =
-			attrMap.get("Engrafted Tumour Passage")?.value as string;
+		const engraftedTumourPassage = attrMap.get("Engrafted Tumour Passage")
+			?.value as string;
 		const dataType = attrMap.get("Data Type")?.value as string;
 		const platformName = attrMap.get("Platform Used")?.value as string;
 		const platformId = `${dataType.replace(/\s+/g, "_")}_${platformName.replace(
@@ -553,7 +245,7 @@ const parseMolecularData = (
 		)}`;
 
 		const dbNames = ["ENA", "EGA", "GEO", "dbGAP"];
-		const externalDbLinks: ExternalDbLink[] = [];
+		const externalDbLinks: MolecularDataExternalDbLink[] = [];
 
 		for (const db of dbNames) {
 			const attr = attrMap.get(db);
@@ -584,76 +276,367 @@ const parseMolecularData = (
 };
 
 const parseExtLinks = (allData: any): ExtLinks => {
-	const identifiers = findMultipleByKeyValues(allData, [
+	const identifiers: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Identifiers" }
 	])["type:Identifiers"];
 	const supplier = findMultipleByKeyValues(allData, [
 		{ key: "name", value: "Supplier" }
 	])["name:Supplier"]?.[0];
-  const supplierRegex = /^(.+?)\s*\((.+?)\)$/;
-  const supplierValues = supplier?.value?.match(supplierRegex);
-  const supplierUrl = supplier.valqual?.find((qual: BioStudiesDataAttribute) => qual.name === "url")?.value;
+	let parsedExtLinksObj = { externalModelLinksByType: {} } as ExtLinks;
 
-	const parsedIdentifiers = identifiers.map((entry) => {
-		const resourceLabel = entry.attributes.find(
-			(attr: BioStudiesDataAttribute) => attr.name === "Resource"
-		)?.value;
-		const linkAttr = entry.attributes.find(
-			(attr: BioStudiesDataAttribute) => attr.name === "Link"
-		);
-		const linkLabel = linkAttr?.value;
-		const url = linkAttr?.valqual?.find(
+	if (!identifiers && !supplier) return parsedExtLinksObj;
+
+	const parsedIdentifiers =
+		identifiers &&
+		identifiers.map((entry) => {
+			const resourceLabel = entry.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === "Resource"
+			)?.value;
+			const linkAttr = entry.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === "Link"
+			);
+			const linkLabel = linkAttr?.value;
+			const url = linkAttr?.valqual?.find(
+				(qual: BioStudiesDataAttribute) => qual.name === "url"
+			)?.value;
+
+			return {
+				type: "external_id" as const,
+				link: url,
+				resourceLabel,
+				linkLabel
+			};
+		});
+
+	if (parsedIdentifiers && supplier) {
+		const supplierRegex = /^(.+?)\s*\((.+?)\)$/;
+		const supplierValues = supplier?.value?.match(supplierRegex);
+		const supplierUrl = supplier.valqual?.find(
 			(qual: BioStudiesDataAttribute) => qual.name === "url"
 		)?.value;
 
-		return {
-			type: "external_id" as const,
-			link: url,
-			resourceLabel,
-			linkLabel
-		};
-	});
-
-	return {
-		externalModelLinksByType: {
+		parsedExtLinksObj.externalModelLinksByType = {
 			external_id: parsedIdentifiers,
 			supplier: [
 				{
-          type: "supplier",
+					type: "supplier",
 					link: supplierUrl,
-          resourceLabel: supplierValues[2], // value outside parenthesis
-          linkLabel:  supplierValues[1], // value inside parenthesis
+					resourceLabel: supplierValues[2], // value outside parenthesis
+					linkLabel: supplierValues[1] // value inside parenthesis
 				}
 			]
+		};
+	}
+
+	return parsedExtLinksObj;
+};
+
+const parseEngraftments = (allData: any): Engraftment[] => {
+	const engraftments: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "PDX model engraftment" }
+	])["type:PDX model engraftment"];
+
+	if (!engraftments) return [];
+
+	return engraftments.map((entry) => {
+		const attrMap: Map<string, BioStudiesDataAttribute> = new Map(
+			entry.attributes.map((attr: BioStudiesDataAttribute) => [attr.name, attr])
+		);
+
+		const passageNumber = (attrMap.get("Passage")?.value as string) ?? "";
+		const hostStrain = (attrMap.get("Host Strain Name")?.value as string) ?? "";
+		const hostStrainNomenclature =
+			(attrMap.get("Host Strain Nomenclature")?.value as string) ?? "";
+		const engraftmentSite = (attrMap.get("Site")?.value as string) ?? "";
+		const engraftmentType = (attrMap.get("Type")?.value as string) ?? "";
+		const engraftmentSampleType =
+			(attrMap.get("Material")?.value as string) ?? "";
+		const engraftmentSampleState =
+			(attrMap.get("Material Status")?.value as string) ?? "";
+
+		return {
+			passageNumber,
+			hostStrain,
+			hostStrainNomenclature,
+			engraftmentSite,
+			engraftmentType,
+			engraftmentSampleType,
+			engraftmentSampleState
+		};
+	});
+};
+
+type TreatmentExternalDbLink = {
+	link: string;
+	resourceLabel: string;
+};
+
+type Treatment = {
+	name: string;
+	dose: string;
+	passageRange?: string;
+	response?: string;
+	externalDbLinks?: TreatmentExternalDbLink[];
+};
+
+const parseDrugDosing = (allData: any): Treatment[][] => {
+	const modelTreatment: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Model treatment" }
+	])["type:Model treatment"];
+
+	if (!modelTreatment || modelTreatment.length === 0) return [];
+
+	return modelTreatment.map(
+		({ attributes }: { attributes: BioStudiesDataAttribute[] }) => {
+			const drugAttr = attributes.find((attr) => attr.name === "Drug");
+			const doseAttr = attributes.find((attr) => attr.name === "Dose");
+			const passage =
+				attributes.find((attr) => attr.name === "Passage")?.value ?? "";
+			const response =
+				attributes.find((attr) => attr.name === "Response")?.value ?? "";
+
+			const drugs = ((drugAttr?.value as string) ?? "")
+				.split(/\s*\+\s*/)
+				.map((t) => t.trim());
+			const doses = ((doseAttr?.value as string) ?? "")
+				.split(/\s*\+\s*/)
+				.map((t) => t.trim());
+
+			const externalDbLinks: Record<string, TreatmentExternalDbLink[]> = {};
+
+			for (const attr of attributes) {
+				if (attr.valqual && attr.valqual.length > 0) {
+					const url = attr.valqual.find(
+						(v: BioStudiesDataValqual) => v.name === "url"
+					)?.value;
+					if (url && attr.name) {
+						if (!externalDbLinks[attr.name]) externalDbLinks[attr.name] = [];
+						externalDbLinks[attr.name].push({
+							link: url,
+							resourceLabel: attr.name
+						});
+					}
+				}
+			}
+
+			return drugs.map((drugName, index) => {
+				const dose = doses[index] ?? doses[0] ?? "";
+				const dbLinks = [
+					...(externalDbLinks["ChEMBL"] ?? []),
+					...(externalDbLinks["PubChem"] ?? [])
+				];
+
+				return {
+					name: drugName,
+					dose,
+					passageRange: passage,
+					response,
+					externalDbLinks: dbLinks
+				} as Treatment;
+			});
 		}
+	);
+};
+
+const parsePatientTreatment = (allData: any): Treatment[][] => {
+	const patientTreatment: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Patient treatment" }
+	])["type:Patient treatment"];
+
+	if (!patientTreatment || patientTreatment.length === 0) return [];
+
+	return patientTreatment.map((entry) => {
+		const attrMap: Record<string, Attribute> = Object.fromEntries(
+			entry.attributes.map((attr: BioStudiesDataAttribute) => [attr.name, attr])
+		);
+
+		const dose = attrMap["Dose"]?.value ?? "not provided";
+		const response = attrMap["Response"]?.value ?? "not provided";
+
+		const treatmentNames = (attrMap["Treatment"]?.value ?? "")
+			.split(/\s*\+\s*/)
+			.map((t) => t.trim());
+
+		return treatmentNames.map((treatmentName) => {
+			const links: TreatmentExternalDbLink[] = [];
+
+			for (const db of ["ChEMBL", "PubChem"]) {
+				const attr = attrMap[db];
+				const url = attr?.valqual?.find(
+					(vq: BioStudiesDataValqual) => vq.name === "url"
+				)?.value;
+
+				if (url) {
+					links.push({ link: url, resourceLabel: db });
+				}
+			}
+
+			return {
+				name: treatmentName,
+				dose,
+				response,
+				externalDbLinks: links.length > 0 ? links : null
+			} as Treatment;
+		});
+	});
+};
+
+const parseQualityData = (allData: any): QualityData[] => {
+	const qualityData: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Model quality control" }
+	])["type:Model quality control"];
+
+	return qualityData.map((item) => {
+		const getValue = (name: string) =>
+			item.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === name
+			)?.value ?? "Not provided";
+
+		return {
+			description: getValue("Description"),
+			passagesTested: getValue("Passage"),
+			validationTechnique: getValue("Technique"),
+			validationHostStrainNomenclature: "Not provided",
+			morphologicalFeatures: "Not provided",
+			snpAnalysis: "Not provided",
+			strAnalysis: "Not provided",
+			tumourStatus: "Not provided",
+			modelPurity: "Not provided",
+			comments: "Not provided"
+		};
+	});
+};
+
+const parseModelImages = (allData: any): ModelImage[] => {
+	const histologyImages: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Histology images" }
+	])["type:Histology images"];
+
+	if (!histologyImages) return [];
+
+	return histologyImages.map((item) => {
+		const getValue = (name: string): string =>
+			item.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === name
+			)?.value ?? "Not provided";
+
+		const getValqualURL = (): string => {
+			const urlAttr = item.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === "Url"
+			);
+
+			return (
+				urlAttr?.valqual?.find((v: BioStudiesDataValqual) => v.name === "URL")
+					?.value ?? "Not provided"
+			);
+		};
+
+		return {
+			url: getValqualURL(),
+			description: getValue("Description"),
+			sampleType: getValue("Sample type"),
+			passage: getValue("Passage"),
+			magnification: getValue("Magnification"),
+			staining: getValue("Staining")
+		};
+	});
+};
+
+const parseKnowledgeGraph = (allData: any) => {
+	const knowledgeGraph: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Related models" }
+	])["type:Related models"];
+
+
+
+	return knowledgeGraph;
+};
+
+const parseCellModelData = (allData: any): CellModelData => {
+	const cellModelData: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Model derivation" }
+	])["type:Model derivation"];
+
+	const getValue = (name: string): string =>
+		cellModelData[0].attributes.find(
+			(attr: BioStudiesDataAttribute) => attr.name === name
+		)?.value ?? "Not provided";
+
+	return {
+		growthProperties: getValue("Growth properties"),
+		growthMedia: getValue("Growth media"),
+		plateCoating: getValue("Plate coating"),
+		passageNumber: getValue("Passage"),
+		supplements: getValue("Supplements"),
+		contaminated: getValue("Contaminated"),
+		contaminationDetails: getValue("Contamination details")
 	};
+};
+
+const parsePublications = (allData: any): Publication[] => {
+	const publications: any[] = findMultipleByKeyValues(allData, [
+		{ key: "type", value: "Publications" }
+	])["type:Publications"];
+
+	return publications.map((item) => {
+		const getValue = (name: string): string =>
+			item.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === name
+			)?.value ?? "Not provided";
+
+		const getValqualURL = (name: string): string => {
+			const attr = item.attributes.find(
+				(attr: BioStudiesDataAttribute) => attr.name === name
+			);
+
+			return (
+				attr?.valqual?.find((v: BioStudiesDataValqual) => v.name === "url")
+					?.value ?? ""
+			);
+		};
+
+		return {
+			pmid: getValqualURL("PubMed"),
+			doi: {
+				id: getValue("DOI"),
+				url: getValqualURL("DOI")
+			},
+			pubYear: getValue("Year"),
+			title: getValue("Title"),
+			authorString: getValue("Authors")
+		};
+	});
 };
 
 export const getAllModelData = async (
 	modelId: string,
-	providerId?: string
+  providerId: string
 ): Promise<AllModelData> => {
-	const modelProviderId = providerId ?? (await getProviderId(modelId));
-	const modelData = await getBioStudiesTitleSearchResults(modelId);
+	const modelData = await getBioStudiesTitleSearchResults(modelId, providerId);
 	console.log({ modelData });
 	const metadata = parseMetadata(modelData);
-	const metadataa = await getModelDetailsMetadata(modelId, modelProviderId);
 	const immuneMarkers = parseImmuneMarkers(modelData);
-	const molecularData = parseMolecularData(modelData, modelId, modelProviderId);
-	const pdcmModelId: number = metadataa.pdcmModelId;
+	const molecularData = parseMolecularData(
+		modelData,
+		modelId,
+		metadata.providerId
+	);
 	const extLinks = parseExtLinks(modelData);
-	// const extLinks = await getModelExtLinks(pdcmModelId, modelId); // todo
-	const modelType = metadataa.modelType;
-	const engraftments = await getModelEngraftments(pdcmModelId, modelType); // todo
-	const drugDosing = await getModelDrugDosing(pdcmModelId); // todo
-	const patientTreatment = await getPatientTreatment(pdcmModelId); // todo
-	const qualityData = await getModelQualityData(pdcmModelId); // todo
-	const modelImages = await getModelImages(modelId); // todo
+	const modelType = metadata.modelType;
+	const engraftments = parseEngraftments(modelData);
+	const drugDosing = parseDrugDosing(modelData);
+	const patientTreatment = parsePatientTreatment(modelData);
+	const qualityData = parseQualityData(modelData);
+	const modelImages = parseModelImages(modelData);
 	const knowledgeGraph = await getModelKnowledgeGraph(modelId); // todo
+  const bsKnowledgeGraph = parseKnowledgeGraph(modelData);
+  console.log({knowledgeGraph, bsKnowledgeGraph});
+	const publications = parsePublications(modelData);
+
 	let cellModelData = {} as CellModelData;
 
 	if (modelType !== "PDX") {
-		cellModelData = await getCellModelData(pdcmModelId);
+		cellModelData = parseCellModelData(modelData);
 	}
 
 	return {
@@ -668,6 +651,6 @@ export const getAllModelData = async (
 		qualityData,
 		knowledgeGraph,
 		modelImages,
-		publications: [] as Publication[]
+		publications
 	};
 };
