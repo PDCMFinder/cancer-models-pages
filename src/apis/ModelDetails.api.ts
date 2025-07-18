@@ -1,45 +1,22 @@
 import {
   AllModelData,
-  APIKnowledgeGraph,
   CellModelData,
   Engraftment,
   ExtLinks,
   ImmuneMarker,
-  KnowledgeGraph,
   ModelImage,
   MolecularData,
   ParsedModelMetadata,
   Publication,
-  QualityData
+  QualityData,
+  RelatedModel,
+  RelatedModelRoles
 } from "../types/ModelData.model";
-import { camelCase } from "../utils/dataUtils";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
-
-export async function getModelKnowledgeGraph(
-	modelId: string
-): Promise<KnowledgeGraph> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/model_information?external_model_id=eq.${modelId}&select=knowledge_graph`
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response
-		.json()
-		.then((d: { knowledge_graph: APIKnowledgeGraph | null }[]) => {
-			const apiGraph = d[0]?.knowledge_graph;
-			const data: KnowledgeGraph = {
-				edges: apiGraph?.edges?.map((edge) => camelCase(edge)) ?? [],
-				nodes: apiGraph?.nodes?.map((node) => camelCase(node)) ?? []
-			};
-
-			return data;
-		});
-}
 
 const getBioStudiesTitleSearchResults = async (
 	modelId: string,
-  providerId: string
+	providerId: string
 ): Promise<Record<string, string>> => {
 	if (!modelId) return {};
 
@@ -227,6 +204,7 @@ const parseMolecularData = (
 		{ key: "type", value: "Molecular data" }
 	]);
 	const molecularData = data["type:Molecular data"];
+	if (!molecularData) return [];
 
 	return molecularData.map((entry) => {
 		const attrMap: Map<string, BioStudiesDataAttribute> = new Map(
@@ -486,6 +464,8 @@ const parseQualityData = (allData: any): QualityData[] => {
 		{ key: "type", value: "Model quality control" }
 	])["type:Model quality control"];
 
+	if (!qualityData) return [];
+
 	return qualityData.map((item) => {
 		const getValue = (name: string) =>
 			item.attributes.find(
@@ -542,14 +522,29 @@ const parseModelImages = (allData: any): ModelImage[] => {
 	});
 };
 
-const parseKnowledgeGraph = (allData: any) => {
-	const knowledgeGraph: any[] = findMultipleByKeyValues(allData, [
+const parseRelatedModel = (allData: any): RelatedModel | null => {
+	const relatedModels: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Related models" }
 	])["type:Related models"];
 
+	if (!relatedModels) return null;
 
+	const getValue = (srcObj: any, name: string): string =>
+		srcObj.find((attr: BioStudiesDataAttribute) => attr.name === name)?.value ??
+		"Not provided";
 
-	return knowledgeGraph;
+	function isRole(value: any): value is RelatedModelRoles {
+		return value === "parent of" || value === "child of";
+	}
+
+	const rawRole = getValue(relatedModels[0].links[0].attributes, "Role");
+
+	return {
+		role: isRole(rawRole)
+			? rawRole
+			: "parent of",
+		relatedModelId: relatedModels[0].links[0].url
+	};
 };
 
 const parseCellModelData = (allData: any): CellModelData => {
@@ -577,6 +572,8 @@ const parsePublications = (allData: any): Publication[] => {
 	const publications: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Publications" }
 	])["type:Publications"];
+
+	if (!publications) return [];
 
 	return publications.map((item) => {
 		const getValue = (name: string): string =>
@@ -610,7 +607,7 @@ const parsePublications = (allData: any): Publication[] => {
 
 export const getAllModelData = async (
 	modelId: string,
-  providerId: string
+	providerId: string
 ): Promise<AllModelData> => {
 	const modelData = await getBioStudiesTitleSearchResults(modelId, providerId);
 	console.log({ modelData });
@@ -628,9 +625,7 @@ export const getAllModelData = async (
 	const patientTreatment = parsePatientTreatment(modelData);
 	const qualityData = parseQualityData(modelData);
 	const modelImages = parseModelImages(modelData);
-	const knowledgeGraph = await getModelKnowledgeGraph(modelId); // todo
-  const bsKnowledgeGraph = parseKnowledgeGraph(modelData);
-  console.log({knowledgeGraph, bsKnowledgeGraph});
+	const relatedModel = parseRelatedModel(modelData);
 	const publications = parsePublications(modelData);
 
 	let cellModelData = {} as CellModelData;
@@ -649,7 +644,7 @@ export const getAllModelData = async (
 		drugDosing,
 		patientTreatment,
 		qualityData,
-		knowledgeGraph,
+		relatedModel,
 		modelImages,
 		publications
 	};

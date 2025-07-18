@@ -1,4 +1,3 @@
-import { CamelCaseKeys } from "../../types/globalTypes";
 
 export type ImmuneMarkerAPI = {
 	model_id: string;
@@ -21,10 +20,17 @@ export type AllModelData = {
 	drugDosing: Treatment[][];
 	patientTreatment: Treatment[][];
 	qualityData: QualityData[];
-	knowledgeGraph: KnowledgeGraph;
+  relatedModel: RelatedModel | null;
 	modelImages: ModelImage[];
 	publications: Publication[];
 };
+
+export type RelatedModelRoles = "parent of" | "child of"
+
+export type RelatedModel = {
+  role: RelatedModelRoles;
+  relatedModelId: string;
+}
 
 export type ParsedModelMetadata = {
 	histology: string;
@@ -397,8 +403,6 @@ export type APIKnowledgeGraph = {
 		data_source: string;
 	}[];
 };
-
-export type KnowledgeGraph = CamelCaseKeys<APIKnowledgeGraph>;
 
 export type Publication = {
 	pmid: string;

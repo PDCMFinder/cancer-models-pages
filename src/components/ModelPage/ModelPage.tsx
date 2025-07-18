@@ -5,8 +5,8 @@ import Head from "next/head";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
-import { ReactFlowProvider } from "reactflow";
 import FloatingButton from "../../components/FloatingWidget/FloatingButton";
+import HierarchyTree from "../../components/HierarchyTree/HierarchyTree";
 import ModelTypeIcon from "../../components/Icons/ModelTypeIcon";
 import ImageChecker from "../../components/ImageChecker/ImageChecker";
 import Loader from "../../components/Loader/Loader";
@@ -54,7 +54,7 @@ const ModelPage = ({
 	cellModelData,
 	engraftments,
 	modelImages,
-	knowledgeGraph,
+	relatedModel,
 	publications
 }: AllModelData) => {
 	const NA_STRING = "N/A",
@@ -338,8 +338,7 @@ const ModelPage = ({
 											)}
 										</li>
 										<li className="mb-2">
-											{knowledgeGraph.edges.length > 0 &&
-											knowledgeGraph.nodes.length > 0 ? (
+											{relatedModel ? (
 												<Link
 													replace
 													href="#related-models"
@@ -1167,21 +1166,17 @@ const ModelPage = ({
 									</div>
 								</div>
 							)}
-							{knowledgeGraph.edges.length > 0 &&
-								knowledgeGraph.nodes.length > 0 && (
-									<div id="related-models" className="row mb-5 pt-3">
-										<div className="col-12 mb-1">
-											<h2 className="mt-0 mb-4">Related models</h2>
-											<ReactFlowProvider>
-												<DynamicHierarchyTree
-													providerId={metadata.providerId}
-													modelId={metadata.modelId}
-													data={knowledgeGraph}
-												/>
-											</ReactFlowProvider>
-										</div>
+							{relatedModel && (
+								<div id="related-models" className="row mb-5 pt-3">
+									<div className="col-12 mb-1">
+										<h2 className="mt-0 mb-4">Related models</h2>
+										<HierarchyTree
+											modelId={metadata.modelId}
+											{...relatedModel}
+										/>
 									</div>
-								)}
+								</div>
+							)}
 							{validHistologyImages.length > 0 && (
 								<div id="histology-images" className="row mb-5 pt-3">
 									<div className="col-12 mb-1">

@@ -1,5 +1,9 @@
-.nodeType {
-	&-patient {
-		background: red;
-	}
+@import "../../styles/vars";
+
+.CustomNode {
+	border: 0.1rem solid;
+	padding: 1.1rem 2.2rem;
+	display: inline-flex;
+	border-radius: $br-common;
+	line-height: 1;
 }
