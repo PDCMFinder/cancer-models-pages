@@ -231,6 +231,9 @@ img {
 	&-min {
 		width: min-content;
 	}
+	&-max {
+		width: max-content;
+	}
 	@include mediaOver("lg") {
 		&-lg-auto {
 			width: auto;

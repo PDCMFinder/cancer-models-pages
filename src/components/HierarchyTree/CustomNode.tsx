@@ -1,15 +1,15 @@
 import styles from "./CustomNode.module.scss";
 
-type Props = {
-	children: React.ReactNode;
-	current?: boolean;
-};
-
-const CustomNode = (props: Props) => {
+const CustomNode = ({
+	current,
+	ref,
+	...props
+}: { current?: boolean } & React.ComponentProps<"div">) => {
 	return (
 		<div
-			className={styles.CustomNode}
-			style={{ backgroundColor: props.current ? "pink" : "transparent" }}
+			ref={ref}
+			className={`${styles.CustomNode} ${current ? "current" : ""}`}
+			{...props}
 		>
 			{props.children}
 		</div>

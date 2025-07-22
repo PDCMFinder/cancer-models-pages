@@ -20,7 +20,7 @@ export type AllModelData = {
 	drugDosing: Treatment[][];
 	patientTreatment: Treatment[][];
 	qualityData: QualityData[];
-  relatedModel: RelatedModel | null;
+  relatedModel: RelatedModel[];
 	modelImages: ModelImage[];
 	publications: Publication[];
 };

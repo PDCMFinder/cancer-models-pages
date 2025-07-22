@@ -9,7 +9,6 @@ import {
   ParsedModelMetadata,
   Publication,
   QualityData,
-  RelatedModel,
   RelatedModelRoles
 } from "../types/ModelData.model";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
@@ -91,7 +90,8 @@ const parseMetadata = (allData: any): ParsedModelMetadata => {
 	const primarySite = data["name:Primary Site"][0]?.value;
 	const title = data["name:Title"][0]?.value; //  "[providerId] [modelType] [modelId] Histology"
 	const providerId = title.match(/\[(.*?)\]/)[1]; // first match is provider id
-	const providerName = data["type:Organization"][0]?.attributes[0].value;
+	const providerName =
+		data["type:Organization"][0]?.attributes[0].value.match(/^(.*?)\s*\(/)[1]; // we don't want the parenthesis that includes the ID
 	const tumourType = data["name:Tumour Type"][0]?.value;
 	const dateSubmitted = data["name:ReleaseDate"][0]?.value;
 
@@ -522,29 +522,31 @@ const parseModelImages = (allData: any): ModelImage[] => {
 	});
 };
 
-const parseRelatedModel = (allData: any): RelatedModel | null => {
+const parseRelatedModel = (allData: any): any[] => { // todo any
 	const relatedModels: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Related models" }
 	])["type:Related models"];
 
-	if (!relatedModels) return null;
+	if (!relatedModels) return [];
 
 	const getValue = (srcObj: any, name: string): string =>
 		srcObj.find((attr: BioStudiesDataAttribute) => attr.name === name)?.value ??
 		"Not provided";
 
-	function isRole(value: any): value is RelatedModelRoles {
+	function isRoleTS(value: any): value is RelatedModelRoles {
 		return value === "parent of" || value === "child of";
 	}
 
 	const rawRole = getValue(relatedModels[0].links[0].attributes, "Role");
 
-	return {
-		role: isRole(rawRole)
-			? rawRole
-			: "parent of",
-		relatedModelId: relatedModels[0].links[0].url
-	};
+	return relatedModels[0].links.map(
+		(link: { url: string; attributes: { name: string; value: string } }) => {
+			return ({
+				role: isRoleTS(rawRole) ? rawRole : "parent of",
+				relatedModelId: link.url
+			});
+		}
+	);
 };
 
 const parseCellModelData = (allData: any): CellModelData => {

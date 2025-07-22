@@ -6,4 +6,7 @@
 	display: inline-flex;
 	border-radius: $br-common;
 	line-height: 1;
+  &.current {
+    background-color: red;
+  }
 }
