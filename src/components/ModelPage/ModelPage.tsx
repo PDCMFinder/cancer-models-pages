@@ -1139,20 +1139,6 @@ const ModelPage = ({
 																			>
 																				{treatment.response}
 																				<br />
-																				{/* hack to handle height from name row links */}
-																				{/* {treatment.externalDbLinks?.map(
-																					(externalDbLink) => {
-																						return (
-																							<span
-																								key={externalDbLink.link}
-																								className="text-white"
-																								style={{ opacity: 0 }}
-																							>
-																								.
-																							</span>
-																						);
-																					}
-																				)} */}
 																			</div>
 																		);
 																	})}
@@ -1166,7 +1152,7 @@ const ModelPage = ({
 									</div>
 								</div>
 							)}
-							{relatedModel && (
+							{relatedModel.length > 0 && (
 								<div id="related-models" className="row mb-5 pt-3">
 									<div className="col-12 mb-1">
 										<h2 className="mt-0 mb-4">Related models</h2>

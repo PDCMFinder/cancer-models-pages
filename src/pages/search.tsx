@@ -375,7 +375,10 @@ const Search: NextPage = () => {
 	const compareModels = () => {
 		if (modelsToCompare.length > 1) {
 			let compareModelsQuery = modelsToCompare.join("+");
-			window.open(`/compare?models=${compareModelsQuery}`, "_blank");
+			window.open(
+				`/cancer-models-pages/compare?models=${compareModelsQuery}`,
+				"_blank"
+			);
 
 			setModelsToCompare([]);
 		} else {

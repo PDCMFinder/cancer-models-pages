@@ -11,8 +11,6 @@ import Button from "../components/Button/Button";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
 import ModelTypeIcon from "../components/Icons/ModelTypeIcon";
 import Loader from "../components/Loader/Loader";
-import ModelNotAvailable from "../components/ModelNotAvailable/ModelNotAvailable";
-import QualityBadge from "../components/QualityBadge/QualityBadge";
 import ShowHide from "../components/ShowHide/ShowHide";
 import Tooltip from "../components/Tooltip/Tooltip";
 import useWindowDimensions from "../hooks/useWindowDimensions";
@@ -149,7 +147,7 @@ const Compare: NextPage = () => {
 													</sub>
 													<h1 className="h3 m-0">
 														<Link
-															href={`/data/models/${metadata.providerId}/${data?.metadata.modelId}`}
+															href={`/data/models/${metadata.providerId}/${metadata.modelId}`}
 															className="text-primary-primary"
 														>
 															{metadata.modelId}
@@ -160,14 +158,7 @@ const Compare: NextPage = () => {
 														modelType={metadata.modelType}
 														size="1.5em"
 													/>
-													{!metadata.modelAvailable && <ModelNotAvailable />}
 												</div>
-												<QualityBadge
-													className="w-50"
-													score={metadata.score}
-													style={{ width: "10em" }}
-													containerClassName="text-muted"
-												/>
 											</div>
 										</div>
 									) : null;
@@ -188,15 +179,15 @@ const Compare: NextPage = () => {
 											</p>
 										</div>
 										{allModelsData.map(({ data }) => {
-											return data ? (
+											const metadata = data?.metadata;
+
+											return metadata ? (
 												<div
 													className="col"
-													key={
-														data.metadata.modelId + data?.metadata.patientSex
-													}
+													key={metadata.modelId + metadata.patientSex}
 												>
 													<p className="text-capitalize">
-														{data.metadata.patientSex}
+														{metadata.patientSex}
 													</p>
 												</div>
 											) : null;
@@ -446,7 +437,7 @@ const Compare: NextPage = () => {
 							{allModelsData.some(
 								({ data }) =>
 									data?.metadata?.modelType !== PDX_STRING &&
-									data?.cellModelData?.id
+									data?.cellModelData?.growthMedia
 							) ? (
 								<div
 									className={`row ${styles.Compare_table}`}
@@ -491,7 +482,7 @@ const Compare: NextPage = () => {
 														className="col"
 														key={data?.metadata.modelId + "derivation"}
 													>
-														{data?.cellModelData.id && (
+														{data?.cellModelData.growthMedia && (
 															<div
 																className="mb-2"
 																key={data?.metadata.modelId}

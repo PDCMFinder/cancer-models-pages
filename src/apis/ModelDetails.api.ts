@@ -15,12 +15,14 @@ import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
 const getBioStudiesTitleSearchResults = async (
 	modelId: string,
-	providerId: string
+	providerId?: string
 ): Promise<Record<string, string>> => {
 	if (!modelId) return {};
 
 	const searchResultsResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?title=${modelId}+AND+${providerId}&type=study&isPublic=true`
+		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?title=${modelId}${
+			providerId && `+AND+${providerId}`
+		}&type=study&isPublic=true`
 	);
 
 	if (!searchResultsResponse.ok) {
@@ -522,7 +524,8 @@ const parseModelImages = (allData: any): ModelImage[] => {
 	});
 };
 
-const parseRelatedModel = (allData: any): any[] => { // todo any
+const parseRelatedModel = (allData: any): any[] => {
+	// todo any
 	const relatedModels: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Related models" }
 	])["type:Related models"];
@@ -541,10 +544,10 @@ const parseRelatedModel = (allData: any): any[] => { // todo any
 
 	return relatedModels[0].links.map(
 		(link: { url: string; attributes: { name: string; value: string } }) => {
-			return ({
+			return {
 				role: isRoleTS(rawRole) ? rawRole : "parent of",
 				relatedModelId: link.url
-			});
+			};
 		}
 	);
 };
@@ -609,10 +612,9 @@ const parsePublications = (allData: any): Publication[] => {
 
 export const getAllModelData = async (
 	modelId: string,
-	providerId: string
+	providerId?: string
 ): Promise<AllModelData> => {
 	const modelData = await getBioStudiesTitleSearchResults(modelId, providerId);
-	console.log({ modelData });
 	const metadata = parseMetadata(modelData);
 	const immuneMarkers = parseImmuneMarkers(modelData);
 	const molecularData = parseMolecularData(
