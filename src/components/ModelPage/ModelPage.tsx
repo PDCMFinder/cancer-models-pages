@@ -1172,6 +1172,7 @@ const ModelPage = ({
 										<h2 className="mt-0 mb-4">Related models</h2>
 										<HierarchyTree
 											modelId={metadata.modelId}
+											providerId={metadata.providerId}
 											data={relatedModel}
 										/>
 									</div>

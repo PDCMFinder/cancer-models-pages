@@ -6,7 +6,8 @@
 	display: inline-flex;
 	border-radius: $br-common;
 	line-height: 1;
-  &.current {
-    background-color: red;
+  &_current {
+    border-width: .15rem;
+    background-color: $color-primary-quaternary-lighter;
   }
 }
