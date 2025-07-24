@@ -1,11 +1,15 @@
 import {
   AllModelData,
+  Attribute,
+  BioStudiesModelData,
+  BsImmuneMarkers,
   CellModelData,
   Engraftment,
   ExtLinks,
   ImmuneMarker,
   ModelImage,
   MolecularData,
+  MolecularDataExternalDbLink,
   ParsedModelMetadata,
   Publication,
   QualityData,
@@ -16,12 +20,12 @@ import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 const getBioStudiesTitleSearchResults = async (
 	modelId: string,
 	providerId?: string
-): Promise<Record<string, string>> => {
-	if (!modelId) return {};
+): Promise<BioStudiesModelData> => {
+	if (!modelId) return {} as BioStudiesModelData;
 
 	const searchResultsResponse = await fetch(
 		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?title=${modelId}${
-			providerId && `+AND+${providerId}`
+			providerId ? `+AND+${providerId}` : ""
 		}&type=study&isPublic=true`
 	);
 
@@ -36,7 +40,9 @@ const getBioStudiesTitleSearchResults = async (
 		.then((d) => (d.totalHits > 0 ? d.hits[0].accession : ""));
 
 	if (!accessionId) {
-		throw new Error("No model exists with that accession ID");
+		throw new Error(
+			`No model exists with that accession ID. No id for: ${modelId}`
+		);
 	}
 
 	const modelDataResponse = await fetch(
@@ -50,7 +56,7 @@ const getBioStudiesTitleSearchResults = async (
 	return modelDataResponse.json();
 };
 
-const parseMetadata = (allData: any): ParsedModelMetadata => {
+const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 	//we get/return these pieces of data
 	// case sensitive
 	const criteria = [
@@ -118,22 +124,7 @@ const parseMetadata = (allData: any): ParsedModelMetadata => {
 	};
 };
 
-type Attribute = {
-	name: string;
-	value: string;
-	valqual?: { name: string; value: string }[];
-};
-
-type Subsection = {
-	type?: string;
-	attributes: Attribute[];
-};
-
-type BsImmuneMarkers = {
-	subsections: Subsection[][];
-};
-
-const parseImmuneMarkers = (allData: any): ImmuneMarker[] => {
+const parseImmuneMarkers = (allData: BioStudiesModelData): ImmuneMarker[] => {
 	const data = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Immune markers" }
 	]);
@@ -183,22 +174,8 @@ const parseImmuneMarkers = (allData: any): ImmuneMarker[] => {
 	return immuneMarkers;
 };
 
-type BioStudiesDataValqual = { name: string; value: string };
-
-type BioStudiesDataAttribute = {
-	name: string;
-	value: string | number | null;
-	valqual?: BioStudiesDataValqual[];
-};
-
-type MolecularDataExternalDbLink = {
-	column: string;
-	resource: string;
-	link: string;
-};
-
 const parseMolecularData = (
-	allData: any,
+	allData: BioStudiesModelData,
 	modelId: string,
 	providerId: string
 ): MolecularData[] => {
@@ -209,8 +186,8 @@ const parseMolecularData = (
 	if (!molecularData) return [];
 
 	return molecularData.map((entry) => {
-		const attrMap: Map<string, BioStudiesDataAttribute> = new Map(
-			entry.attributes.map((attr: BioStudiesDataAttribute) => [attr.name, attr])
+		const attrMap: Map<string, Attribute> = new Map(
+			entry.attributes.map((attr: Attribute) => [attr.name, attr])
 		);
 
 		const sampleId = attrMap.get("Sample ID")?.value as string;
@@ -255,7 +232,7 @@ const parseMolecularData = (
 	});
 };
 
-const parseExtLinks = (allData: any): ExtLinks => {
+const parseExtLinks = (allData: BioStudiesModelData): ExtLinks => {
 	const identifiers: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Identifiers" }
 	])["type:Identifiers"];
@@ -270,14 +247,14 @@ const parseExtLinks = (allData: any): ExtLinks => {
 		identifiers &&
 		identifiers.map((entry) => {
 			const resourceLabel = entry.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === "Resource"
+				(attr: Attribute) => attr.name === "Resource"
 			)?.value;
 			const linkAttr = entry.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === "Link"
+				(attr: Attribute) => attr.name === "Link"
 			);
 			const linkLabel = linkAttr?.value;
 			const url = linkAttr?.valqual?.find(
-				(qual: BioStudiesDataAttribute) => qual.name === "url"
+				(qual: Attribute) => qual.name === "url"
 			)?.value;
 
 			return {
@@ -292,7 +269,7 @@ const parseExtLinks = (allData: any): ExtLinks => {
 		const supplierRegex = /^(.+?)\s*\((.+?)\)$/;
 		const supplierValues = supplier?.value?.match(supplierRegex);
 		const supplierUrl = supplier.valqual?.find(
-			(qual: BioStudiesDataAttribute) => qual.name === "url"
+			(qual: Attribute) => qual.name === "url"
 		)?.value;
 
 		parsedExtLinksObj.externalModelLinksByType = {
@@ -311,7 +288,7 @@ const parseExtLinks = (allData: any): ExtLinks => {
 	return parsedExtLinksObj;
 };
 
-const parseEngraftments = (allData: any): Engraftment[] => {
+const parseEngraftments = (allData: BioStudiesModelData): Engraftment[] => {
 	const engraftments: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "PDX model engraftment" }
 	])["type:PDX model engraftment"];
@@ -319,8 +296,8 @@ const parseEngraftments = (allData: any): Engraftment[] => {
 	if (!engraftments) return [];
 
 	return engraftments.map((entry) => {
-		const attrMap: Map<string, BioStudiesDataAttribute> = new Map(
-			entry.attributes.map((attr: BioStudiesDataAttribute) => [attr.name, attr])
+		const attrMap: Map<string, Attribute> = new Map(
+			entry.attributes.map((attr: Attribute) => [attr.name, attr])
 		);
 
 		const passageNumber = (attrMap.get("Passage")?.value as string) ?? "";
@@ -359,7 +336,7 @@ type Treatment = {
 	externalDbLinks?: TreatmentExternalDbLink[];
 };
 
-const parseDrugDosing = (allData: any): Treatment[][] => {
+const parseDrugDosing = (allData: BioStudiesModelData): Treatment[][] => {
 	const modelTreatment: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Model treatment" }
 	])["type:Model treatment"];
@@ -367,7 +344,7 @@ const parseDrugDosing = (allData: any): Treatment[][] => {
 	if (!modelTreatment || modelTreatment.length === 0) return [];
 
 	return modelTreatment.map(
-		({ attributes }: { attributes: BioStudiesDataAttribute[] }) => {
+		({ attributes }: { attributes: Attribute[] }) => {
 			const drugAttr = attributes.find((attr) => attr.name === "Drug");
 			const doseAttr = attributes.find((attr) => attr.name === "Dose");
 			const passage =
@@ -387,7 +364,7 @@ const parseDrugDosing = (allData: any): Treatment[][] => {
 			for (const attr of attributes) {
 				if (attr.valqual && attr.valqual.length > 0) {
 					const url = attr.valqual.find(
-						(v: BioStudiesDataValqual) => v.name === "url"
+						(v: Attribute) => v.name === "url"
 					)?.value;
 					if (url && attr.name) {
 						if (!externalDbLinks[attr.name]) externalDbLinks[attr.name] = [];
@@ -418,7 +395,7 @@ const parseDrugDosing = (allData: any): Treatment[][] => {
 	);
 };
 
-const parsePatientTreatment = (allData: any): Treatment[][] => {
+const parsePatientTreatment = (allData: BioStudiesModelData): Treatment[][] => {
 	const patientTreatment: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Patient treatment" }
 	])["type:Patient treatment"];
@@ -427,7 +404,7 @@ const parsePatientTreatment = (allData: any): Treatment[][] => {
 
 	return patientTreatment.map((entry) => {
 		const attrMap: Record<string, Attribute> = Object.fromEntries(
-			entry.attributes.map((attr: BioStudiesDataAttribute) => [attr.name, attr])
+			entry.attributes.map((attr: Attribute) => [attr.name, attr])
 		);
 
 		const dose = attrMap["Dose"]?.value ?? "not provided";
@@ -443,7 +420,7 @@ const parsePatientTreatment = (allData: any): Treatment[][] => {
 			for (const db of ["ChEMBL", "PubChem"]) {
 				const attr = attrMap[db];
 				const url = attr?.valqual?.find(
-					(vq: BioStudiesDataValqual) => vq.name === "url"
+					(vq: Attribute) => vq.name === "url"
 				)?.value;
 
 				if (url) {
@@ -461,7 +438,7 @@ const parsePatientTreatment = (allData: any): Treatment[][] => {
 	});
 };
 
-const parseQualityData = (allData: any): QualityData[] => {
+const parseQualityData = (allData: BioStudiesModelData): QualityData[] => {
 	const qualityData: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Model quality control" }
 	])["type:Model quality control"];
@@ -471,7 +448,7 @@ const parseQualityData = (allData: any): QualityData[] => {
 	return qualityData.map((item) => {
 		const getValue = (name: string) =>
 			item.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === name
+				(attr: Attribute) => attr.name === name
 			)?.value ?? "Not provided";
 
 		return {
@@ -489,7 +466,7 @@ const parseQualityData = (allData: any): QualityData[] => {
 	});
 };
 
-const parseModelImages = (allData: any): ModelImage[] => {
+const parseModelImages = (allData: BioStudiesModelData): ModelImage[] => {
 	const histologyImages: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Histology images" }
 	])["type:Histology images"];
@@ -499,16 +476,16 @@ const parseModelImages = (allData: any): ModelImage[] => {
 	return histologyImages.map((item) => {
 		const getValue = (name: string): string =>
 			item.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === name
+				(attr: Attribute) => attr.name === name
 			)?.value ?? "Not provided";
 
 		const getValqualURL = (): string => {
 			const urlAttr = item.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === "Url"
+				(attr: Attribute) => attr.name === "Url"
 			);
 
 			return (
-				urlAttr?.valqual?.find((v: BioStudiesDataValqual) => v.name === "URL")
+				urlAttr?.valqual?.find((v: Attribute) => v.name === "URL")
 					?.value ?? "Not provided"
 			);
 		};
@@ -524,7 +501,7 @@ const parseModelImages = (allData: any): ModelImage[] => {
 	});
 };
 
-const parseRelatedModel = (allData: any): any[] => {
+const parseRelatedModel = (allData: BioStudiesModelData): any[] => {
 	// todo any
 	const relatedModels: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Related models" }
@@ -533,7 +510,7 @@ const parseRelatedModel = (allData: any): any[] => {
 	if (!relatedModels) return [];
 
 	const getValue = (srcObj: any, name: string): string =>
-		srcObj.find((attr: BioStudiesDataAttribute) => attr.name === name)?.value ??
+		srcObj.find((attr: Attribute) => attr.name === name)?.value ??
 		"Not provided";
 
 	function isRoleTS(value: any): value is RelatedModelRoles {
@@ -552,14 +529,14 @@ const parseRelatedModel = (allData: any): any[] => {
 	);
 };
 
-const parseCellModelData = (allData: any): CellModelData => {
+const parseCellModelData = (allData: BioStudiesModelData): CellModelData => {
 	const cellModelData: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Model derivation" }
 	])["type:Model derivation"];
 
 	const getValue = (name: string): string =>
 		cellModelData[0].attributes.find(
-			(attr: BioStudiesDataAttribute) => attr.name === name
+			(attr: Attribute) => attr.name === name
 		)?.value ?? "Not provided";
 
 	return {
@@ -573,7 +550,7 @@ const parseCellModelData = (allData: any): CellModelData => {
 	};
 };
 
-const parsePublications = (allData: any): Publication[] => {
+const parsePublications = (allData: BioStudiesModelData): Publication[] => {
 	const publications: any[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Publications" }
 	])["type:Publications"];
@@ -583,16 +560,16 @@ const parsePublications = (allData: any): Publication[] => {
 	return publications.map((item) => {
 		const getValue = (name: string): string =>
 			item.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === name
+				(attr: Attribute) => attr.name === name
 			)?.value ?? "Not provided";
 
 		const getValqualURL = (name: string): string => {
 			const attr = item.attributes.find(
-				(attr: BioStudiesDataAttribute) => attr.name === name
+				(attr: Attribute) => attr.name === name
 			);
 
 			return (
-				attr?.valqual?.find((v: BioStudiesDataValqual) => v.name === "url")
+				attr?.valqual?.find((v: Attribute) => v.name === "url")
 					?.value ?? ""
 			);
 		};
@@ -615,6 +592,7 @@ export const getAllModelData = async (
 	providerId?: string
 ): Promise<AllModelData> => {
 	const modelData = await getBioStudiesTitleSearchResults(modelId, providerId);
+	console.log(modelData);
 	const metadata = parseMetadata(modelData);
 	const immuneMarkers = parseImmuneMarkers(modelData);
 	const molecularData = parseMolecularData(

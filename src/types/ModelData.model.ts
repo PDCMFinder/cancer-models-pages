@@ -87,26 +87,6 @@ export type Marker = {
 	value: string[];
 };
 
-export type APIEngraftment = {
-	passage_number: string;
-	host_strain: {
-		name: string;
-		nomenclature: string;
-	};
-	engraftment_site: {
-		name: string;
-	};
-	engraftment_type: {
-		name: string;
-	};
-	engraftment_sample_type: {
-		name: string;
-	};
-	engraftment_sample_state: {
-		name: string;
-	};
-};
-
 export type Engraftment = {
 	passageNumber: string;
 	hostStrain: string;
@@ -178,4 +158,63 @@ export type Publication = {
 	pubYear: string;
 	title: string;
 	authorString: string;
+};
+
+
+export type BioStudiesModelData = {
+	accno: string;
+	attributes: Attribute[];
+	section: Section;
+	type: string;
+};
+
+export type Attribute = {
+	name: string;
+	value: string;
+	valqual?: Attribute[];
+};
+
+export type Section = {
+	accno: string;
+	type: string;
+	attributes: Attribute[];
+	subsections: [Subsection[], FileGroup?, RelatedModels?];
+};
+
+export type Subsection = {
+	accno?: string;
+	type: string;
+	attributes: Attribute[];
+	files?: File[];
+};
+
+export type FileGroup = {
+	files: File[];
+};
+
+export type File = {
+	path: string;
+	size: number;
+	attributes: Attribute[];
+	type: string;
+};
+
+export type RelatedModels = {
+	type: "Related models";
+	links: RelatedModelLink[];
+};
+
+export type RelatedModelLink = {
+	url: string;
+	attributes: Attribute[];
+};
+
+export type BsImmuneMarkers = {
+	subsections: Subsection[][];
+};
+
+export type MolecularDataExternalDbLink = {
+	column: string;
+	resource: string;
+	link: string;
 };
