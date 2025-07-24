@@ -338,7 +338,7 @@ const ModelPage = ({
 											)}
 										</li>
 										<li className="mb-2">
-											{relatedModel ? (
+											{relatedModel.length ? (
 												<Link
 													replace
 													href="#related-models"

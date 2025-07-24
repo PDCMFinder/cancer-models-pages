@@ -11,7 +11,7 @@ export const fetchModelData = async (modelId: string, providerId: string) => {
 		patientTreatment,
 		qualityData,
 		modelImages,
-		knowledgeGraph
+		relatedModel
 	} = await getAllModelData(modelId, providerId);
 
 	return {
@@ -24,6 +24,6 @@ export const fetchModelData = async (modelId: string, providerId: string) => {
 		patientTreatment,
 		qualityData,
 		modelImages,
-		knowledgeGraph
+		relatedModel
 	};
 };
