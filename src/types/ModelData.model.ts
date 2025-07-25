@@ -81,7 +81,7 @@ export type ImmuneMarker = {
 	markers: Marker[];
 };
 
-export type Marker = {
+type Marker = {
 	details: string;
 	name: string;
 	value: string[];
@@ -107,13 +107,7 @@ export type CellModelData = {
 	supplements: string;
 };
 
-export type DrugDosing = {
-	treatmentName: string;
-	treatmentDose: string;
-	treatmentResponse: string;
-};
-
-type TreatmentExternalDbLink = {
+export type TreatmentExternalDbLink = {
 	link: string;
 	resourceLabel: string;
 };
@@ -160,7 +154,6 @@ export type Publication = {
 	authorString: string;
 };
 
-
 export type BioStudiesModelData = {
 	accno: string;
 	attributes: Attribute[];
@@ -188,11 +181,11 @@ export type Subsection = {
 	files?: File[];
 };
 
-export type FileGroup = {
+type FileGroup = {
 	files: File[];
 };
 
-export type File = {
+type File = {
 	path: string;
 	size: number;
 	attributes: Attribute[];
@@ -204,7 +197,7 @@ export type RelatedModels = {
 	links: RelatedModelLink[];
 };
 
-export type RelatedModelLink = {
+type RelatedModelLink = {
 	url: string;
 	attributes: Attribute[];
 };

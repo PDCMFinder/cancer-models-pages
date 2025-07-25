@@ -5,8 +5,6 @@ import { SearchResult as SearchResultType } from "../../../types/Search.model";
 import breakPoints from "../../../utils/breakpoints";
 import Card from "../../Card/Card";
 import InputAndLabel from "../../Input/InputAndLabel";
-import ModelNotAvailable from "../../ModelNotAvailable/ModelNotAvailable";
-import QualityBadge from "../../QualityBadge/QualityBadge";
 import ShowHide from "../../ShowHide/ShowHide";
 import styles from "./SearchResult.module.scss";
 
@@ -56,19 +54,17 @@ const SearchResult = (props: SearchResultProps) => {
 	const { windowWidth = 0 } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
 	const {
-		pdcmId,
-		sourceId,
 		providerName,
+		providerId,
 		histology,
 		primarySite,
 		collectionSite,
 		tumourType,
-		dataAvailable,
 		modelType,
+		modelId,
 		patientAge,
 		patientSex,
-		score,
-		modelAvailable
+		dataAvailable
 	} = props.data;
 
 	const metadata = [
@@ -80,51 +76,28 @@ const SearchResult = (props: SearchResultProps) => {
 		{ name: "Patient Age", data: patientAge }
 	];
 
-	const modelLink = `/data/models/${sourceId}/${pdcmId}`;
+	const modelLink = `/data/models/${providerId}/${modelId}`;
 
 	return (
-		<Card
-			className={`${styles.SearchResult} ${
-				modelAvailable ? "" : styles.modelNotAvailable
-			}`}
-			id="tour_searchResult"
-		>
+		<Card className={styles.SearchResult} id="tour_searchResult">
 			<div className="row">
 				<div className="col-12 col-md-6 col-lg-4 d-lg-flex flex-column justify-content-between">
 					<div>
 						<h2 className="h3 m-0">
-							<Link href={modelLink}>{pdcmId}</Link>
+							<Link href={modelLink}>{modelId}</Link>
 						</h2>
 						<p className="text-capitalize mb-0">
-							<Link href={`/about/providers/${sourceId}`} title={providerName}>
+							<Link
+								href={`/about/providers/${providerId}`}
+								title={providerName}
+							>
 								{`${providerName?.substring(0, 50)}${
 									providerName?.length > 50 ? "..." : ""
 								}`}
 							</Link>
 						</p>
-						{!modelAvailable && <ModelNotAvailable />}
 					</div>
-					<ShowHide showOver={bpLarge} windowWidth={windowWidth}>
-						{score > 0 && (
-							<QualityBadge
-								score={score}
-								containerClassName="text-muted"
-								style={{ width: "10em" }}
-								className="w-50"
-							/>
-						)}
-					</ShowHide>
 					<p>{histology}</p>
-					<ShowHide hideOver={bpLarge} windowWidth={windowWidth}>
-						{score > 0 && (
-							<QualityBadge
-								score={score}
-								containerClassName="text-muted"
-								style={{ width: "10em" }}
-								className="w-50"
-							/>
-						)}
-					</ShowHide>
 				</div>
 				<div className="col-12 col-md-6 col-lg-4 mt-3 mt-md-0">
 					<div className={`row ${styles.SearchResult_metadata}`}>
@@ -154,18 +127,18 @@ const SearchResult = (props: SearchResultProps) => {
 					</p>
 					<div className={`row ${styles.dataAvailable_grid}`}>
 						{dataTypes.map((dt) => {
-							const hasData = dataAvailable?.includes(dt.key),
+							const key = dt.key,
+								sectionLink = dt.sectionLink,
+								hasData = dataAvailable[key],
 								name = dt.name;
 
 							return (
-								<div key={dt.key} className="col-6 h-fit">
+								<div key={key} className="col-6 h-fit">
 									<p className={`mb-0 ${!hasData ? "text-muted" : ""}`.trim()}>
 										{hasData ? (
 											<Link
 												href={`${modelLink}#${
-													dt.sectionLink
-														? dt.sectionLink
-														: dt.key.replace(" ", "-")
+													sectionLink ? sectionLink : key.replace(" ", "-")
 												}`}
 											>
 												{name}
@@ -179,9 +152,9 @@ const SearchResult = (props: SearchResultProps) => {
 						})}
 						<ShowHide showOver={bpLarge} windowWidth={windowWidth}>
 							<InputAndLabel
-								forId={pdcmId}
-								id={pdcmId}
-								name={`${pdcmId}-name`}
+								forId={modelId}
+								id={modelId}
+								name={`${modelId}-name`}
 								type="checkbox"
 								label="Add to compare"
 								className="text-smaller mt-2"

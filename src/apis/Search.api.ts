@@ -1,13 +1,120 @@
 import {
-	FacetOperator,
-	FacetProps,
-	FacetSectionProps
+  FacetOperator,
+  FacetProps,
+  FacetSectionProps
 } from "../types/Facet.model";
+import { BioStudiesModelData } from "../types/ModelData.model";
 import { SearchResult } from "../types/Search.model";
-import { ethnicityCategories } from "../utils/collapseEthnicity";
 import { camelCase } from "../utils/dataUtils";
+import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const parseSearchResultModelData = (allData: BioStudiesModelData): SearchResult => {
+	// parse to only return needed data for search result
+	// modelId, providerName, histology, modelType, tumorType, primarySite, collectionSite, patientSex, patientAge
+	// available data: CNA, expression, bioMarkers, geneMutation, modelTreatment, patientTreatment
+	const criteria = [
+		{ key: "name", value: "Model ID" },
+		{ key: "type", value: "Organization" },
+		{ key: "name", value: "Histology" },
+		{ key: "name", value: "Study type" },
+		{ key: "name", value: "Tumour Type" },
+		{ key: "name", value: "Primary Site" },
+		{ key: "name", value: "Collection Site" },
+		{ key: "name", value: "Cancer Grade" },
+		{ key: "name", value: "Patient Sex" },
+		{ key: "name", value: "Patient Age" },
+
+		{ key: "value", value: "copy number alteration" },
+		{ key: "value", value: "expression" },
+		{ key: "value", value: "bio markers" },
+		{ key: "value", value: "mutation" },
+		{ key: "type", value: "Model treatment" },
+		{ key: "type", value: "Patient treatment" }
+	];
+
+	// find the key value pairs inside the [deep?] object
+	const data = findMultipleByKeyValues(allData, criteria);
+
+	// here we access the piece of data we need
+	// returns objects
+	const modelId = data["name:Model ID"][0]?.value;
+	const providerName =
+		data["type:Organization"][0]?.attributes[0].value.match(/^(.*?)\s*\(/)[1]; // we don't want the parenthesis that includes the ID
+	const providerId =
+		data["type:Organization"][0]?.attributes[0].value.match(/\(([^)]+)\)/)[1]; //  parenthesis that includes the ID
+	const histology = data["name:Histology"][0]?.value;
+	const modelType = data["name:Study type"][0]?.value;
+	const tumourType = data["name:Tumour Type"][0]?.value;
+	const primarySite = data["name:Primary Site"][0]?.value;
+	const collectionSite = data["name:Collection Site"][0]?.value;
+	const patientSex = data["name:Patient Sex"][0]?.value;
+	const patientAge = data["name:Patient Age"][0]?.value;
+
+	const CNA = !!data["value:copy number alteration"];
+	const expression = !!data["value:expression"];
+	const bioMarkers = !!data["value:bio markers"];
+	const geneMutation = !!data["value:mutation"];
+	const modelTreatment = !!data["type:Model treatment"];
+	const patientTreatment = !!data["type:Patient treatment"];
+
+	return {
+		collectionSite,
+		histology,
+		modelId,
+		modelType,
+		patientAge,
+		patientSex,
+		primarySite,
+		providerName,
+    providerId,
+		tumourType,
+
+    dataAvailable: {
+      "copy number alteration": CNA,
+      "expression": expression,
+      "bio markers": bioMarkers,
+      "mutation": geneMutation,
+      "model treatment": modelTreatment,
+      "patient treatment": patientTreatment
+    }
+	};
+};
+
+export const getSearchResults = async (page: number, query?: string) => {
+	const searchResultsResponse = await fetch(
+		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/cancermodelsorg/search?pageSize=10&isPublic=true&page=${page}${
+			query ? `&query=${query}` : ""
+		}`
+	);
+
+	if (!searchResultsResponse.ok) {
+		throw new Error("Network response was not ok");
+	}
+
+	const searchResultsIds = await searchResultsResponse.json().then((d) =>
+		d.totalHits > 0 // just checking if there are totalHits, which there always should unless something is wrong with the API
+			? d.hits.map((hit: Record<string, string>) => hit.accession)
+			: []
+	);
+
+	const data = await Promise.all(
+		searchResultsIds.map(async (id: string) => {
+			const modelData = await fetch(
+				`https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${id}`
+			);
+
+			if (!modelData.ok) {
+				throw new Error(`Failed to fetch study with id ${id}`);
+			}
+
+			return modelData.json().then((d) => parseSearchResultModelData(d));
+		})
+	);
+
+	return data;
+};
 
 export async function getSearchFacets(): Promise<FacetSectionProps[]> {
 	let response = await fetch(
@@ -93,98 +200,6 @@ export async function autoCompleteFacetOptions(
 		return d.map(({ option }) => {
 			return { label: option, value: option };
 		});
-	});
-}
-
-export async function getSearchResults(
-	searchValues: string[] = [],
-	searchFilterSelection: any,
-	pageSize: number = 10,
-	sortBy: string,
-	facetOperators: FacetOperator[]
-): Promise<[number, SearchResult[]]> {
-	if (!searchFilterSelection && !searchValues.length) {
-		return Promise.resolve([0, []]);
-	}
-	let query =
-		searchValues.length > 0
-			? `search_terms=ov.{${searchValues.join(",")}}`
-			: "";
-
-	for (const facetId in searchFilterSelection) {
-		if (
-			searchFilterSelection[facetId].selection?.length &&
-			facetId !== "page"
-		) {
-			const currentFacetOperators = facetOperators.find(
-				(obj) => obj.facetColumn === facetId
-			);
-			let options: string[] = searchFilterSelection[facetId].selection.map(
-				(d: string) => `"${d}"`
-			);
-
-			// Handle filtering of subcategories while selecting top category
-			if (facetId === "patient_ethnicity") {
-				for (let key in ethnicityCategories) {
-					if (searchFilterSelection[facetId].selection.includes(key)) {
-						options = ethnicityCategories[key].map((d: string) => `"${d}"`);
-					}
-				}
-			}
-
-			let apiOperator;
-
-			if (searchFilterSelection[facetId].operator === "ANY")
-				apiOperator = currentFacetOperators?.anyOperator ?? "ov";
-
-			if (searchFilterSelection[facetId].operator === "ALL")
-				apiOperator = currentFacetOperators?.allOperator ?? "cs";
-
-			let optionsQuery =
-				apiOperator === "in"
-					? `(${encodeURIComponent(options.join(","))})`
-					: `{${encodeURIComponent(options.join(","))}}`;
-
-			query += `&${facetId}=${apiOperator}.${optionsQuery}`;
-		}
-	}
-
-	let response = await fetch(
-		`${API_URL}/search_index?${query}&limit=${pageSize}&offset=${
-			Math.max(searchFilterSelection["page"].selection - 1, 0) * pageSize
-		}&select=provider_name,patient_age,patient_sex,external_model_id,model_type,data_source,histology,primary_site,collection_site,tumour_type,dataset_available,scores,model_availability_boolean&order=${sortBy}`,
-		{ headers: { Prefer: "count=exact" } }
-	);
-	if (!response.ok) {
-		throw new Error("Network response was not ok");
-	}
-	return response.json().then((d: any) => {
-		return [
-			parseInt(response.headers.get("Content-Range")?.split("/")[1] || "0"),
-			d.map((result: any) => {
-				const score =
-					(result.model_type === "PDX"
-						? result.scores.pdx_metadata_score
-						: result.scores.in_vitro_metadata_score) ?? 0;
-
-				return {
-					pdcmId: result.external_model_id,
-					sourceId: result.data_source,
-					datasource: "",
-					providerName: result.provider_name,
-					histology: result.histology,
-					primarySite: result.primary_site,
-					collectionSite: result.collection_site,
-					tumourType: result.tumour_type,
-					dataAvailable: result.dataset_available,
-					modelType: result.model_type,
-					patientAge: result.patient_age,
-					patientSex: result.patient_sex,
-					score,
-					modelAvailable: result.model_availability_boolean
-				};
-			})
-		];
 	});
 }
 

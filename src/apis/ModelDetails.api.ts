@@ -5,6 +5,7 @@ import {
   BsImmuneMarkers,
   CellModelData,
   Engraftment,
+  ExternalModelLink,
   ExtLinks,
   ImmuneMarker,
   ModelImage,
@@ -13,7 +14,12 @@ import {
   ParsedModelMetadata,
   Publication,
   QualityData,
-  RelatedModelRoles
+  RelatedModel,
+  RelatedModelRoles,
+  RelatedModels,
+  Subsection,
+  Treatment,
+  TreatmentExternalDbLink
 } from "../types/ModelData.model";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
@@ -183,6 +189,7 @@ const parseMolecularData = (
 		{ key: "type", value: "Molecular data" }
 	]);
 	const molecularData = data["type:Molecular data"];
+
 	if (!molecularData) return [];
 
 	return molecularData.map((entry) => {
@@ -233,17 +240,17 @@ const parseMolecularData = (
 };
 
 const parseExtLinks = (allData: BioStudiesModelData): ExtLinks => {
-	const identifiers: any[] = findMultipleByKeyValues(allData, [
+	const identifiers: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Identifiers" }
 	])["type:Identifiers"];
-	const supplier = findMultipleByKeyValues(allData, [
+	const supplier: Attribute = findMultipleByKeyValues(allData, [
 		{ key: "name", value: "Supplier" }
 	])["name:Supplier"]?.[0];
 	let parsedExtLinksObj = { externalModelLinksByType: {} } as ExtLinks;
 
 	if (!identifiers && !supplier) return parsedExtLinksObj;
 
-	const parsedIdentifiers =
+	const parsedIdentifiers: ExternalModelLink[] =
 		identifiers &&
 		identifiers.map((entry) => {
 			const resourceLabel = entry.attributes.find(
@@ -259,18 +266,19 @@ const parseExtLinks = (allData: BioStudiesModelData): ExtLinks => {
 
 			return {
 				type: "external_id" as const,
-				link: url,
-				resourceLabel,
-				linkLabel
+				link: url || "",
+				resourceLabel: resourceLabel || "",
+				linkLabel: linkLabel || ""
 			};
 		});
 
 	if (parsedIdentifiers && supplier) {
 		const supplierRegex = /^(.+?)\s*\((.+?)\)$/;
-		const supplierValues = supplier?.value?.match(supplierRegex);
-		const supplierUrl = supplier.valqual?.find(
-			(qual: Attribute) => qual.name === "url"
-		)?.value;
+		const supplierValues: string[] =
+			supplier?.value?.match(supplierRegex) || [];
+		const supplierUrl =
+			supplier.valqual?.find((qual: Attribute) => qual.name === "url")?.value ||
+			"";
 
 		parsedExtLinksObj.externalModelLinksByType = {
 			external_id: parsedIdentifiers,
@@ -289,7 +297,7 @@ const parseExtLinks = (allData: BioStudiesModelData): ExtLinks => {
 };
 
 const parseEngraftments = (allData: BioStudiesModelData): Engraftment[] => {
-	const engraftments: any[] = findMultipleByKeyValues(allData, [
+	const engraftments: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "PDX model engraftment" }
 	])["type:PDX model engraftment"];
 
@@ -323,80 +331,65 @@ const parseEngraftments = (allData: BioStudiesModelData): Engraftment[] => {
 	});
 };
 
-type TreatmentExternalDbLink = {
-	link: string;
-	resourceLabel: string;
-};
-
-type Treatment = {
-	name: string;
-	dose: string;
-	passageRange?: string;
-	response?: string;
-	externalDbLinks?: TreatmentExternalDbLink[];
-};
-
 const parseDrugDosing = (allData: BioStudiesModelData): Treatment[][] => {
-	const modelTreatment: any[] = findMultipleByKeyValues(allData, [
+	const modelTreatment: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Model treatment" }
 	])["type:Model treatment"];
 
 	if (!modelTreatment || modelTreatment.length === 0) return [];
 
-	return modelTreatment.map(
-		({ attributes }: { attributes: Attribute[] }) => {
-			const drugAttr = attributes.find((attr) => attr.name === "Drug");
-			const doseAttr = attributes.find((attr) => attr.name === "Dose");
-			const passage =
-				attributes.find((attr) => attr.name === "Passage")?.value ?? "";
-			const response =
-				attributes.find((attr) => attr.name === "Response")?.value ?? "";
+	return modelTreatment.map(({ attributes }: { attributes: Attribute[] }) => {
+		const drugAttr = attributes.find((attr) => attr.name === "Drug");
+		const doseAttr = attributes.find((attr) => attr.name === "Dose");
+		const passage =
+			attributes.find((attr) => attr.name === "Passage")?.value ?? "";
+		const response =
+			attributes.find((attr) => attr.name === "Response")?.value ?? "";
 
-			const drugs = ((drugAttr?.value as string) ?? "")
-				.split(/\s*\+\s*/)
-				.map((t) => t.trim());
-			const doses = ((doseAttr?.value as string) ?? "")
-				.split(/\s*\+\s*/)
-				.map((t) => t.trim());
+		const drugs = ((drugAttr?.value as string) ?? "")
+			.split(/\s*\+\s*/)
+			.map((t) => t.trim());
+		const doses = ((doseAttr?.value as string) ?? "")
+			.split(/\s*\+\s*/)
+			.map((t) => t.trim());
 
-			const externalDbLinks: Record<string, TreatmentExternalDbLink[]> = {};
+		const externalDbLinks: Record<string, TreatmentExternalDbLink[]> = {};
 
-			for (const attr of attributes) {
-				if (attr.valqual && attr.valqual.length > 0) {
-					const url = attr.valqual.find(
-						(v: Attribute) => v.name === "url"
-					)?.value;
-					if (url && attr.name) {
-						if (!externalDbLinks[attr.name]) externalDbLinks[attr.name] = [];
-						externalDbLinks[attr.name].push({
-							link: url,
-							resourceLabel: attr.name
-						});
-					}
+		for (const attr of attributes) {
+			if (attr.valqual && attr.valqual.length > 0) {
+				const url = attr.valqual.find(
+					(v: Attribute) => v.name === "url"
+				)?.value;
+				if (url && attr.name) {
+					if (!externalDbLinks[attr.name]) externalDbLinks[attr.name] = [];
+					externalDbLinks[attr.name].push({
+						link: url,
+						resourceLabel: attr.name
+					});
 				}
 			}
-
-			return drugs.map((drugName, index) => {
-				const dose = doses[index] ?? doses[0] ?? "";
-				const dbLinks = [
-					...(externalDbLinks["ChEMBL"] ?? []),
-					...(externalDbLinks["PubChem"] ?? [])
-				];
-
-				return {
-					name: drugName,
-					dose,
-					passageRange: passage,
-					response,
-					externalDbLinks: dbLinks
-				} as Treatment;
-			});
 		}
-	);
+
+		return drugs.map((drugName, index) => {
+			const dose = doses[index] ?? doses[0] ?? "";
+			const dbLinks = [
+				...(externalDbLinks["ChEMBL"] ?? []),
+				...(externalDbLinks["PubChem"] ?? [])
+			];
+
+			return {
+				name: drugName,
+				dose,
+				passageRange: passage,
+				response,
+				externalDbLinks: dbLinks
+			} as Treatment;
+		});
+	});
 };
 
 const parsePatientTreatment = (allData: BioStudiesModelData): Treatment[][] => {
-	const patientTreatment: any[] = findMultipleByKeyValues(allData, [
+	const patientTreatment: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Patient treatment" }
 	])["type:Patient treatment"];
 
@@ -439,7 +432,7 @@ const parsePatientTreatment = (allData: BioStudiesModelData): Treatment[][] => {
 };
 
 const parseQualityData = (allData: BioStudiesModelData): QualityData[] => {
-	const qualityData: any[] = findMultipleByKeyValues(allData, [
+	const qualityData: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Model quality control" }
 	])["type:Model quality control"];
 
@@ -447,9 +440,8 @@ const parseQualityData = (allData: BioStudiesModelData): QualityData[] => {
 
 	return qualityData.map((item) => {
 		const getValue = (name: string) =>
-			item.attributes.find(
-				(attr: Attribute) => attr.name === name
-			)?.value ?? "Not provided";
+			item.attributes.find((attr: Attribute) => attr.name === name)?.value ??
+			"Not provided";
 
 		return {
 			description: getValue("Description"),
@@ -467,7 +459,7 @@ const parseQualityData = (allData: BioStudiesModelData): QualityData[] => {
 };
 
 const parseModelImages = (allData: BioStudiesModelData): ModelImage[] => {
-	const histologyImages: any[] = findMultipleByKeyValues(allData, [
+	const histologyImages: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Histology images" }
 	])["type:Histology images"];
 
@@ -475,9 +467,8 @@ const parseModelImages = (allData: BioStudiesModelData): ModelImage[] => {
 
 	return histologyImages.map((item) => {
 		const getValue = (name: string): string =>
-			item.attributes.find(
-				(attr: Attribute) => attr.name === name
-			)?.value ?? "Not provided";
+			item.attributes.find((attr: Attribute) => attr.name === name)?.value ??
+			"Not provided";
 
 		const getValqualURL = (): string => {
 			const urlAttr = item.attributes.find(
@@ -485,8 +476,8 @@ const parseModelImages = (allData: BioStudiesModelData): ModelImage[] => {
 			);
 
 			return (
-				urlAttr?.valqual?.find((v: Attribute) => v.name === "URL")
-					?.value ?? "Not provided"
+				urlAttr?.valqual?.find((v: Attribute) => v.name === "URL")?.value ??
+				"Not provided"
 			);
 		};
 
@@ -501,9 +492,8 @@ const parseModelImages = (allData: BioStudiesModelData): ModelImage[] => {
 	});
 };
 
-const parseRelatedModel = (allData: BioStudiesModelData): any[] => {
-	// todo any
-	const relatedModels: any[] = findMultipleByKeyValues(allData, [
+const parseRelatedModel = (allData: BioStudiesModelData): RelatedModel[] => {
+	const relatedModels: RelatedModels[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Related models" }
 	])["type:Related models"];
 
@@ -519,25 +509,22 @@ const parseRelatedModel = (allData: BioStudiesModelData): any[] => {
 
 	const rawRole = getValue(relatedModels[0].links[0].attributes, "Role");
 
-	return relatedModels[0].links.map(
-		(link: { url: string; attributes: { name: string; value: string } }) => {
-			return {
-				role: isRoleTS(rawRole) ? rawRole : "parent of",
-				relatedModelId: link.url
-			};
-		}
-	);
+	return relatedModels[0].links.map((link) => {
+		return {
+			role: isRoleTS(rawRole) ? rawRole : "parent of",
+			relatedModelId: link.url
+		};
+	});
 };
 
 const parseCellModelData = (allData: BioStudiesModelData): CellModelData => {
-	const cellModelData: any[] = findMultipleByKeyValues(allData, [
+	const cellModelData: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Model derivation" }
 	])["type:Model derivation"];
 
 	const getValue = (name: string): string =>
-		cellModelData[0].attributes.find(
-			(attr: Attribute) => attr.name === name
-		)?.value ?? "Not provided";
+		cellModelData[0].attributes.find((attr: Attribute) => attr.name === name)
+			?.value ?? "Not provided";
 
 	return {
 		growthProperties: getValue("Growth properties"),
@@ -551,7 +538,7 @@ const parseCellModelData = (allData: BioStudiesModelData): CellModelData => {
 };
 
 const parsePublications = (allData: BioStudiesModelData): Publication[] => {
-	const publications: any[] = findMultipleByKeyValues(allData, [
+	const publications: Subsection[] = findMultipleByKeyValues(allData, [
 		{ key: "type", value: "Publications" }
 	])["type:Publications"];
 
@@ -559,9 +546,8 @@ const parsePublications = (allData: BioStudiesModelData): Publication[] => {
 
 	return publications.map((item) => {
 		const getValue = (name: string): string =>
-			item.attributes.find(
-				(attr: Attribute) => attr.name === name
-			)?.value ?? "Not provided";
+			item.attributes.find((attr: Attribute) => attr.name === name)?.value ??
+			"Not provided";
 
 		const getValqualURL = (name: string): string => {
 			const attr = item.attributes.find(
@@ -569,8 +555,7 @@ const parsePublications = (allData: BioStudiesModelData): Publication[] => {
 			);
 
 			return (
-				attr?.valqual?.find((v: Attribute) => v.name === "url")
-					?.value ?? ""
+				attr?.valqual?.find((v: Attribute) => v.name === "url")?.value ?? ""
 			);
 		};
 
