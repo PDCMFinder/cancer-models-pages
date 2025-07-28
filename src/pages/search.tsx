@@ -27,6 +27,22 @@ const DynamicModal = dynamic(import("../components/Modal/Modal"), {
 	ssr: false
 });
 
+const ResultsSummary = (
+	totalHits: number,
+	currentPage: number,
+	resultsPerPage: number
+) => {
+	if (!totalHits) return null;
+
+	const endIndex = currentPage * resultsPerPage;
+	const maxShown = Math.min(totalHits, endIndex);
+	const startIndex = (currentPage - 1) * resultsPerPage + 1;
+
+	return `Showing results ${startIndex.toLocaleString()} to
+    ${maxShown.toLocaleString()} of ${totalHits.toLocaleString()}
+    results`;
+};
+
 export type onFilterChangeType = {
 	type: "add" | "remove" | "clear" | "toggleOperator" | "init" | "substitute";
 };
@@ -38,7 +54,6 @@ const Search: NextPage = () => {
 	const bpLarge = breakPoints.large;
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
-	const [searchResults, setSearchResults] = useState<any[]>([]);
 
 	const [driverInstance, setDriverInstance] =
 		useState<ReturnType<typeof driver> | null>(null);
@@ -155,15 +170,11 @@ const Search: NextPage = () => {
 							<div className="row mb-3 align-center">
 								<div className="col-12 col-md-6">
 									<p className="mb-md-0">
-										{`Showing ${(currentPage - 1) * resultsPerPage + 1} to 
-										${
-											searchResultsData &&
-											searchResultsData?.totalHits <
-												(currentPage - 1) * resultsPerPage + resultsPerPage
-												? searchResultsData?.totalHits
-												: (currentPage - 1) * resultsPerPage + resultsPerPage
-										} 
-										of ${searchResultsData?.totalHits.toLocaleString()} results`}
+										{ResultsSummary(
+											searchResultsData?.totalHits ?? 0,
+											currentPage,
+											resultsPerPage
+										)}
 									</p>
 								</div>
 							</div>

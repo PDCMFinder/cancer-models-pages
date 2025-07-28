@@ -54,7 +54,7 @@ const Pagination = (props: PaginationProps) => {
 							}
 							onClick={() => onPageChange(page)}
 						>
-							{page}
+							{page.toLocaleString()}
 						</button>
 					);
 				} else {
@@ -71,7 +71,7 @@ const Pagination = (props: PaginationProps) => {
 							: undefined
 					}
 				>
-					{totalPages}
+					{totalPages.toLocaleString()}
 				</button>
 			) : null}
 			<button
