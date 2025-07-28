@@ -1,14 +1,21 @@
 import Link from "next/link";
 import { ChangeEvent } from "react";
 import useWindowDimensions from "../../../hooks/useWindowDimensions";
-import { SearchResult as SearchResultType } from "../../../types/Search.model";
+import {
+	SearchResult as SearchResultType,
+	ValidDataAvailableKeys
+} from "../../../types/Search.model";
 import breakPoints from "../../../utils/breakpoints";
 import Card from "../../Card/Card";
 import InputAndLabel from "../../Input/InputAndLabel";
 import ShowHide from "../../ShowHide/ShowHide";
 import styles from "./SearchResult.module.scss";
 
-const dataTypes = [
+const dataTypes: {
+	key: ValidDataAvailableKeys;
+	name: string;
+	sectionLink: string;
+}[] = [
 	{
 		key: "copy number alteration",
 		name: "CNA",
@@ -136,13 +143,7 @@ const SearchResult = (props: SearchResultProps) => {
 								<div key={key} className="col-6 h-fit">
 									<p className={`mb-0 ${!hasData ? "text-muted" : ""}`.trim()}>
 										{hasData ? (
-											<Link
-												href={`${modelLink}#${
-													sectionLink ? sectionLink : key.replace(" ", "-")
-												}`}
-											>
-												{name}
-											</Link>
+											<Link href={`${modelLink}#${sectionLink}`}>{name}</Link>
 										) : (
 											name
 										)}

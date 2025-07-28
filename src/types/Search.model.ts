@@ -1,3 +1,11 @@
+export type ValidDataAvailableKeys =
+  | "copy number alteration"
+  | "expression"
+  | "bio markers"
+  | "mutation"
+  | "model treatment"
+  | "patient treatment";
+
 export type SearchResult = {
   collectionSite: string;
   histology: string;
@@ -9,12 +17,5 @@ export type SearchResult = {
   providerName: string;
   providerId: string;
   tumourType: string;
-  dataAvailable: {
-    "copy number alteration": boolean;
-    "expression": boolean;
-    "bio markers": boolean;
-    "mutation": boolean;
-    "model treatment": boolean;
-    "patient treatment": boolean;
-  }
+  dataAvailable: Record<ValidDataAvailableKeys, boolean>;
 };

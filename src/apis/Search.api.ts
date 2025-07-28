@@ -10,10 +10,10 @@ import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const parseSearchResultModelData = (allData: BioStudiesModelData): SearchResult => {
+const parseSearchResultModelData = (
+	allData: BioStudiesModelData
+): SearchResult => {
 	// parse to only return needed data for search result
-	// modelId, providerName, histology, modelType, tumorType, primarySite, collectionSite, patientSex, patientAge
-	// available data: CNA, expression, bioMarkers, geneMutation, modelTreatment, patientTreatment
 	const criteria = [
 		{ key: "name", value: "Model ID" },
 		{ key: "type", value: "Organization" },
@@ -68,21 +68,23 @@ const parseSearchResultModelData = (allData: BioStudiesModelData): SearchResult 
 		patientSex,
 		primarySite,
 		providerName,
-    providerId,
+		providerId,
 		tumourType,
 
-    dataAvailable: {
-      "copy number alteration": CNA,
-      "expression": expression,
-      "bio markers": bioMarkers,
-      "mutation": geneMutation,
-      "model treatment": modelTreatment,
-      "patient treatment": patientTreatment
-    }
+		dataAvailable: {
+			"copy number alteration": CNA,
+			expression: expression,
+			"bio markers": bioMarkers,
+			mutation: geneMutation,
+			"model treatment": modelTreatment,
+			"patient treatment": patientTreatment
+		}
 	};
 };
 
 export const getSearchResults = async (page: number, query?: string) => {
+	let totalHits = 0;
+
 	const searchResultsResponse = await fetch(
 		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/cancermodelsorg/search?pageSize=10&isPublic=true&page=${page}${
 			query ? `&query=${query}` : ""
@@ -93,11 +95,15 @@ export const getSearchResults = async (page: number, query?: string) => {
 		throw new Error("Network response was not ok");
 	}
 
-	const searchResultsIds = await searchResultsResponse.json().then((d) =>
-		d.totalHits > 0 // just checking if there are totalHits, which there always should unless something is wrong with the API
-			? d.hits.map((hit: Record<string, string>) => hit.accession)
-			: []
-	);
+	const searchResultsIds: string[] = await searchResultsResponse
+		.json()
+		.then((d) => {
+			if (d.totalHits > 0) {
+				totalHits = d.totalHits;
+
+				return d.hits.map((hit: Record<string, string>) => hit.accession);
+			}
+		});
 
 	const data = await Promise.all(
 		searchResultsIds.map(async (id: string) => {
@@ -113,7 +119,7 @@ export const getSearchResults = async (page: number, query?: string) => {
 		})
 	);
 
-	return data;
+	return { data, totalHits };
 };
 
 export async function getSearchFacets(): Promise<FacetSectionProps[]> {

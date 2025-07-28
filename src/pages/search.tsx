@@ -9,6 +9,7 @@ import { getModelCount } from "../apis/AggregatedData.api";
 import { getSearchResults } from "../apis/Search.api";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
 import Loader from "../components/Loader/Loader";
+import Pagination from "../components/Pagination/Pagination";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
 import ShowHide from "../components/ShowHide/ShowHide";
@@ -30,26 +31,7 @@ export type onFilterChangeType = {
 	type: "add" | "remove" | "clear" | "toggleOperator" | "init" | "substitute";
 };
 
-const sortByOptions = [
-		{
-			value:
-				"scores->>data_score.desc.nullslast,scores->>pdx_metadata_score.desc.nullslast,scores->>in_vitro_metadata_score.desc.nullslast",
-			text: "Data available"
-		},
-		{ value: "external_model_id.asc.nullslast", text: "Model Id: A to Z" },
-		{ value: "external_model_id.desc.nullslast", text: "Model Id: Z to A" },
-		{
-			value:
-				"scores->>pdx_metadata_score.asc.nullslast,scores->>in_vitro_metadata_score.asc.nullslast",
-			text: "Metadata: Ascending"
-		},
-		{
-			value:
-				"scores->>pdx_metadata_score.desc.nullslast,scores->>in_vitro_metadata_score.desc.nullslast",
-			text: "Metadata: Descending"
-		}
-	],
-	resultsPerPage = 10;
+const resultsPerPage = 10;
 
 const Search: NextPage = () => {
 	const { windowWidth = 0 } = useWindowDimensions();
@@ -123,15 +105,10 @@ const Search: NextPage = () => {
 		return getModelCount();
 	});
 
-	const {
-		data: searchResultsQuery,
-		isLoading: isLoadingSearchResults,
-		isError: isErrorSearchResults
-	} = useQuery("search-results", () => getSearchResults(currentPage), {
-		onSuccess(data) {
-			setSearchResults(data);
-		}
-	});
+	const { data: searchResultsData } = useQuery(
+		["search-results", currentPage],
+		() => getSearchResults(currentPage)
+	);
 
 	return (
 		<>
@@ -178,14 +155,15 @@ const Search: NextPage = () => {
 							<div className="row mb-3 align-center">
 								<div className="col-12 col-md-6">
 									<p className="mb-md-0">
-										{/* {`Showing ${(currentPage - 1) * resultsPerPage + 1} to 
+										{`Showing ${(currentPage - 1) * resultsPerPage + 1} to 
 										${
-											totalResults <
-											(currentPage - 1) * resultsPerPage + resultsPerPage
-												? totalResults
+											searchResultsData &&
+											searchResultsData?.totalHits <
+												(currentPage - 1) * resultsPerPage + resultsPerPage
+												? searchResultsData?.totalHits
 												: (currentPage - 1) * resultsPerPage + resultsPerPage
 										} 
-										of ${totalResults.toLocaleString()} results`} */}
+										of ${searchResultsData?.totalHits.toLocaleString()} results`}
 									</p>
 								</div>
 							</div>
@@ -227,25 +205,27 @@ const Search: NextPage = () => {
 								: SearchFiltersComponent} */}
 						</div>
 						<div className="col-12 col-lg-9">
-							{searchResults ? (
-								searchResults.length > 0 ? (
+							{searchResultsData ? (
+								searchResultsData.totalHits > 0 ? (
 									<>
 										<SearchResults
 											compareModel={compareModel}
 											modelsToCompare={modelsToCompare}
-											data={searchResults}
+											data={searchResultsData.data}
 										/>
 										<div className="row">
 											<div className="col-12">
-												{/* <Pagination
+												<Pagination
 													totalPages={
-														totalResults !== 0
-															? Math.ceil(totalResults / resultsPerPage)
+														searchResultsData?.totalHits !== 0
+															? Math.ceil(
+																	searchResultsData?.totalHits / resultsPerPage
+															  )
 															: 1
 													}
 													currentPage={currentPage}
 													onPageChange={(page: number) => changePage(page)}
-												/> */}
+												/>
 											</div>
 										</div>
 									</>

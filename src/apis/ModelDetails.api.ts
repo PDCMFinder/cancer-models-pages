@@ -577,7 +577,6 @@ export const getAllModelData = async (
 	providerId?: string
 ): Promise<AllModelData> => {
 	const modelData = await getBioStudiesTitleSearchResults(modelId, providerId);
-	console.log(modelData);
 	const metadata = parseMetadata(modelData);
 	const immuneMarkers = parseImmuneMarkers(modelData);
 	const molecularData = parseMolecularData(
