@@ -26,12 +26,7 @@ const parseSearchResultModelData = (
 		{ key: "name", value: "Patient Sex" },
 		{ key: "name", value: "Patient Age" },
 
-		{ key: "value", value: "copy number alteration" },
-		{ key: "value", value: "expression" },
-		{ key: "value", value: "bio markers" },
-		{ key: "value", value: "mutation" },
-		{ key: "type", value: "Model treatment" },
-		{ key: "type", value: "Patient treatment" }
+		{ key: "name", value: "Dataset Available" }
 	];
 
 	// find the key value pairs inside the [deep?] object
@@ -39,25 +34,33 @@ const parseSearchResultModelData = (
 
 	// here we access the piece of data we need
 	// returns objects
-	const modelId = data["name:Model ID"][0]?.value;
-	const providerName =
-		data["type:Organization"][0]?.attributes[0].value.match(/^(.*?)\s*\(/)[1]; // we don't want the parenthesis that includes the ID
-	const providerId =
-		data["type:Organization"][0]?.attributes[0].value.match(/\(([^)]+)\)/)[1]; //  parenthesis that includes the ID
-	const histology = data["name:Histology"][0]?.value;
-	const modelType = data["name:Study type"][0]?.value;
-	const tumourType = data["name:Tumour Type"][0]?.value;
-	const primarySite = data["name:Primary Site"][0]?.value;
-	const collectionSite = data["name:Collection Site"][0]?.value;
-	const patientSex = data["name:Patient Sex"][0]?.value;
-	const patientAge = data["name:Patient Age"][0]?.value;
+	const getFirstValue = (key: string) => data[key]?.[0]?.value;
 
-	const CNA = !!data["value:copy number alteration"];
-	const expression = !!data["value:expression"];
-	const bioMarkers = !!data["value:bio markers"];
-	const geneMutation = !!data["value:mutation"];
-	const modelTreatment = !!data["type:Model treatment"];
-	const patientTreatment = !!data["type:Patient treatment"];
+	// Special handling for provider string parsing
+	const orgAttr = data["type:Organization"]?.[0]?.attributes?.[0]?.value || "";
+	const providerName = orgAttr.match(/^(.*?)\s*\(/)?.[1] || "";
+	const providerId = orgAttr.match(/\(([^)]+)\)/)?.[1] || "";
+
+	const modelId = getFirstValue("name:Model ID");
+	const histology = getFirstValue("name:Histology");
+	const modelType = getFirstValue("name:Study type");
+	const tumourType = getFirstValue("name:Tumour Type");
+	const primarySite = getFirstValue("name:Primary Site");
+	const collectionSite = getFirstValue("name:Collection Site");
+	const patientSex = getFirstValue("name:Patient Sex");
+	const patientAge = getFirstValue("name:Patient Age");
+
+	const availableDatasets = data["name:Dataset Available"] || [];
+
+	const getAvailability = (dataset: string) =>
+		availableDatasets.some((obj) => obj.value === dataset);
+
+	const CNA = getAvailability("copy number alteration");
+	const expression = getAvailability("expression");
+	const bioMarkers = getAvailability("bio markers");
+	const mutation = getAvailability("mutation");
+	const modelTreatment = getAvailability("model treatment");
+	const patientTreatment = getAvailability("patient treatment");
 
 	return {
 		collectionSite,
@@ -75,7 +78,7 @@ const parseSearchResultModelData = (
 			"copy number alteration": CNA,
 			expression: expression,
 			"bio markers": bioMarkers,
-			mutation: geneMutation,
+			mutation: mutation,
 			"model treatment": modelTreatment,
 			"patient treatment": patientTreatment
 		}
