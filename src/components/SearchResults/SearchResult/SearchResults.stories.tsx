@@ -13,20 +13,24 @@ const Template: ComponentStory<typeof SearchResult> = (args) => (
 export const Component = Template.bind({});
 Component.args = {
 	data: {
-		pdcmId: "SIDM00861",
-		sourceId: "CMP",
-		datasource: "",
+		modelId: "model ID",
 		providerName: "Cell Model Passports",
+		providerId: "CMP",
 		histology: "Ovarian Clear Cell Adenocarcinoma",
 		primarySite: "ovary",
 		collectionSite: "ovary",
 		tumourType: "Not Provided",
-		dataAvailable: ["mutation", "copy number alteration", "expression"],
+		dataAvailable: {
+			"bio markers": true,
+			"model treatment": false,
+			"patient treatment": false,
+			mutation: true,
+			"copy number alteration": true,
+			expression: false
+		},
 		modelType: "cell line",
 		patientAge: "40 - 49",
-		patientSex: "female",
-		score: 0,
-		modelAvailable: true
+		patientSex: "female"
 	},
 	addModelToCompare: (e) => alert(e.target.id),
 	compareCheck: false
