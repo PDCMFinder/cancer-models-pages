@@ -23,6 +23,18 @@ import {
 } from "../types/ModelData.model";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
+type SearchHit = {
+	accession: string;
+	type: string;
+	title: string;
+	author: string;
+	links: number;
+	files: number;
+	release_date: string;
+	views: number;
+	isPublic: boolean;
+};
+
 const getBioStudiesTitleSearchResults = async (
 	modelId: string,
 	providerId?: string
@@ -30,20 +42,29 @@ const getBioStudiesTitleSearchResults = async (
 	if (!modelId) return {} as BioStudiesModelData;
 
 	const searchResultsResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?title=${modelId}${
+		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?type=study&isPublic=true&title=${modelId}${
 			providerId ? `+AND+${providerId}` : ""
-		}&type=study&isPublic=true`
+		}`
 	);
-
 	if (!searchResultsResponse.ok) {
 		throw new Error("Network response was not ok");
 	}
 
 	// we're assuming the model ID is the first result of searching the id on biostudies
 	// this is the best way to do it right now
-	const accessionId = await searchResultsResponse
-		.json()
-		.then((d) => (d.totalHits > 0 ? d.hits[0].accession : ""));
+	const accessionId = await searchResultsResponse.json().then((d) => {
+		const { hits, totalHits }: { hits: SearchHit[]; totalHits: number } = d;
+
+		if (totalHits) {
+			const searchResultHit = hits.find(
+				(hit: SearchHit) =>
+					hit.title.includes(providerId ?? "") &&
+					hit.title.includes(modelId)
+			);
+
+			return searchResultHit?.accession || "";
+		}
+	});
 
 	if (!accessionId) {
 		throw new Error(
