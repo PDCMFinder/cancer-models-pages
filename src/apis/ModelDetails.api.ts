@@ -110,25 +110,25 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 
 	// here we access the piece of data we need
 	// returns objects
-	const cancerGrade = data["name:Cancer Grade"][0]?.value;
-	const cancerStage = data["name:Cancer Stage"][0]?.value;
-	const cancerSystem = data["name:Cancer System"][0]?.value;
-	const collectionSite = data["name:Collection Site"][0]?.value;
-	const histology = data["name:Histology"][0]?.value;
-	const licenseName = data["name:License"][0]?.value;
-	const licenseUrl = data["name:License"][0]?.valqual?.[0].value;
-	const modelId = data["name:Model ID"][0]?.value;
-	const modelType = data["name:Study type"][0]?.value;
-	const patientAge = data["name:Patient Age"][0]?.value;
-	const patientEthnicity = data["name:Patient Ethnicity"][0]?.value;
-	const patientSex = data["name:Patient Sex"][0]?.value;
-	const primarySite = data["name:Primary Site"][0]?.value;
-	const title = data["name:Title"][0]?.value; //  "[providerId] [modelType] [modelId] Histology"
-	const providerId = title.match(/\[(.*?)\]/)[1]; // first match is provider id
+	const cancerGrade = data["name:Cancer Grade"]?.[0]?.value ?? null;
+	const cancerStage = data["name:Cancer Stage"]?.[0]?.value ?? null;
+	const cancerSystem = data["name:Cancer System"]?.[0]?.value ?? null;
+	const collectionSite = data["name:Collection Site"]?.[0]?.value ?? null;
+	const histology = data["name:Histology"]?.[0]?.value ?? null;
+	const licenseName = data["name:License"]?.[0]?.value ?? null;
+	const licenseUrl = data["name:License"]?.[0]?.valqual?.[0].value ?? null;
+	const modelId = data["name:Model ID"]?.[0]?.value ?? null;
+	const modelType = data["name:Study type"]?.[0]?.value ?? null;
+	const patientAge = data["name:Patient Age"]?.[0]?.value ?? null;
+	const patientEthnicity = data["name:Patient Ethnicity"]?.[0]?.value ?? null;
+	const patientSex = data["name:Patient Sex"]?.[0]?.value ?? null;
+	const primarySite = data["name:Primary Site"]?.[0]?.value ?? null;
+	const title = data["name:Title"]?.[0]?.value ?? null; //  "[providerId] [modelType] [modelId] Histology"
+	const providerId = title.match(/\[(.*?)\]/)?.[1] ?? null; // first match is provider id
 	const providerName =
-		data["type:Organization"][0]?.attributes[0].value.match(/^(.*?)\s*\(/)[1]; // we don't want the parenthesis that includes the ID
-	const tumourType = data["name:Tumour Type"][0]?.value;
-	const dateSubmitted = data["name:ReleaseDate"][0]?.value;
+		data["type:Organization"]?.[0]?.attributes?.[0].value.match(/^(.*?)\s*\(/)[1] ?? null; // we don't want the parenthesis that includes the ID
+	const tumourType = data["name:Tumour Type"]?.[0]?.value ?? null;
+	const dateSubmitted = data["name:ReleaseDate"]?.[0]?.value ?? null;
 
 	return {
 		cancerGrade,
@@ -528,9 +528,9 @@ const parseRelatedModel = (allData: BioStudiesModelData): RelatedModel[] => {
 		return value === "parent of" || value === "child of";
 	}
 
-	const rawRole = getValue(relatedModels[0].links[0].attributes, "Role");
+	const rawRole = getValue(relatedModels?.[0].links[0].attributes, "Role");
 
-	return relatedModels[0].links.map((link) => {
+	return relatedModels?.[0].links.map((link) => {
 		return {
 			role: isRoleTS(rawRole) ? rawRole : "parent of",
 			relatedModelId: link.url
@@ -544,7 +544,7 @@ const parseCellModelData = (allData: BioStudiesModelData): CellModelData => {
 	])["type:Model derivation"];
 
 	const getValue = (name: string): string =>
-		cellModelData[0].attributes.find((attr: Attribute) => attr.name === name)
+		cellModelData?.[0].attributes.find((attr: Attribute) => attr.name === name)
 			?.value ?? "Not provided";
 
 	return {

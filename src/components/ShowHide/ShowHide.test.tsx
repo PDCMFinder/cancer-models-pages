@@ -3,7 +3,7 @@ import { screen } from "@testing-library/dom";
 import { render } from "@testing-library/react";
 import ShowHide from "./ShowHide";
 
-describe.skip("ShowHide responsive component", () => {
+describe("ShowHide responsive component", () => {
 	it("should show above certain window width", () => {
 		render(
 			<ShowHide windowWidth={window.outerWidth} showOver={767}>

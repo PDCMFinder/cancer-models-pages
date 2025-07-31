@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { useQuery } from "react-query";
 import { getModelCount } from "../../apis/AggregatedData.api";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
@@ -7,13 +6,6 @@ import { routes } from "../../utils/routes";
 import ShowHide from "../ShowHide/ShowHide";
 import NavDesktop from "./Navbar-desktop/Navbar-desktop";
 import NavMobile from "./Navbar-mobile/Navbar-mobile";
-
-const DynamicModal = dynamic(() => import("../Modal/Modal"), {
-	ssr: false
-});
-const DynamicCard = dynamic(() => import("../Card/Card"), {
-	ssr: false
-});
 
 // controls responsive change of component
 const Navbar = () => {

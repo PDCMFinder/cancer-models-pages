@@ -3,7 +3,7 @@ import { screen } from "@testing-library/dom";
 import { render } from "@testing-library/react";
 import Button from "./Button";
 
-describe.skip("Button UI component", () => {
+describe("Button UI component", () => {
 	it("should render a button with text", () => {
 		render(
 			<Button color="dark" priority="primary">

@@ -1,6 +1,5 @@
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import { NextPage } from "next/types";
 import { useEffect, useState } from "react";
@@ -8,7 +7,6 @@ import { useQuery } from "react-query";
 import { getModelCount } from "../apis/AggregatedData.api";
 import { getSearchResults } from "../apis/Search.api";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
-import Loader from "../components/Loader/Loader";
 import Pagination from "../components/Pagination/Pagination";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
@@ -17,15 +15,6 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import breakPoints from "../utils/breakpoints";
 import { searchTourSteps } from "../utils/tourSteps";
 import styles from "./search.module.scss";
-
-const DynamicModal = dynamic(import("../components/Modal/Modal"), {
-	loading: () => (
-		<div style={{ height: "300px" }}>
-			<Loader />
-		</div>
-	),
-	ssr: false
-});
 
 const ResultsSummary = (
 	totalHits: number,
@@ -90,30 +79,9 @@ const Search: NextPage = () => {
 			if (prev.includes(id)) {
 				return prev.filter((model) => model !== id);
 			} else {
-				if (prev.length === 4) {
-					alert(
-						"You've reached the maximum amount of models to compare. Remove a model to add another."
-					);
-					return prev;
-				} else {
-					return [...prev, id];
-				}
+				return [...prev, id];
 			}
 		});
-	};
-
-	const compareModels = () => {
-		if (modelsToCompare.length > 1) {
-			let compareModelsQuery = modelsToCompare.join("+");
-			window.open(
-				`/cancer-models-pages/compare?models=${compareModelsQuery}`,
-				"_blank"
-			);
-
-			setModelsToCompare([]);
-		} else {
-			alert("Please select at least 2 models to compare");
-		}
 	};
 
 	let modelCount = useQuery("modelCount", () => {
@@ -291,7 +259,7 @@ const Search: NextPage = () => {
 														<Button
 															color="dark"
 															priority="secondary"
-															className="text-underline m-0 ml-1"
+															className="m-0 ml-1"
 															style={{ padding: ".2rem .3rem" }}
 															onClick={() =>
 																setModelsToCompare((prev) =>
@@ -323,6 +291,7 @@ const Search: NextPage = () => {
 												priority="primary"
 												className="my-1 py-1"
 												onClick={() => compareModels()}
+												disabled={!canCompareModels}
 											>
 												Compare
 											</Button>

@@ -7,7 +7,6 @@
 }
 .Modal {
 	z-index: 9999999999;
-	width: 90%;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	min-height: initial;
@@ -16,6 +15,9 @@
 	top: $spacing-2;
 	left: 50%;
 	transform: translateX(-50%);
+  @media screen and (max-width: $bp-md) {
+    width: 90% !important;
+  }
 	&-center {
 		top: 50%;
 		left: 50%;

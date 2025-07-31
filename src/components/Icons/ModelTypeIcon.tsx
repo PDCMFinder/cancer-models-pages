@@ -1,5 +1,5 @@
 import { HTMLAttributes } from "react";
-import CavendishIcon, { type CavendishIconProps } from "./CavendishIcon";
+import CavendishIcon, { CavendishIconProps } from "./CavendishIcon";
 import MouseIcon from "./MouseIcon";
 import OrganoidIcon from "./OrganoidIcon";
 
@@ -26,7 +26,7 @@ const ModelTypeIcon = ({
 
 	const IconComponent = icons[modelType] || (() => <></>);
 
-	if (modelType.toLowerCase() === "other" && !hideOther) {
+	if (modelType?.toLowerCase() === "other" && !hideOther) {
 		return (
 			<p className="m-0" style={{ fontSize: "1em" }}>
 				Other

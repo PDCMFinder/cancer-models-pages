@@ -3,7 +3,7 @@ import styles from "./Modal.module.scss";
 
 type ModalProps = {
 	children: JSX.Element;
-	modalWidth?: "100" | "50" | "auto";
+	modalWidth?: "90" | "50" | "auto";
 	verticalAlign?: "center" | "top";
 	className?: string;
 	handleClose?: () => void;
@@ -14,7 +14,7 @@ type ModalProps = {
 
 const Modal = ({
 	children,
-	modalWidth = "auto",
+	modalWidth = "90",
 	verticalAlign = "center",
 	className,
 	handleClose,
@@ -57,7 +57,7 @@ const Modal = ({
 			></div>
 			<div
 				className={`${styles.Modal} ${
-					verticalAlign === "center" ? styles[`Modal-center`] : ""
+					verticalAlign === "center" && styles[`Modal-center`]
 				} ${className ?? ""} position-fixed w-${modalWidth}`}
 				style={style}
 			>
