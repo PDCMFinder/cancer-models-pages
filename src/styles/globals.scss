@@ -597,23 +597,6 @@ table {
 		line-height: 1.1;
 	}
 }
-.react-flow__node-custom {
-	cursor: default !important;
-	border-radius: $br-common;
-	border: 1px solid transparent;
-	background-color: $color-white;
-	p {
-		margin: 0;
-	}
-	&.current {
-		border-color: $color-primary-primary;
-	}
-}
-[class^="react-flow__edge"] {
-	path {
-		stroke: $color-primary-primary;
-	}
-}
 .sunburst path {
 	stroke-opacity: 0 !important;
 	stroke: transparent !important;
