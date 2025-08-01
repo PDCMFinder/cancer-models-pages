@@ -183,12 +183,17 @@ img {
 		&-start {
 			align-self: flex-start;
 		}
-	}
+  }
 	@include mediaOver("md") {
 		&-md {
 			&-center {
 				align-items: center;
 			}
+		}
+	}
+	&-content {
+		&-between {
+			align-content: space-between;
 		}
 	}
 }

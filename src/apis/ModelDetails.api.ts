@@ -58,8 +58,7 @@ const getBioStudiesTitleSearchResults = async (
 		if (totalHits) {
 			const searchResultHit = hits.find(
 				(hit: SearchHit) =>
-					hit.title.includes(providerId ?? "") &&
-					hit.title.includes(modelId)
+					hit.title.includes(providerId ?? "") && hit.title.includes(modelId)
 			);
 
 			return searchResultHit?.accession || "";
@@ -94,12 +93,11 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 		{ key: "name", value: "Histology" },
 		{ key: "name", value: "License" },
 		{ key: "name", value: "Model ID" },
-		{ key: "name", value: "Study type" },
+		{ key: "name", value: "Model type" },
 		{ key: "name", value: "Patient Age" },
 		{ key: "name", value: "Patient Ethnicity" },
 		{ key: "name", value: "Patient Sex" },
 		{ key: "name", value: "Primary Site" },
-		{ key: "name", value: "Title" },
 		{ key: "type", value: "Organization" },
 		{ key: "name", value: "Tumour Type" },
 		{ key: "name", value: "ReleaseDate" }
@@ -118,15 +116,15 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 	const licenseName = data["name:License"]?.[0]?.value ?? null;
 	const licenseUrl = data["name:License"]?.[0]?.valqual?.[0].value ?? null;
 	const modelId = data["name:Model ID"]?.[0]?.value ?? null;
-	const modelType = data["name:Study type"]?.[0]?.value ?? null;
+	const modelType = data["name:Model type"]?.[0]?.value ?? null;
 	const patientAge = data["name:Patient Age"]?.[0]?.value ?? null;
 	const patientEthnicity = data["name:Patient Ethnicity"]?.[0]?.value ?? null;
 	const patientSex = data["name:Patient Sex"]?.[0]?.value ?? null;
 	const primarySite = data["name:Primary Site"]?.[0]?.value ?? null;
-	const title = data["name:Title"]?.[0]?.value ?? null; //  "[providerId] [modelType] [modelId] Histology"
-	const providerId = title.match(/\[(.*?)\]/)?.[1] ?? null; // first match is provider id
-	const providerName =
-		data["type:Organization"]?.[0]?.attributes?.[0].value.match(/^(.*?)\s*\(/)[1] ?? null; // we don't want the parenthesis that includes the ID
+	const organization =
+		data["type:Organization"]?.[0]?.attributes?.[0].value ?? null;
+	const providerId = organization.match(/\(([^)]+)\)/)[1] ?? null; // parenthesis that includes the ID
+	const providerName = organization.match(/^(.*?)\s*\(/)[1] ?? null; // we don't want the parenthesis that includes the ID
 	const tumourType = data["name:Tumour Type"]?.[0]?.value ?? null;
 	const dateSubmitted = data["name:ReleaseDate"]?.[0]?.value ?? null;
 

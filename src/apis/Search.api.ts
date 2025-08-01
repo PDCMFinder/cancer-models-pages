@@ -18,7 +18,7 @@ const parseSearchResultModelData = (
 		{ key: "name", value: "Model ID" },
 		{ key: "type", value: "Organization" },
 		{ key: "name", value: "Histology" },
-		{ key: "name", value: "Study type" },
+		{ key: "name", value: "Model type" },
 		{ key: "name", value: "Tumour Type" },
 		{ key: "name", value: "Primary Site" },
 		{ key: "name", value: "Collection Site" },
@@ -43,7 +43,7 @@ const parseSearchResultModelData = (
 
 	const modelId = getFirstValue("name:Model ID");
 	const histology = getFirstValue("name:Histology");
-	const modelType = getFirstValue("name:Study type");
+	const modelType = getFirstValue("name:Model type");
 	const tumourType = getFirstValue("name:Tumour Type");
 	const primarySite = getFirstValue("name:Primary Site");
 	const collectionSite = getFirstValue("name:Collection Site");
