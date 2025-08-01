@@ -14,30 +14,14 @@ export type FacetSectionSelection = {
 	operator: "ANY" | "ALL";
 };
 
-export type FacetSectionProps = {
-	key: string;
+export type FacetSection = {
+	title: string;
 	name: string;
-	facets: FacetProps[];
-	sectionSelection?: FacetSectionSelection;
-	sectionOperators?: { [facet: string]: string };
-	onSelectionChange?(
-		facetKey: string,
-		selection: string[],
-		operator: string
-	): void;
+	children: Facet[];
 };
 
-export type FacetProps = {
-	facetId: string;
+export type Facet = {
 	name: string;
-	type: string;
-	options: string[];
-	selection?: string[];
-	operator?: string;
-	loading?: boolean;
-	displayOperators?: boolean;
-	placeholder?: string | null;
-	onSelectionChange?(selection: string[], operator: string): void;
-	isBoolean: boolean;
-	description?: string;
+	value: string;
+	hits: number;
 };
