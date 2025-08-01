@@ -35,6 +35,8 @@ type SearchHit = {
 	isPublic: boolean;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const getBioStudiesTitleSearchResults = async (
 	modelId: string,
 	providerId?: string
@@ -42,7 +44,7 @@ const getBioStudiesTitleSearchResults = async (
 	if (!modelId) return {} as BioStudiesModelData;
 
 	const searchResultsResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/CancerModelsOrg/search?type=study&isPublic=true&title=${modelId}${
+		`${API_URL}/search?type=study&isPublic=true&title=${modelId}${
 			providerId ? `+AND+${providerId}` : ""
 		}`
 	);

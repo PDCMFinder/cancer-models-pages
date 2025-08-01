@@ -5,8 +5,10 @@ import { NextPage } from "next/types";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getModelCount } from "../apis/AggregatedData.api";
-import { getSearchResults } from "../apis/Search.api";
+import { getSearchFacets, getSearchResults } from "../apis/Search.api";
+import Card from "../components/Card/Card";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
+import InputAndLabel from "../components/Input/InputAndLabel";
 import Pagination from "../components/Pagination/Pagination";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
@@ -91,6 +93,9 @@ const Search: NextPage = () => {
 	const { data: searchResultsData } = useQuery(
 		["search-results", currentPage],
 		() => getSearchResults(currentPage)
+	);
+	const { data: facetsData } = useQuery("search-facets", () =>
+		getSearchFacets()
 	);
 
 	return (
@@ -182,6 +187,58 @@ const Search: NextPage = () => {
 							{/* {windowWidth < bpLarge
 								? showFilters && ModalSearchFiltersComponent
 								: SearchFiltersComponent} */}
+
+							<Card
+								className="bg-lightGray bc-transparent overflow-visible"
+								contentClassName="py-3 px-2"
+								id="tour_filters"
+							>
+								{facetsData &&
+									facetsData.map((section) => {
+										return (
+											<div className="w-100" key={section.name}>
+												<h3 className="mb-0 p text-bold d-inline-block text-capitalize">
+													{section.title}
+												</h3>
+												<hr />
+												<ul className="ul-noStyle m-0 text-capitalize">
+													{section.children.map((option) => {
+														return (
+															<li key={option.name}>
+																<InputAndLabel
+																	data-hj-allow={true}
+																	forId={option.name}
+																	id={option.name}
+																	name={`${option.name}-name`}
+																	type="checkbox"
+																	label={option.name}
+																	// checked={selection?.includes(option.value)} // no problem passing value since we're checking if it's boolean, if not, pass option as normally. This works for boolean filters
+																	// onChange={(
+																	// 	e:
+																	// 		| ChangeEvent<HTMLInputElement>
+																	// 		| ChangeEvent<HTMLTextAreaElement>
+																	// ): void => {
+																	// 	const target = e.target as HTMLInputElement;
+																	// 	const actionType = target.checked
+																	// 		? "add"
+																	// 		: "remove";
+
+																	// 	props.onFilterChange(
+																	// 		option.name,
+																	// 		option.value,
+																	// 		operator,
+																	// 		actionType
+																	// 	);
+																	// }}
+																/>
+															</li>
+														);
+													})}
+												</ul>
+											</div>
+										);
+									})}
+							</Card>
 						</div>
 						<div className="col-12 col-lg-9">
 							{searchResultsData ? (
