@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuery } from "react-query";
@@ -14,18 +13,6 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import breakPoints from "../utils/breakpoints";
 import { ProjectButtons } from "./about/providers";
 import styles from "./index.module.scss";
-
-const DynamicSearchBar = dynamic(
-	() => import("../components/SearchBar/SearchBar"),
-	{
-		loading: () => (
-			<div style={{ height: "50px" }}>
-				<Loader />
-			</div>
-		),
-		ssr: false
-	}
-);
 
 const Home: NextPage = () => {
 	const { windowWidth } = useWindowDimensions();
@@ -70,7 +57,6 @@ const Home: NextPage = () => {
 									: ""
 							} cancer models`}
 						/>
-						<DynamicSearchBar id="searchBar-search-id" name="searchBar-name" />
 					</div>
 				</div>
 			</header>

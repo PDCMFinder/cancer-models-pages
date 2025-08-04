@@ -1,6 +1,4 @@
-import {
-  FacetSection
-} from "../types/Facet.model";
+import { FacetSection } from "../types/Facet.model";
 import { BioStudiesModelData } from "../types/ModelData.model";
 import { SearchResult } from "../types/Search.model";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
@@ -82,14 +80,29 @@ const parseSearchResultModelData = (
 	};
 };
 
-export const getSearchResults = async (page: number, query?: string) => {
+export const getSearchResults = async (
+	page: number,
+	selectedFacets: Record<string, string[]>,
+	query?: string
+) => {
 	let totalHits = 0;
+	let queryParts = [`${API_URL}/search?pageSize=10&page=${page}`];
 
-	const searchResultsResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/cancermodelsorg/search?pageSize=10&isPublic=true&page=${page}${
-			query ? `&query=${query}` : ""
-		}`
-	);
+	if (query) {
+		queryParts.push(`query=${encodeURIComponent(query)}`);
+	}
+
+	Object.entries(selectedFacets).forEach(([facet, options]) => {
+		options.forEach((option) => {
+			queryParts.push(
+				`${encodeURIComponent(facet)}=${encodeURIComponent(option)}`
+			);
+		});
+	});
+
+	const searchQueryString = queryParts.join("&");
+
+	const searchResultsResponse = await fetch(searchQueryString);
 
 	if (!searchResultsResponse.ok) {
 		throw new Error("Network response was not ok");
@@ -123,9 +136,7 @@ export const getSearchResults = async (page: number, query?: string) => {
 };
 
 export async function getSearchFacets(): Promise<FacetSection[]> {
-	let response = await fetch(
-		`${API_URL}/facets`
-	);
+	let response = await fetch(`${API_URL}/facets`);
 
 	if (!response.ok) {
 		throw new Error("Network response was not ok");

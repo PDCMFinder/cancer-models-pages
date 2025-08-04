@@ -6,10 +6,9 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getModelCount } from "../apis/AggregatedData.api";
 import { getSearchFacets, getSearchResults } from "../apis/Search.api";
-import Card from "../components/Card/Card";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
-import InputAndLabel from "../components/Input/InputAndLabel";
 import Pagination from "../components/Pagination/Pagination";
+import SearchFacets from "../components/SearchFilters/SearchFacets";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
 import ShowHide from "../components/ShowHide/ShowHide";
@@ -45,6 +44,9 @@ const Search: NextPage = () => {
 	const bpLarge = breakPoints.large;
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
+	const [selectedFacets, setSelectedFacets] = useState<
+		Record<string, string[]>
+	>({});
 
 	const [driverInstance, setDriverInstance] =
 		useState<ReturnType<typeof driver> | null>(null);
@@ -91,12 +93,31 @@ const Search: NextPage = () => {
 	});
 
 	const { data: searchResultsData } = useQuery(
-		["search-results", currentPage],
-		() => getSearchResults(currentPage)
+		["search-results", currentPage, selectedFacets],
+		() => getSearchResults(currentPage, selectedFacets)
 	);
 	const { data: facetsData } = useQuery("search-facets", () =>
 		getSearchFacets()
 	);
+
+	const handleFacetChange = (sectionName: string, facetValue: string) => {
+		const newState = structuredClone(selectedFacets);
+		const section = newState[sectionName] ?? [];
+
+		if (section.includes(facetValue)) {
+			const updatedSection = section.filter((value) => value !== facetValue);
+			if (updatedSection.length > 0) {
+				newState[sectionName] = updatedSection;
+			} else {
+				// delete empty keys (not really needed but let handle it here)
+				delete newState[sectionName];
+			}
+		} else {
+			newState[sectionName] = [...section, facetValue];
+		}
+
+		setSelectedFacets(newState);
+	};
 
 	return (
 		<>
@@ -147,7 +168,8 @@ const Search: NextPage = () => {
 											searchResultsData?.totalHits ?? 0,
 											currentPage,
 											resultsPerPage
-										)}
+										) ?? "Showing results"}
+										{/* render "Showing results" as a fallback so there's no blink */}
 									</p>
 								</div>
 							</div>
@@ -187,58 +209,18 @@ const Search: NextPage = () => {
 							{/* {windowWidth < bpLarge
 								? showFilters && ModalSearchFiltersComponent
 								: SearchFiltersComponent} */}
-
-							<Card
-								className="bg-lightGray bc-transparent overflow-visible"
-								contentClassName="py-3 px-2"
-								id="tour_filters"
-							>
-								{facetsData &&
-									facetsData.map((section) => {
-										return (
-											<div className="w-100" key={section.name}>
-												<h3 className="mb-0 p text-bold d-inline-block text-capitalize">
-													{section.title}
-												</h3>
-												<hr />
-												<ul className="ul-noStyle m-0 text-capitalize">
-													{section.children.map((option) => {
-														return (
-															<li key={option.name}>
-																<InputAndLabel
-																	data-hj-allow={true}
-																	forId={option.name}
-																	id={option.name}
-																	name={`${option.name}-name`}
-																	type="checkbox"
-																	label={option.name}
-																	// checked={selection?.includes(option.value)} // no problem passing value since we're checking if it's boolean, if not, pass option as normally. This works for boolean filters
-																	// onChange={(
-																	// 	e:
-																	// 		| ChangeEvent<HTMLInputElement>
-																	// 		| ChangeEvent<HTMLTextAreaElement>
-																	// ): void => {
-																	// 	const target = e.target as HTMLInputElement;
-																	// 	const actionType = target.checked
-																	// 		? "add"
-																	// 		: "remove";
-
-																	// 	props.onFilterChange(
-																	// 		option.name,
-																	// 		option.value,
-																	// 		operator,
-																	// 		actionType
-																	// 	);
-																	// }}
-																/>
-															</li>
-														);
-													})}
-												</ul>
-											</div>
-										);
-									})}
-							</Card>
+							{facetsData && (
+								<SearchFacets
+									data={facetsData}
+									selectedFacets={{}}
+									onFilterChange={function (
+										sectionName: string,
+										facetValue: string
+									): void {
+										handleFacetChange(sectionName, facetValue);
+									}}
+								/>
+							)}
 						</div>
 						<div className="col-12 col-lg-9">
 							{searchResultsData ? (
