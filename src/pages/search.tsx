@@ -5,9 +5,10 @@ import { NextPage } from "next/types";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { getModelCount } from "../apis/AggregatedData.api";
-import { getSearchResults } from "../apis/Search.api";
+import { getSearchFacets, getSearchResults } from "../apis/Search.api";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
 import Pagination from "../components/Pagination/Pagination";
+import SearchFacets from "../components/SearchFilters/SearchFacets";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
 import ShowHide from "../components/ShowHide/ShowHide";
@@ -43,6 +44,9 @@ const Search: NextPage = () => {
 	const bpLarge = breakPoints.large;
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
+	const [selectedFacets, setSelectedFacets] = useState<
+		Record<string, string[]>
+	>({});
 
 	const [driverInstance, setDriverInstance] =
 		useState<ReturnType<typeof driver> | null>(null);
@@ -89,9 +93,31 @@ const Search: NextPage = () => {
 	});
 
 	const { data: searchResultsData } = useQuery(
-		["search-results", currentPage],
-		() => getSearchResults(currentPage)
+		["search-results", currentPage, selectedFacets],
+		() => getSearchResults(currentPage, selectedFacets)
 	);
+	const { data: facetsData } = useQuery("search-facets", () =>
+		getSearchFacets()
+	);
+
+	const handleFacetChange = (sectionName: string, facetValue: string) => {
+		const newState = structuredClone(selectedFacets);
+		const section = newState[sectionName] ?? [];
+
+		if (section.includes(facetValue)) {
+			const updatedSection = section.filter((value) => value !== facetValue);
+			if (updatedSection.length > 0) {
+				newState[sectionName] = updatedSection;
+			} else {
+				// delete empty keys (not really needed but let handle it here)
+				delete newState[sectionName];
+			}
+		} else {
+			newState[sectionName] = [...section, facetValue];
+		}
+
+		setSelectedFacets(newState);
+	};
 
 	return (
 		<>
@@ -142,7 +168,8 @@ const Search: NextPage = () => {
 											searchResultsData?.totalHits ?? 0,
 											currentPage,
 											resultsPerPage
-										)}
+										) ?? "Showing results"}
+										{/* render "Showing results" as a fallback so there's no blink */}
 									</p>
 								</div>
 							</div>
@@ -182,6 +209,18 @@ const Search: NextPage = () => {
 							{/* {windowWidth < bpLarge
 								? showFilters && ModalSearchFiltersComponent
 								: SearchFiltersComponent} */}
+							{facetsData && (
+								<SearchFacets
+									data={facetsData}
+									selectedFacets={{}}
+									onFilterChange={function (
+										sectionName: string,
+										facetValue: string
+									): void {
+										handleFacetChange(sectionName, facetValue);
+									}}
+								/>
+							)}
 						</div>
 						<div className="col-12 col-lg-9">
 							{searchResultsData ? (
