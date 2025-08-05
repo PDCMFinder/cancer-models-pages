@@ -1,21 +1,21 @@
-import { FacetSection, FacetSidebarSelection } from "../../types/Facet.model";
+import { memo } from "react";
+import { FacetSection } from "../../types/Facet.model";
 import Card from "../Card/Card";
 import InputAndLabel from "../Input/InputAndLabel";
 
 type SearchFacets = {
 	data: FacetSection[];
-	selectedFacets: FacetSidebarSelection;
 	onFilterChange: (sectionName: string, facetValue: string) => void;
 };
 
-const SearchFacets = (props: SearchFacets) => {
+const SearchFacets = ({ data, onFilterChange }: SearchFacets) => {
 	return (
 		<Card
 			className="bg-lightGray bc-transparent overflow-visible"
 			contentClassName="pt-0 pb-3 px-2"
 			id="tour_filters"
 		>
-			{props.data.map((section) => {
+			{data?.map((section) => {
 				return (
 					<div className="w-100" key={section.name}>
 						<h3 className="mb-0 p text-bold d-inline-block text-capitalize">
@@ -34,7 +34,7 @@ const SearchFacets = (props: SearchFacets) => {
 											type="checkbox"
 											label={option.name}
 											onChange={() =>
-												props.onFilterChange(section.name, option.value)
+												onFilterChange(section.name, option.value)
 											}
 										/>
 									</li>
@@ -48,4 +48,4 @@ const SearchFacets = (props: SearchFacets) => {
 	);
 };
 
-export default SearchFacets;
+export default memo(SearchFacets);

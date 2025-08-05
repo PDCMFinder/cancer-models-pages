@@ -1,4 +1,6 @@
-type ShowHideBasics = { children: any; windowWidth: number };
+import { memo } from "react";
+
+type ShowHideBasics = { children: React.ReactNode; windowWidth: number };
 
 interface IShowOver extends ShowHideBasics {
 	showOver: number;
@@ -12,11 +14,12 @@ interface IHideOver extends ShowHideBasics {
 
 type ShowHideProps = IShowOver | IHideOver;
 
-const ShowHide = (props: ShowHideProps) => {
-	let windowWidth = props.windowWidth,
-		showOver = props.showOver,
-		hideOver = props.hideOver;
-
+const ShowHide = ({
+	windowWidth,
+	showOver,
+	hideOver,
+	children
+}: ShowHideProps) => {
 	if (
 		(hideOver && windowWidth >= hideOver) ||
 		(showOver && windowWidth < showOver)
@@ -24,7 +27,7 @@ const ShowHide = (props: ShowHideProps) => {
 		return null;
 	}
 
-	return <>{props.children}</>;
+	return <>{children}</>;
 };
 
-export default ShowHide;
+export default memo(ShowHide);
