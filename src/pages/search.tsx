@@ -8,6 +8,7 @@ import { getModelCount } from "../apis/AggregatedData.api";
 import { getSearchFacets, getSearchResults } from "../apis/Search.api";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
 import Pagination from "../components/Pagination/Pagination";
+import SearchBar from "../components/SearchBar/SearchBar";
 import SearchFacets from "../components/SearchFilters/SearchFacets";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
@@ -47,6 +48,7 @@ const Search: NextPage = () => {
 	const [selectedFacets, setSelectedFacets] = useState<
 		Record<string, string[]>
 	>({});
+	const [searchQuery, setSearchQuery] = useState<string>("");
 
 	const [driverInstance, setDriverInstance] =
 		useState<ReturnType<typeof driver> | null>(null);
@@ -93,8 +95,8 @@ const Search: NextPage = () => {
 	});
 
 	const { data: searchResultsData } = useQuery(
-		["search-results", currentPage, selectedFacets],
-		() => getSearchResults(currentPage, selectedFacets)
+		["search-results", currentPage, selectedFacets, searchQuery],
+		() => getSearchResults(currentPage, selectedFacets, searchQuery)
 	);
 	const { data: facetsData } = useQuery("search-facets", () =>
 		getSearchFacets()
@@ -109,7 +111,7 @@ const Search: NextPage = () => {
 			if (updatedSection.length > 0) {
 				newState[sectionName] = updatedSection;
 			} else {
-				// delete empty keys (not really needed but let handle it here)
+				// delete empty keys (not really needed but lets handle it here)
 				delete newState[sectionName];
 			}
 		} else {
@@ -146,13 +148,7 @@ const Search: NextPage = () => {
 					</div>
 					<div className="row">
 						<div className="col-12 col-md-10 col-lg-6 offset-md-1 offset-lg-3">
-							{/* <SearchBar
-								id="searchBar"
-								name="searchBar-name"
-								isMulti
-								onFilterChange={handleFilterChange}
-								selection={searchFilterState}
-							/> */}
+							<SearchBar setSearchQuery={setSearchQuery} />
 						</div>
 					</div>
 				</div>
@@ -168,8 +164,9 @@ const Search: NextPage = () => {
 											searchResultsData?.totalHits ?? 0,
 											currentPage,
 											resultsPerPage
-										) ?? "Showing results"}
-										{/* render "Showing results" as a fallback so there's no blink */}
+										)}
+										&nbsp;
+										{/* render blank space as a fallback so there's no blink */}
 									</p>
 								</div>
 							</div>
@@ -212,7 +209,6 @@ const Search: NextPage = () => {
 							{facetsData && (
 								<SearchFacets
 									data={facetsData}
-									selectedFacets={{}}
 									onFilterChange={function (
 										sectionName: string,
 										facetValue: string
@@ -258,19 +254,27 @@ const Search: NextPage = () => {
 											<p>
 												Your search terms:
 												<br />
-												{/* <ul className="ul-noStyle">
-                        {selectedFilters.current &&
-														selectedFilters.current.map((filter) => (
+												<ul className="ul-noStyle">
+													{selectedFacets &&
+														Object.keys(selectedFacets).map((filter) => (
 															<li key={filter} className="text-capitalize">
 																<span className="text-primary-tertiary">•</span>{" "}
 																{filter
+																	.split(".")[2]
 																	.replaceAll("_", " ")
 																	.replace(":", ": ")
 																	.replaceAll(",", ", ")
 																	.replaceAll(" boolean", "")}
+																: {selectedFacets[filter].join(", ")}
 															</li>
 														))}
-                          </ul> */}
+													{searchQuery && (
+														<li key={searchQuery} className="text-capitalize">
+															<span className="text-primary-tertiary">•</span>{" "}
+															Search term: {searchQuery}
+														</li>
+													)}
+												</ul>
 											</p>
 											{/* {ClearFilterButtonComponent} */}
 										</div>

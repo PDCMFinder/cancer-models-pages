@@ -89,7 +89,7 @@ export const getSearchResults = async (
 	let queryParts = [`${API_URL}/search?pageSize=10&page=${page}`];
 
 	if (query) {
-		queryParts.push(`query=${encodeURIComponent(query)}`);
+		queryParts.push(`title=${encodeURIComponent(query)}`);
 	}
 
 	Object.entries(selectedFacets).forEach(([facet, options]) => {
@@ -118,19 +118,19 @@ export const getSearchResults = async (
 			}
 		});
 
-	const data = await Promise.all(
-		searchResultsIds.map(async (id: string) => {
-			const modelData = await fetch(
-				`https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${id}`
-			);
-
-			if (!modelData.ok) {
-				throw new Error(`Failed to fetch study with id ${id}`);
-			}
-
-			return modelData.json().then((d) => parseSearchResultModelData(d));
-		})
-	);
+    const data = searchResultsIds ? await Promise.all(
+      searchResultsIds.map(async (id: string) => {
+        const modelData = await fetch(
+          `https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${id}`
+        );
+        
+        if (!modelData.ok) {
+          throw new Error(`Failed to fetch study with id ${id}`);
+        }
+        
+        return modelData.json().then((d) => parseSearchResultModelData(d));
+      })
+    ) : [];
 
 	return { data, totalHits };
 };

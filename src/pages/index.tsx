@@ -5,8 +5,8 @@ import { useQuery } from "react-query";
 import { getModelCount } from "../apis/AggregatedData.api";
 import Button from "../components/Button/Button";
 import DataCountCard from "../components/DataCountCard/DataCountCard";
-import Label from "../components/Input/Label";
 import Loader from "../components/Loader/Loader";
+import SearchBar from "../components/SearchBar/SearchBar";
 import ShowHide from "../components/ShowHide/ShowHide";
 import { useActiveProject } from "../hooks/useActiveProject";
 import useWindowDimensions from "../hooks/useWindowDimensions";
@@ -47,16 +47,8 @@ const Home: NextPage = () => {
 						</ShowHide>
 					</div>
 					<div className={`${styles.header_search} py-5`}>
-						<Label
-							name="searchBar"
-							forId="searchBar-label"
-							className="h3 text-white"
-							label={`Search ${
-								modelCount && modelCount.data
-									? `over ${modelCount.data.toLocaleString()}`
-									: ""
-							} cancer models`}
-						/>
+						<SearchBar onChange={(e) => console.log(e)} />
+						{/* TODO: redirect to search page with current query */}
 					</div>
 				</div>
 			</header>
