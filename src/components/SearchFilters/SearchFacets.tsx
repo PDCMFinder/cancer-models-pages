@@ -12,7 +12,7 @@ const SearchFacets = (props: SearchFacets) => {
 	return (
 		<Card
 			className="bg-lightGray bc-transparent overflow-visible"
-			contentClassName="py-3 px-2"
+			contentClassName="pt-0 pb-3 px-2"
 			id="tour_filters"
 		>
 			{props.data.map((section) => {
