@@ -1,40 +1,50 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
-import useDebounce from "../../hooks/useDebounce";
+import { FormEvent, useEffect, useRef } from "react";
+import Button from "../Button/Button";
 import Input from "../Input/Input";
 import Label from "../Input/Label";
 
 type Props = {
-	setSearchQuery?: Dispatch<SetStateAction<string>>;
-	onChange?: (
-		e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
-	) => void;
+	defaultValue?: string | undefined;
+	onSubmit?: (inputValue: string) => void;
 };
 
-const SearchBar = ({ setSearchQuery, onChange }: Props) => {
-	const [debouncedValue, _, setDebounceValue] = useDebounce("", 500);
-
+const SearchBar = ({ defaultValue, onSubmit }: Props) => {
+	const searchRef = useRef<null | HTMLInputElement>(null);
 	useEffect(() => {
-		setSearchQuery && setSearchQuery(debouncedValue);
-	}, [debouncedValue]);
+		if (searchRef.current !== null) {
+			searchRef.current.value = defaultValue ?? "";
+		}
+	}, [defaultValue]);
+
+	const handleOnSubmit = (e: FormEvent) => {
+		e.preventDefault();
+		onSubmit && onSubmit(searchRef?.current?.value ?? "");
+	};
 
 	return (
-		<>
-			<Label
-				label="Search for model ID, histology and/or model type"
-				forId="search-bar"
-				name="search-bar"
-				className="text-white"
-			/>
-			<Input
-				name="search-bar"
-				type="search"
-				placeholder="Eg. CRL-2835, Breast Carcinoma, PDX"
-				onChange={(e) => {
-					setDebounceValue(e.target.value);
-					onChange && onChange(e);
-				}}
-			/>
-		</>
+		<form onSubmit={(e) => handleOnSubmit(e)}>
+			<div className="d-flex align-center">
+				<div>
+					<Label
+						label="Search for model ID, histology and/or model type"
+						forId="search-bar"
+						name="search-bar"
+						className="text-white"
+					/>
+					<Input
+						inputRef={searchRef}
+						name="search-bar"
+						type="search"
+						placeholder="Eg. CRL-2835, Breast Carcinoma, PDX"
+						required
+						defaultValue={defaultValue}
+					/>
+				</div>
+				<Button priority="primary" color="dark" type="submit">
+					Search
+				</Button>
+			</div>
+		</form>
 	);
 };
 

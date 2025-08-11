@@ -87,6 +87,7 @@ export type InputProps = {
 	required?: boolean;
 	checked?: boolean;
 	defaultChecked?: boolean;
+  defaultValue?: string | number | undefined;
 };
 
 export type TabProps = {

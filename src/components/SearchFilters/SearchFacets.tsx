@@ -5,10 +5,15 @@ import InputAndLabel from "../Input/InputAndLabel";
 
 type SearchFacets = {
 	data: FacetSection[];
+	currentFacetSelection: Record<string, string[]>;
 	onFilterChange: (sectionName: string, facetValue: string) => void;
 };
 
-const SearchFacets = ({ data, onFilterChange }: SearchFacets) => {
+const SearchFacets = ({
+	data,
+	currentFacetSelection,
+	onFilterChange
+}: SearchFacets) => {
 	return (
 		<Card
 			className="bg-lightGray bc-transparent overflow-visible"
@@ -24,6 +29,10 @@ const SearchFacets = ({ data, onFilterChange }: SearchFacets) => {
 						<hr />
 						<ul className="ul-noStyle m-0 text-capitalize">
 							{section.children.map((option) => {
+								const isChecked =
+									currentFacetSelection[section.name]?.includes(option.value) ??
+									false;
+
 								return (
 									<li key={section.name + option.name}>
 										<InputAndLabel
@@ -33,6 +42,7 @@ const SearchFacets = ({ data, onFilterChange }: SearchFacets) => {
 											name={`${option.name}-name`}
 											type="checkbox"
 											label={option.name}
+											checked={isChecked}
 											onChange={() =>
 												onFilterChange(section.name, option.value)
 											}
