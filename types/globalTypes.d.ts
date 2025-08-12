@@ -72,6 +72,7 @@ export type LabelProps = {
 };
 
 export type InputProps = {
+  style: CSSProperties;
 	name: string;
 	id?: string;
 	type: typeof inputTypes[number] | "textarea";
@@ -87,6 +88,7 @@ export type InputProps = {
 	required?: boolean;
 	checked?: boolean;
 	defaultChecked?: boolean;
+  defaultValue?: string | number | undefined;
 };
 
 export type TabProps = {

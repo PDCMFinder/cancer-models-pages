@@ -17,7 +17,9 @@ const Input = (props: InputProps) => {
 			ref: props.inputRef && props.inputRef,
 			required: props.required,
 			checked: props.checked,
-			defaultChecked: props.defaultChecked
+			defaultChecked: props.defaultChecked,
+			defaultValue: props.defaultValue,
+			style: props.style
 		},
 		InputElement =
 			props.type === "textarea" ? (

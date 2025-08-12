@@ -1,12 +1,9 @@
 import type { NextPage } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { useQuery } from "react-query";
-import { getModelCount } from "../apis/AggregatedData.api";
+import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
-import DataCountCard from "../components/DataCountCard/DataCountCard";
-import Label from "../components/Input/Label";
 import Loader from "../components/Loader/Loader";
+import SearchBar from "../components/SearchBar/SearchBar";
 import ShowHide from "../components/ShowHide/ShowHide";
 import { useActiveProject } from "../hooks/useActiveProject";
 import useWindowDimensions from "../hooks/useWindowDimensions";
@@ -15,9 +12,10 @@ import { ProjectButtons } from "./about/providers";
 import styles from "./index.module.scss";
 
 const Home: NextPage = () => {
+	const router = useRouter();
 	const { windowWidth } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
-	const modelCount = useQuery("modelCount", () => getModelCount());
+	// const modelCount = useQuery("modelCount", () => getModelCount());
 	const { activeProjectData, handleProjectClick, isLoadingProviders } =
 		useActiveProject();
 
@@ -28,7 +26,7 @@ const Home: NextPage = () => {
 					<div className={styles.header_searchBackground}></div>
 					<ShowHide windowWidth={windowWidth || 0} showOver={bpLarge}>
 						<div className={styles.header_graphicElement}>
-							<DataCountCard layout="vertical" iconSize="2em" />
+							{/* <DataCountCard layout="vertical" iconSize="2em" /> */}
 						</div>
 					</ShowHide>
 					<div
@@ -42,21 +40,21 @@ const Home: NextPage = () => {
 							<div
 								className={`${styles.header_graphicElement} mt-3 position-relative`}
 							>
-								<DataCountCard layout="vertical" iconSize="2em" />
+								{/* <DataCountCard layout="vertical" iconSize="2em" /> */}
 							</div>
 						</ShowHide>
 					</div>
 					<div className={`${styles.header_search} py-5`}>
-						<Label
-							name="searchBar"
-							forId="searchBar-label"
-							className="h3 text-white"
-							label={`Search ${
-								modelCount && modelCount.data
-									? `over ${modelCount.data.toLocaleString()}`
-									: ""
-							} cancer models`}
+						<h2 className="h3 text-white">Search over 10,342 cancer models</h2>
+						<SearchBar
+							onSubmit={(value) =>
+								router.push({
+									pathname: "search",
+									search: `?query=${value}`
+								})
+							}
 						/>
+						{/* TODO: redirect to search page with current query */}
 					</div>
 				</div>
 			</header>
@@ -106,13 +104,13 @@ const Home: NextPage = () => {
 													{activeProjectData.project_full_name ??
 														activeProjectData.project_abbreviation}
 												</h3>
-												<p className="mb-lg-0">
+												{/* <p className="mb-lg-0">
 													<Link
 														href={`/search?filters=project_name%3A${activeProjectData.project_abbreviation}`}
 													>
 														Explore project&apos;s models
 													</Link>
-												</p>
+												</p> */}
 											</div>
 										</div>
 										<hr className="mb-3" />
@@ -125,25 +123,25 @@ const Home: NextPage = () => {
 											key={provider?.data_source}
 											className="col text-center"
 										>
-											<Link
+											{/* <Link
 												href={`/search?filters=data_source%3A${provider?.data_source}`}
 												title={`Explore all ${provider?.data_source} models`}
 												style={{ height: "100px" }}
 												className="mb-1 d-flex"
 											>
-												<Image
-													src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
-													alt={`${provider?.provider_name} logo`}
-													title={provider?.provider_name}
-													className="w-auto h-auto m-auto"
-													width={300}
-													height={100}
-													style={{
-														maxHeight: "100px",
-														maxWidth: "75%"
-													}}
-												/>
-											</Link>
+											</Link> */}
+											<Image
+												src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
+												alt={`${provider?.provider_name} logo`}
+												title={provider?.provider_name}
+												className="w-auto h-auto m-auto"
+												width={300}
+												height={100}
+												style={{
+													maxHeight: "100px",
+													maxWidth: "75%"
+												}}
+											/>
 											<p className="text-small text-muted">
 												{provider?.provider_name}
 											</p>

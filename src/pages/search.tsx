@@ -1,13 +1,16 @@
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Head from "next/head";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 import { NextPage } from "next/types";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
-import { getModelCount } from "../apis/AggregatedData.api";
 import { getSearchFacets, getSearchResults } from "../apis/Search.api";
+import Button from "../components/Button/Button";
 import FloatingButton from "../components/FloatingWidget/FloatingButton";
 import Pagination from "../components/Pagination/Pagination";
+import SearchBar from "../components/SearchBar/SearchBar";
 import SearchFacets from "../components/SearchFilters/SearchFacets";
 import SearchResults from "../components/SearchResults/SearchResults";
 import SearchResultsLoader from "../components/SearchResults/SearchResultsLoader";
@@ -19,22 +22,24 @@ import styles from "./search.module.scss";
 
 const ResultsSummary = (
 	totalHits: number,
-	currentPage: number,
+	page: number,
 	resultsPerPage: number
 ) => {
 	if (!totalHits) return null;
 
-	const endIndex = currentPage * resultsPerPage;
+	const endIndex = page * resultsPerPage;
 	const maxShown = Math.min(totalHits, endIndex);
-	const startIndex = (currentPage - 1) * resultsPerPage + 1;
+	const startIndex = (page - 1) * resultsPerPage + 1;
 
 	return `Showing results ${startIndex.toLocaleString()} to
     ${maxShown.toLocaleString()} of ${totalHits.toLocaleString()}
     results`;
 };
 
-export type onFilterChangeType = {
-	type: "add" | "remove" | "clear" | "toggleOperator" | "init" | "substitute";
+export type SearchState = {
+	page: number;
+	selectedFacets: Record<string, string[]>;
+	searchQuery: string | null;
 };
 
 const resultsPerPage = 10;
@@ -42,14 +47,22 @@ const resultsPerPage = 10;
 const Search: NextPage = () => {
 	const { windowWidth = 0 } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
-	const [currentPage, setCurrentPage] = useState<number>(1);
+	const router = useRouter();
+	const urlSearchParams = useSearchParams();
+	const urlQuery = urlSearchParams.get("query") ?? "";
+	const [showMobileFacets, setShowMobileFacets] = useState(false);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
-	const [selectedFacets, setSelectedFacets] = useState<
-		Record<string, string[]>
-	>({});
-
 	const [driverInstance, setDriverInstance] =
 		useState<ReturnType<typeof driver> | null>(null);
+	const [searchState, setSearchState] = useState<SearchState>({
+		page: 1,
+		selectedFacets: {},
+		searchQuery: urlQuery ?? ""
+	});
+
+	useEffect(() => {
+		setSearchState((prev) => ({ ...prev, searchQuery: urlQuery }));
+	}, [urlQuery]);
 
 	useEffect(() => {
 		const loadDriver = async () => {
@@ -74,8 +87,8 @@ const Search: NextPage = () => {
 	};
 
 	const changePage = (page: number) => {
-		setCurrentPage(page);
-		window.scrollTo(0, 350);
+		setSearchState((prev) => ({ ...prev, page: page }));
+		window.scrollTo(0, 370);
 	};
 
 	const compareModel = (id: string): void => {
@@ -88,20 +101,29 @@ const Search: NextPage = () => {
 		});
 	};
 
-	let modelCount = useQuery("modelCount", () => {
-		return getModelCount();
-	});
-
 	const { data: searchResultsData } = useQuery(
-		["search-results", currentPage, selectedFacets],
-		() => getSearchResults(currentPage, selectedFacets)
+		[
+			"search-results",
+			searchState.page,
+			searchState.selectedFacets,
+			searchState.searchQuery
+		],
+		async () =>
+			getSearchResults(
+				searchState.page,
+				searchState.selectedFacets,
+				searchState.searchQuery ?? ""
+			),
+		{
+			enabled: searchState.searchQuery !== null
+		}
 	);
 	const { data: facetsData } = useQuery("search-facets", () =>
 		getSearchFacets()
 	);
 
 	const handleFacetChange = (sectionName: string, facetValue: string) => {
-		const newState = structuredClone(selectedFacets);
+		const newState = structuredClone(searchState.selectedFacets);
 		const section = newState[sectionName] ?? [];
 
 		if (section.includes(facetValue)) {
@@ -109,15 +131,64 @@ const Search: NextPage = () => {
 			if (updatedSection.length > 0) {
 				newState[sectionName] = updatedSection;
 			} else {
-				// delete empty keys (not really needed but let handle it here)
+				// delete empty keys (not really needed but lets handle it here)
 				delete newState[sectionName];
 			}
 		} else {
 			newState[sectionName] = [...section, facetValue];
 		}
 
-		setSelectedFacets(newState);
+		setSearchState((prev) => ({ ...prev, selectedFacets: newState }));
 	};
+
+	const handleSearchBarSubmit = (value: string) => {
+		if (value === "") {
+			router.push({
+				pathname: "/search"
+			});
+
+			return;
+		}
+		setSearchState((prev) => ({ ...prev, searchQuery: value }));
+		router.push({
+			pathname: "/search",
+			query: { query: value }
+		});
+	};
+
+	const ClearFilterButtonComponent = useMemo(
+		() => (
+			<Button
+				style={{ color: "#b75858" }}
+				className="m-0"
+				priority="secondary"
+				color="dark"
+				disabled={Object.keys(searchState.selectedFacets).length === 0}
+				onClick={() => {
+					setSearchState((prev) => ({ ...prev, selectedFacets: {} }));
+				}}
+			>
+				Clear
+			</Button>
+		),
+		[searchState.selectedFacets]
+	);
+
+	const memoizedSearchFacets = useMemo(
+		() => (
+			<SearchFacets
+				data={facetsData ?? []}
+				currentFacetSelection={searchState.selectedFacets}
+				onFilterChange={function (
+					sectionName: string,
+					facetValue: string
+				): void {
+					handleFacetChange(sectionName, facetValue);
+				}}
+			/>
+		),
+		[facetsData, searchState.selectedFacets]
+	);
 
 	return (
 		<>
@@ -135,24 +206,26 @@ const Search: NextPage = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
+							{/* OK to hardcode total models */}
 							<h1 className="h2 text-white text-center mt-0">
-								Search{" "}
-								{modelCount && modelCount.data
-									? `over ${modelCount.data.toLocaleString()}`
-									: ""}{" "}
-								cancer models
+								Search over 10,342 cancer models
 							</h1>
 						</div>
 					</div>
 					<div className="row">
-						<div className="col-12 col-md-10 col-lg-6 offset-md-1 offset-lg-3">
-							{/* <SearchBar
-								id="searchBar"
-								name="searchBar-name"
-								isMulti
-								onFilterChange={handleFilterChange}
-								selection={searchFilterState}
-							/> */}
+						<div className="col-12 align-end d-md-flex col-gap-2 justify-content-center">
+							<SearchBar
+								onSubmit={handleSearchBarSubmit}
+								defaultValue={urlQuery ?? searchState.searchQuery}
+							/>
+							<Button
+								priority="primary"
+								color="light"
+								className="m-0"
+								onClick={() => handleSearchBarSubmit("")}
+							>
+								See all models
+							</Button>
 						</div>
 					</div>
 				</div>
@@ -161,15 +234,18 @@ const Search: NextPage = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12 col-lg-9 offset-lg-3">
-							<div className="row mb-3 align-center">
+							<div className="row mb-md-3 align-center">
 								<div className="col-12 col-md-6">
-									<p className="mb-md-0">
+									<p className="mb-0">
 										{ResultsSummary(
 											searchResultsData?.totalHits ?? 0,
-											currentPage,
+											searchState.page,
 											resultsPerPage
-										) ?? "Showing results"}
-										{/* render "Showing results" as a fallback so there's no blink */}
+										)}
+										&nbsp;
+										<br />
+										<span className="d-md-none">&nbsp;</span>
+										{/* render blank space as a fallback so there's no blink because of height */}
 									</p>
 								</div>
 							</div>
@@ -179,22 +255,24 @@ const Search: NextPage = () => {
 						<div className="col-12 col-lg-3">
 							<div className="row align-center mb-1">
 								<ShowHide hideOver={bpLarge} windowWidth={windowWidth || 0}>
+									{/* mobile filters */}
 									<div className="col-6 col-md-8 col-lg-6">
-										{/* <Button
+										<Button
 											priority="secondary"
 											color="dark"
-											onClick={() => setShowFilters(true)}
+											onClick={() => setShowMobileFacets((prev) => !prev)}
 											className="align-center d-flex"
 										>
 											<>
 												Filters
-												{hasFilterSelection && (
+												{Object.keys(searchState.selectedFacets).length !==
+													0 && (
 													<span
 														className={`ml-1 ${styles.Search_filterNotification}`}
 													></span>
 												)}
 											</>
-										</Button> */}
+										</Button>
 									</div>
 								</ShowHide>
 								<ShowHide showOver={bpLarge} windowWidth={windowWidth || 0}>
@@ -202,25 +280,14 @@ const Search: NextPage = () => {
 										<h2 className="h3 m-0">Filters</h2>
 									</div>
 									<div className="col-6 col-md-4 col-lg-6 d-flex justify-content-end">
-										{/* {ClearFilterButtonComponent} */}
+										{ClearFilterButtonComponent}
 									</div>
 								</ShowHide>
 							</div>
-							{/* {windowWidth < bpLarge
-								? showFilters && ModalSearchFiltersComponent
-								: SearchFiltersComponent} */}
-							{facetsData && (
-								<SearchFacets
-									data={facetsData}
-									selectedFacets={{}}
-									onFilterChange={function (
-										sectionName: string,
-										facetValue: string
-									): void {
-										handleFacetChange(sectionName, facetValue);
-									}}
-								/>
-							)}
+							{windowWidth < bpLarge
+								? showMobileFacets && memoizedSearchFacets
+								: memoizedSearchFacets}
+							{/* {facetsData && memoizedSearchFacets} */}
 						</div>
 						<div className="col-12 col-lg-9">
 							{searchResultsData ? (
@@ -241,7 +308,7 @@ const Search: NextPage = () => {
 															  )
 															: 1
 													}
-													currentPage={currentPage}
+													currentPage={searchState.page}
 													onPageChange={(page: number) => changePage(page)}
 												/>
 											</div>
@@ -255,24 +322,34 @@ const Search: NextPage = () => {
 												<br />
 												Please try again with different filters.
 											</p>
-											<p>
-												Your search terms:
-												<br />
-												{/* <ul className="ul-noStyle">
-                        {selectedFilters.current &&
-														selectedFilters.current.map((filter) => (
-															<li key={filter} className="text-capitalize">
+											<p>Your search terms:</p>
+											<ul className="ul-noStyle">
+												{searchState.selectedFacets &&
+													Object.entries(searchState.selectedFacets).map(
+														([filterName, filterValues]) => (
+															<li key={filterName} className="text-capitalize">
 																<span className="text-primary-tertiary">•</span>{" "}
-																{filter
+																{filterName
+																	.split(".")[2]
 																	.replaceAll("_", " ")
 																	.replace(":", ": ")
 																	.replaceAll(",", ", ")
 																	.replaceAll(" boolean", "")}
+																: {filterValues.join(", ")}
 															</li>
-														))}
-                          </ul> */}
-											</p>
-											{/* {ClearFilterButtonComponent} */}
+														)
+													)}
+												{searchState.searchQuery && (
+													<li
+														key={searchState.searchQuery}
+														className="text-capitalize"
+													>
+														<span className="text-primary-tertiary">•</span>{" "}
+														Search term: {searchState.searchQuery}
+													</li>
+												)}
+											</ul>
+											{ClearFilterButtonComponent}
 										</div>
 									</div>
 								)
