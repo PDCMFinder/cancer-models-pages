@@ -60,17 +60,6 @@ const Search: NextPage = () => {
 		searchQuery: urlQuery ?? ""
 	});
 
-	// const createQueryString = useCallback(
-	// 	(name: string, value: string) => {
-	// 		const params = new URLSearchParams(searchParams);
-	// 		params.set(name, value);
-
-	// 		return params.toString();
-	// 	},
-	// 	[searchParams]
-	// );
-	// pathname + '?' + createQueryString('sort', 'desc')
-
 	useEffect(() => {
 		setSearchState((prev) => ({ ...prev, searchQuery: urlQuery }));
 	}, [urlQuery]);
@@ -111,10 +100,6 @@ const Search: NextPage = () => {
 			}
 		});
 	};
-
-	// let modelCount = useQuery("modelCount", () => {
-	// 	return getModelCount();
-	// });
 
 	const { data: searchResultsData } = useQuery(
 		[
@@ -157,8 +142,15 @@ const Search: NextPage = () => {
 	};
 
 	const handleSearchBarSubmit = (value: string) => {
+		if (value === "") {
+			router.push({
+				pathname: "/search"
+			});
+
+			return;
+		}
 		setSearchState((prev) => ({ ...prev, searchQuery: value }));
-		router.replace({
+		router.push({
 			pathname: "/search",
 			query: { query: value }
 		});
@@ -221,11 +213,19 @@ const Search: NextPage = () => {
 						</div>
 					</div>
 					<div className="row">
-						<div className="col-12 col-md-10 col-lg-6 offset-md-1 offset-lg-3">
+						<div className="col-12 align-end d-md-flex col-gap-2 justify-content-center">
 							<SearchBar
 								onSubmit={handleSearchBarSubmit}
-								defaultValue={urlQuery ?? searchState.searchQuery ?? ""}
+								defaultValue={urlQuery ?? searchState.searchQuery}
 							/>
+							<Button
+								priority="primary"
+								color="light"
+								className="m-0"
+								onClick={() => handleSearchBarSubmit("")}
+							>
+								See all models
+							</Button>
 						</div>
 					</div>
 				</div>
@@ -234,15 +234,17 @@ const Search: NextPage = () => {
 				<div className="container">
 					<div className="row">
 						<div className="col-12 col-lg-9 offset-lg-3">
-							<div className="row mb-3 align-center">
+							<div className="row mb-md-3 align-center">
 								<div className="col-12 col-md-6">
-									<p className="mb-md-0">
+									<p className="mb-0">
 										{ResultsSummary(
 											searchResultsData?.totalHits ?? 0,
 											searchState.page,
 											resultsPerPage
 										)}
 										&nbsp;
+										<br />
+										<span className="d-md-none">&nbsp;</span>
 										{/* render blank space as a fallback so there's no blink because of height */}
 									</p>
 								</div>
@@ -258,7 +260,7 @@ const Search: NextPage = () => {
 										<Button
 											priority="secondary"
 											color="dark"
-											onClick={() => setShowMobileFacets(true)}
+											onClick={() => setShowMobileFacets((prev) => !prev)}
 											className="align-center d-flex"
 										>
 											<>
@@ -282,10 +284,10 @@ const Search: NextPage = () => {
 									</div>
 								</ShowHide>
 							</div>
-							{/* {windowWidth < bpLarge
-								? showFilters && ModalSearchFiltersComponent
-								: SearchFiltersComponent} */}
-							{facetsData && memoizedSearchFacets}
+							{windowWidth < bpLarge
+								? showMobileFacets && memoizedSearchFacets
+								: memoizedSearchFacets}
+							{/* {facetsData && memoizedSearchFacets} */}
 						</div>
 						<div className="col-12 col-lg-9">
 							{searchResultsData ? (

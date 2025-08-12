@@ -16,7 +16,7 @@ const SearchFacets = ({
 }: SearchFacets) => {
 	return (
 		<Card
-			className="bg-lightGray bc-transparent overflow-visible"
+			className="bg-lightGray bc-transparent overflow-visible mb-3"
 			contentClassName="pt-0 pb-3 px-2"
 			id="tour_filters"
 		>

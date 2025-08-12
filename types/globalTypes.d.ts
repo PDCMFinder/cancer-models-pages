@@ -72,6 +72,7 @@ export type LabelProps = {
 };
 
 export type InputProps = {
+  style: CSSProperties;
 	name: string;
 	id?: string;
 	type: typeof inputTypes[number] | "textarea";

@@ -1,11 +1,9 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
-import ReactGA from "react-ga4";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Card from "../Card/Card";
 import CookieConsent from "../CookieConsent/CookieConsent";
-import FloatingButton from "../FloatingWidget/FloatingButton";
 import CloseIcon from "../Icons/CloseIcon/CloseIcon";
 import Loader from "../Loader/Loader";
 import Navbar from "../Navbar/Navbar";
@@ -44,27 +42,6 @@ const Layout = (props: LayoutProps) => {
 				<Navbar />
 				<main>{props.children}</main>
 				<CookieConsent />
-				{/* bottom right survey bubble */}
-				<FloatingButton
-					onClick={() => {
-						setShowFeedbackModal(true);
-						ReactGA.event("feedback_bubble-click", {
-							category: "event"
-						});
-					}}
-					position="bottom right"
-					className="p-2 br-round"
-					priority="primary"
-					color="dark"
-					fromBottom={80}
-					fromRight={-25}
-				>
-					<div className="d-flex align-center">
-						<p className="mb-0 mr-2 text-small">
-							We&apos;d love your (quick) feedback!
-						</p>
-					</div>
-				</FloatingButton>
 				<ReactQueryDevtools initialIsOpen={false} />
 				<DynamicFooter />
 				{showFeedbackModal && (
