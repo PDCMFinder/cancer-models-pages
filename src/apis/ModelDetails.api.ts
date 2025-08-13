@@ -1,25 +1,25 @@
 import {
-  AllModelData,
-  Attribute,
-  BioStudiesModelData,
-  BsImmuneMarkers,
-  CellModelData,
-  Engraftment,
-  ExternalModelLink,
-  ExtLinks,
-  ImmuneMarker,
-  ModelImage,
-  MolecularData,
-  MolecularDataExternalDbLink,
-  ParsedModelMetadata,
-  Publication,
-  QualityData,
-  RelatedModel,
-  RelatedModelRoles,
-  RelatedModels,
-  Subsection,
-  Treatment,
-  TreatmentExternalDbLink
+	AllModelData,
+	Attribute,
+	BioStudiesModelData,
+	BsImmuneMarkers,
+	CellModelData,
+	Engraftment,
+	ExternalModelLink,
+	ExtLinks,
+	ImmuneMarker,
+	ModelImage,
+	MolecularData,
+	MolecularDataExternalDbLink,
+	ParsedModelMetadata,
+	Publication,
+	QualityData,
+	RelatedModel,
+	RelatedModelRoles,
+	RelatedModels,
+	Subsection,
+	Treatment,
+	TreatmentExternalDbLink
 } from "../types/ModelData.model";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
 
@@ -52,19 +52,22 @@ const getBioStudiesTitleSearchResults = async (
 		throw new Error("Network response was not ok");
 	}
 
-	// we're assuming the model ID is the first result of searching the id on biostudies
-	// this is the best way to do it right now
+	// out of the first 10 results, get the one that the title has the id
+	// we're not using .includes since there might be a partial match (eg. CMP_10 includes CMP_1)
 	const accessionId = await searchResultsResponse.json().then((d) => {
 		const { hits, totalHits }: { hits: SearchHit[]; totalHits: number } = d;
 
-		if (totalHits) {
-			const searchResultHit = hits.find(
-				(hit: SearchHit) =>
-					hit.title.includes(providerId ?? "") && hit.title.includes(modelId)
-			);
+		return (
+			hits.find((study) => {
+				const bracketValues = study.title.match(
+					/(?:\[[^\]]*\]\s*){2}\[([^\]]+)\]/
+				);
 
-			return searchResultHit?.accession || "";
-		}
+				// [providerId] [modelType] [modelId] Histology
+				// bracketValues?.[1] is modelId
+				return bracketValues?.[1] === modelId;
+			})?.accession ?? ""
+		);
 	});
 
 	if (!accessionId) {
