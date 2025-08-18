@@ -1,9 +1,11 @@
 import "driver.js/dist/driver.css";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { GetStaticPaths, GetStaticProps } from "next/types";
 import { useQuery } from "react-query";
 import { getAllModelData } from "../../../../../apis/ModelDetails.api";
 import ModelPage from "../../../../../components/ModelPage/ModelPage";
+import allModelsWithProviders from "../../../../../utils/allModelsWithProviderId";
 
 const DynamicLoader = dynamic(
 	() => import("../../../../../components/Loader/Loader"),
@@ -35,3 +37,23 @@ const ModelDetails = () => {
 };
 
 export default ModelDetails;
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	const paths = allModelsWithProviders.map((item) => ({
+		params: {
+			providerId: item.providerId,
+			modelId: item.modelId
+		}
+	}));
+
+	return {
+		paths,
+		fallback: true
+	};
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+	return {
+		props: {}
+	};
+};
