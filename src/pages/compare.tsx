@@ -83,7 +83,7 @@ const Compare: NextPage = () => {
 
 	// Update URL when a model is removed
 	useEffect(() => {
-		router.push(
+		router.replace(
 			{
 				pathname: "/compare",
 				query: {
