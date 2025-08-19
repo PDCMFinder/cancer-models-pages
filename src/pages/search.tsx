@@ -1,10 +1,11 @@
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { NextPage } from "next/types";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { getSearchFacets, getSearchResults } from "../apis/Search.api";
 import Button from "../components/Button/Button";
@@ -19,6 +20,8 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import breakPoints from "../utils/breakpoints";
 import { searchTourSteps } from "../utils/tourSteps";
 import styles from "./search.module.scss";
+
+const Card = dynamic(() => import("../components/Card/Card"), { ssr: false });
 
 const ResultsSummary = (
 	totalHits: number,
@@ -45,6 +48,7 @@ export type SearchState = {
 const resultsPerPage = 10;
 
 const Search: NextPage = () => {
+	const maxModelsToCompare = 4;
 	const { windowWidth = 0 } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
 	const router = useRouter();
@@ -59,6 +63,8 @@ const Search: NextPage = () => {
 		selectedFacets: {},
 		searchQuery: urlQuery ?? ""
 	});
+	const canCompareModels =
+		modelsToCompare.length >= 2 && modelsToCompare.length <= maxModelsToCompare;
 
 	useEffect(() => {
 		setSearchState((prev) => ({ ...prev, searchQuery: urlQuery }));
@@ -154,6 +160,18 @@ const Search: NextPage = () => {
 			pathname: "/search",
 			query: { query: value }
 		});
+	};
+
+	const compareModels = () => {
+		if (modelsToCompare.length > 1) {
+			let compareModelsQuery = modelsToCompare.join("+");
+			window.open(
+				`/cancer-models-pages/compare?models=${compareModelsQuery}`,
+				"_blank"
+			);
+
+			setModelsToCompare([]);
+		}
 	};
 
 	const ClearFilterButtonComponent = useMemo(
@@ -287,7 +305,6 @@ const Search: NextPage = () => {
 							{windowWidth < bpLarge
 								? showMobileFacets && memoizedSearchFacets
 								: memoizedSearchFacets}
-							{/* {facetsData && memoizedSearchFacets} */}
 						</div>
 						<div className="col-12 col-lg-9">
 							{searchResultsData ? (
@@ -358,7 +375,7 @@ const Search: NextPage = () => {
 							)}
 						</div>
 					</div>
-					{/* {modelsToCompare[0] ? (
+					{modelsToCompare.length > 0 ? (
 						<div className="row position-sticky bottom-0 mt-5">
 							<div className="col-10 offset-1">
 								<Card
@@ -366,6 +383,13 @@ const Search: NextPage = () => {
 									contentClassName="py-2"
 									id="tour_compareCard"
 								>
+									{!canCompareModels && (
+										<div className="col-12">
+											<p className="text-bold">
+												* Please add from 2 to 4 models to compare
+											</p>
+										</div>
+									)}
 									<div className="d-flex align-center justify-content-between">
 										<p className="m-0">
 											<b>Compare up to 4 models: </b>
@@ -424,7 +448,7 @@ const Search: NextPage = () => {
 								</Card>
 							</div>
 						</div>
-					) : null} */}
+					) : null}
 				</div>
 			</section>
 			<ShowHide showOver={bpLarge} windowWidth={windowWidth || 0}>

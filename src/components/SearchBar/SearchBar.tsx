@@ -26,19 +26,20 @@ const SearchBar = ({ defaultValue, onSubmit }: Props) => {
 			<div className="d-md-flex align-end col-gap-2">
 				<div>
 					<Label
-						label="Search for model ID, histology and/or model type"
+						label="Search for CMO model ID or histology"
 						forId="search-bar"
 						name="search-bar"
 						className="text-white"
+						style={{ width: "clamp(0px, 500px, 1000px)", maxWidth: "100%" }}
 					/>
 					<Input
 						inputRef={searchRef}
 						name="search-bar"
 						type="search"
-						placeholder="Eg. CRL-2835, Breast Carcinoma, PDX"
+						placeholder="Eg. CRL-2835, Breast Carcinoma"
 						defaultValue={defaultValue}
 						className="m-0"
-						style={{ height: "42px" }} // same size as button
+						style={{ height: "42px", width: "clamp(0px, 500px, 100%)" }} // same size as button
 					/>
 				</div>
 				<Button
