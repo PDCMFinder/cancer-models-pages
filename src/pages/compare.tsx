@@ -425,7 +425,10 @@ const Compare: NextPage = () => {
 																			<p className="text-uppercase">
 																				<b>Site</b>
 																			</p>
-																			<p>{engraftment.engraftmentSite}</p>
+																			<p>
+																				{engraftment.engraftmentSite ||
+																					"Not provided"}
+																			</p>
 																		</div>
 																	</div>
 																);
