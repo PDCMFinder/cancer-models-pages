@@ -5,7 +5,7 @@ import { GetStaticPaths, GetStaticProps } from "next/types";
 import { useQuery } from "react-query";
 import { getAllModelData } from "../../../../../apis/ModelDetails.api";
 import ModelPage from "../../../../../components/ModelPage/ModelPage";
-import allModelsWithProviders from "../../../../../utils/allModelsWithProviderId";
+import allModelsWithProviders from "../../../../../utils/allModelsWithProviderId.json";
 
 const DynamicLoader = dynamic(
 	() => import("../../../../../components/Loader/Loader"),
@@ -39,12 +39,14 @@ const ModelDetails = () => {
 export default ModelDetails;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	const paths = allModelsWithProviders.map((item) => ({
-		params: {
-			providerId: item.providerId,
-			modelId: item.modelId
-		}
-	}));
+	const paths = allModelsWithProviders.map(
+		(item: { providerId: string; modelId: string }) => ({
+			params: {
+				providerId: item.providerId,
+				modelId: item.modelId
+			}
+		})
+	);
 
 	return {
 		paths,
@@ -52,7 +54,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 	};
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async () => {
 	return {
 		props: {}
 	};

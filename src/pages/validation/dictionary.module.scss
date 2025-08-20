@@ -1,0 +1,49 @@
+@import "../../styles/mixins";
+
+.Dictionary {
+	&_fieldDescription {
+		width: 300px;
+		min-width: 300px;
+		max-width: 300px;
+		text-wrap: auto;
+		@include mediaOver("md") {
+			width: 30%;
+		}
+	}
+	&_attributes {
+		width: 150px;
+		min-width: 150px;
+		max-width: 150px;
+		text-wrap: auto;
+		@include mediaOver("md") {
+			width: 10%;
+		}
+	}
+	&_type {
+		width: 100px;
+		min-width: 100px;
+		max-width: 100px;
+		text-wrap: auto;
+		@include mediaOver("md") {
+			width: 8%;
+		}
+	}
+	&_permissibleValues {
+		width: 300px;
+		min-width: 300px;
+		max-width: 300px;
+		text-wrap: auto;
+		@include mediaOver("md") {
+			width: 26%;
+		}
+	}
+	&_notes {
+		width: 300px;
+		min-width: 300px;
+		max-width: 300px;
+		text-wrap: auto;
+		@include mediaOver("md") {
+			width: 26%;
+		}
+	}
+}

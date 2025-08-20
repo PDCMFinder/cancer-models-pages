@@ -183,7 +183,7 @@ img {
 		&-start {
 			align-self: flex-start;
 		}
-  }
+	}
 	@include mediaOver("md") {
 		&-md {
 			&-center {
@@ -515,6 +515,7 @@ table {
 		padding-left: 0;
 		text-align: left;
 		white-space: nowrap;
+		text-wrap-style: pretty;
 		@include mediaOver("md") {
 			white-space: unset;
 		}
@@ -525,8 +526,8 @@ table {
 	&.table-verticalBorder {
 		td,
 		th {
-			padding: 1rem 2rem 1rem 1rem;
 			border-right: 1px solid darken($color-gray, 10%);
+			padding: 1rem 2rem 1rem 1rem;
 			&:first-of-type {
 				padding-left: 0;
 			}
@@ -534,7 +535,7 @@ table {
 				border-right: none;
 			}
 		}
-		tr:last-of-type {
+		:not(thead) tr:last-of-type {
 			border-bottom: 1px solid darken($color-gray, 10%);
 		}
 	}
@@ -584,6 +585,43 @@ table {
 	&-model {
 		background: lightgreen !important;
 	}
+}
+.regex-container {
+	background: #f9f9f9;
+	padding: 0.5rem;
+	border-radius: 6px;
+	text-wrap: unset;
+}
+.regex-anchor {
+	color: #d62728;
+}
+
+.regex-charclass {
+	color: #1f77b4;
+}
+
+.regex-escaped {
+	color: #7f7f7f;
+}
+
+.regex-quantifier {
+	color: #2ca02c;
+}
+
+.regex-grouping {
+	color: #9467bd;
+}
+
+.regex-alternation {
+	color: #bcbd22;
+}
+
+.regex-lookahead {
+	color: #ff7f0e;
+}
+
+.regex-keyword {
+	color: #e377c2;
 }
 
 // Overwrite external libraries css
