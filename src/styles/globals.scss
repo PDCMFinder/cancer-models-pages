@@ -515,6 +515,7 @@ table {
 		padding-left: 0;
 		text-align: left;
 		white-space: nowrap;
+		text-wrap-style: pretty;
 		@include mediaOver("md") {
 			white-space: unset;
 		}

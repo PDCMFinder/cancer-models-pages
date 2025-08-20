@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import RegexHighlighter from "../../components/RegexHighlighter/RegexHighlighter";
 import metadataDictionaryData from "../../utils/metadataDictionaryData.json";
+import styles from "./dictionary.module.scss";
 
 const Dictionary: NextPage = () => {
 	return (
@@ -41,91 +42,114 @@ const Dictionary: NextPage = () => {
 								<div className="col-12">
 									<h2>{TableTitle}</h2>
 									<p>{schema.description}</p>
-									<table className="table-verticalBorder table-align-top text-small">
-										<caption>{TableTitle}</caption>
-										<thead>
-											<tr>
-												<th>Field & Description</th>
-												<th>Attributes</th>
-												<th>Type</th>
-												<th>Permissible Values</th>
-												<th>Notes</th>
-											</tr>
-										</thead>
-										<tbody>
-											{schema.fields.map((field) => {
-												let PermissibleValue = <></>;
-												if (field.restrictions.regex) {
-													PermissibleValue = (
-														<span>
-															Values must meet the regular expression:
-															<span className="text-family-secondary">
-																<RegexHighlighter
-																	pattern={field.restrictions.regex}
-																/>
-															</span>
-															Examples:
-															<div>
-																<a
-																	target="_blank"
-																	rel={"noreferrer"}
-																	href={`http://www.regexplanet.com/advanced/xregexp/index.html?regex=${encodeURIComponent(
-																		field.restrictions.regex
-																	)}&input=${encodeURIComponent(
-																		field.meta.examples
-																	)}`}
-																>
-																	{field.meta.examples}
-																</a>
-															</div>
-														</span>
-													);
-												} else if (field.restrictions.codeList) {
-													PermissibleValue = (
-														<span>
-															Any of the following:
-															<ul className="text-medium ul-noStyle mb-0">
-																{field.restrictions.codeList.map((item) => (
-																	<li className="m-0" key={field.name + item}>
-																		{item}
-																	</li>
-																))}
-															</ul>
-														</span>
-													);
-												}
-
-												return (
-													<tr key={field.name}>
-														<td>
-															<b>{field.name}</b>
-															<br />
-															{field.description}
-														</td>
-														<td>
-															{field.restrictions.required && (
-																<span
-																	style={{
-																		backgroundColor: "red",
-																		borderRadius: "8px",
-																		padding: ".2rem .7rem",
-																		color: "#FFF"
-																	}}
-																>
-																	Required
+									<div className="overflow-auto showScrollbar-vertical">
+										<table className="table-verticalBorder table-align-top text-small">
+											<caption>{TableTitle}</caption>
+											<thead>
+												<tr>
+													<th className={styles["Dictionary_fieldDescription"]}>
+														Field & Description
+													</th>
+													<th className={styles["Dictionary_attributes"]}>
+														Attributes
+													</th>
+													<th className={styles["Dictionary_type"]}>Type</th>
+													<th
+														className={styles["Dictionary_permissibleValues"]}
+													>
+														Permissible Values
+													</th>
+													<th className={styles["Dictionary_notes"]}>Notes</th>
+												</tr>
+											</thead>
+											<tbody>
+												{schema.fields.map((field) => {
+													let PermissibleValue = <></>;
+													if (field.restrictions.regex) {
+														PermissibleValue = (
+															<span>
+																Values must meet the regular expression:
+																<span className="text-family-secondary">
+																	<RegexHighlighter
+																		pattern={field.restrictions.regex}
+																	/>
 																</span>
-															)}
-														</td>
-														<td>
-															{field.valueType === "string" ? "TEXT" : ""}
-														</td>
-														<td>{PermissibleValue}</td>
-														<td>{field.meta.format}</td>
-													</tr>
-												);
-											})}
-										</tbody>
-									</table>
+																Examples:
+																<div>
+																	<a
+																		style={{ wordBreak: "break-all" }}
+																		target="_blank"
+																		rel={"noreferrer"}
+																		href={`http://www.regexplanet.com/advanced/xregexp/index.html?regex=${encodeURIComponent(
+																			field.restrictions.regex
+																		)}&input=${encodeURIComponent(
+																			field.meta.examples
+																		)}`}
+																	>
+																		{field.meta.examples}
+																	</a>
+																</div>
+															</span>
+														);
+													} else if (field.restrictions.codeList) {
+														PermissibleValue = (
+															<span>
+																Any of the following:
+																<ul className="text-medium ul-noStyle mb-0">
+																	{field.restrictions.codeList.map((item) => (
+																		<li className="m-0" key={field.name + item}>
+																			{item}
+																		</li>
+																	))}
+																</ul>
+															</span>
+														);
+													}
+
+													return (
+														<tr key={field.name}>
+															<td
+																className={
+																	styles["Dictionary_fieldDescription"]
+																}
+															>
+																<b>{field.name}</b>
+																<br />
+																{field.description}
+															</td>
+															<td className={styles["Dictionary_attributes"]}>
+																{field.restrictions.required && (
+																	<span
+																		style={{
+																			backgroundColor: "red",
+																			borderRadius: "8px",
+																			padding: ".2rem .7rem",
+																			color: "#FFF"
+																		}}
+																	>
+																		Required
+																	</span>
+																)}
+															</td>
+															<td className={styles["Dictionary_type"]}>
+																{field.valueType === "string" ? "TEXT" : ""}
+															</td>
+															<td
+																className={
+																	styles["Dictionary_permissibleValues"]
+																}
+															>
+																{PermissibleValue}
+															</td>
+															<td className={styles["Dictionary_notes"]}>
+																{field.meta.format}
+															</td>
+														</tr>
+													);
+												})}
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						);
