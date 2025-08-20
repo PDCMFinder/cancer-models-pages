@@ -1,10 +1,17 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import RegexHighlighter from "../../components/RegexHighlighter/RegexHighlighter";
+import ShowHide from "../../components/ShowHide/ShowHide";
+import useWindowDimensions from "../../hooks/useWindowDimensions";
+import breakPoints from "../../utils/breakpoints";
 import metadataDictionaryData from "../../utils/metadataDictionaryData.json";
 import styles from "./dictionary.module.scss";
 
 const Dictionary: NextPage = () => {
+	const { windowWidth } = useWindowDimensions();
+	const bpLarge = breakPoints.large;
+
 	return (
 		<>
 			<Head>
@@ -27,133 +34,173 @@ const Dictionary: NextPage = () => {
 			</header>
 			<section>
 				<div className="container">
-					{metadataDictionaryData.schemas.map((schema) => {
-						const TableTitle = (
-							<>
-								<span className="text-capitalize">
-									{schema.name.replace("_", " ")}
-								</span>{" "}
-								({schema.name})
-							</>
-						);
+					<div className="row">
+						<ShowHide showOver={bpLarge} windowWidth={windowWidth || 0}>
+							<aside className="col-12 col-lg-2">
+								<div className="pt-5 position-sticky top-0">
+									<p className="h4">Clinical Files</p>
+									<ul className="ul-noStyle">
+										{metadataDictionaryData.schemas.map((schema) => (
+											<li className="mb-2" key={schema.name}>
+												<Link
+													replace
+													href={`#${schema.name}`}
+													className="text-primary-primary text-capitalize"
+												>
+													{schema.name.replace("_", " ")}
+												</Link>
+											</li>
+										))}
+									</ul>
+								</div>
+							</aside>
+						</ShowHide>
+						<div className="col-12 col-lg-10">
+							{metadataDictionaryData.schemas.map((schema) => {
+								const TableTitle = (
+									<>
+										<span className="text-capitalize">
+											{schema.name.replace("_", " ")}
+										</span>{" "}
+										({schema.name})
+									</>
+								);
 
-						return (
-							<div className="row" key={schema.name}>
-								<div className="col-12">
-									<h2>{TableTitle}</h2>
-									<p>{schema.description}</p>
-									<div className="overflow-auto showScrollbar-vertical">
-										<table className="table-verticalBorder table-align-top text-small">
-											<caption>{TableTitle}</caption>
-											<thead>
-												<tr>
-													<th className={styles["Dictionary_fieldDescription"]}>
-														Field & Description
-													</th>
-													<th className={styles["Dictionary_attributes"]}>
-														Attributes
-													</th>
-													<th className={styles["Dictionary_type"]}>Type</th>
-													<th
-														className={styles["Dictionary_permissibleValues"]}
-													>
-														Permissible Values
-													</th>
-													<th className={styles["Dictionary_notes"]}>Notes</th>
-												</tr>
-											</thead>
-											<tbody>
-												{schema.fields.map((field) => {
-													let PermissibleValue = <></>;
-													if (field.restrictions.regex) {
-														PermissibleValue = (
-															<span>
-																Values must meet the regular expression:
-																<span className="text-family-secondary">
-																	<RegexHighlighter
-																		pattern={field.restrictions.regex}
-																	/>
-																</span>
-																Examples:
-																<div>
-																	<a
-																		style={{ wordBreak: "break-all" }}
-																		target="_blank"
-																		rel={"noreferrer"}
-																		href={`http://www.regexplanet.com/advanced/xregexp/index.html?regex=${encodeURIComponent(
-																			field.restrictions.regex
-																		)}&input=${encodeURIComponent(
-																			field.meta.examples
-																		)}`}
-																	>
-																		{field.meta.examples}
-																	</a>
-																</div>
-															</span>
-														);
-													} else if (field.restrictions.codeList) {
-														PermissibleValue = (
-															<span>
-																Any of the following:
-																<ul className="text-medium ul-noStyle mb-0">
-																	{field.restrictions.codeList.map((item) => (
-																		<li className="m-0" key={field.name + item}>
-																			{item}
-																		</li>
-																	))}
-																</ul>
-															</span>
-														);
-													}
-
-													return (
-														<tr key={field.name}>
-															<td
+								return (
+									<div className="row" id={schema.name}>
+										<div className="col-12" key={schema.name}>
+											<h2>{TableTitle}</h2>
+											<p>{schema.description}</p>
+											<div className="overflow-auto showScrollbar-vertical">
+												<table className="table-verticalBorder table-align-top text-small">
+													<caption>{TableTitle}</caption>
+													<thead>
+														<tr>
+															<th
 																className={
 																	styles["Dictionary_fieldDescription"]
 																}
 															>
-																<b>{field.name}</b>
-																<br />
-																{field.description}
-															</td>
-															<td className={styles["Dictionary_attributes"]}>
-																{field.restrictions.required && (
-																	<span
-																		style={{
-																			backgroundColor: "red",
-																			borderRadius: "8px",
-																			padding: ".2rem .7rem",
-																			color: "#FFF"
-																		}}
-																	>
-																		Required
-																	</span>
-																)}
-															</td>
-															<td className={styles["Dictionary_type"]}>
-																{field.valueType === "string" ? "TEXT" : ""}
-															</td>
-															<td
+																Field & Description
+															</th>
+															<th className={styles["Dictionary_attributes"]}>
+																Attributes
+															</th>
+															<th className={styles["Dictionary_type"]}>
+																Type
+															</th>
+															<th
 																className={
 																	styles["Dictionary_permissibleValues"]
 																}
 															>
-																{PermissibleValue}
-															</td>
-															<td className={styles["Dictionary_notes"]}>
-																{field.meta.format}
-															</td>
+																Permissible Values
+															</th>
+															<th className={styles["Dictionary_notes"]}>
+																Notes
+															</th>
 														</tr>
-													);
-												})}
-											</tbody>
-										</table>
+													</thead>
+													<tbody>
+														{schema.fields.map((field) => {
+															let PermissibleValue = <></>;
+															if (field.restrictions.regex) {
+																PermissibleValue = (
+																	<span>
+																		Values must meet the regular expression:
+																		<span className="text-family-secondary">
+																			<RegexHighlighter
+																				pattern={field.restrictions.regex}
+																			/>
+																		</span>
+																		Examples:
+																		<div>
+																			<a
+																				style={{ wordBreak: "break-all" }}
+																				target="_blank"
+																				rel={"noreferrer"}
+																				href={`http://www.regexplanet.com/advanced/xregexp/index.html?regex=${encodeURIComponent(
+																					field.restrictions.regex
+																				)}&input=${encodeURIComponent(
+																					field.meta.examples
+																				)}`}
+																			>
+																				{field.meta.examples}
+																			</a>
+																		</div>
+																	</span>
+																);
+															} else if (field.restrictions.codeList) {
+																PermissibleValue = (
+																	<span>
+																		Any of the following:
+																		<ul className="text-medium ul-noStyle mb-0">
+																			{field.restrictions.codeList.map(
+																				(item) => (
+																					<li
+																						className="m-0"
+																						key={field.name + item}
+																					>
+																						{item}
+																					</li>
+																				)
+																			)}
+																		</ul>
+																	</span>
+																);
+															}
+															return (
+																<tr key={field.name}>
+																	<td
+																		className={
+																			styles["Dictionary_fieldDescription"]
+																		}
+																	>
+																		<b>{field.name}</b>
+																		<br />
+																		{field.description}
+																	</td>
+																	<td
+																		className={styles["Dictionary_attributes"]}
+																	>
+																		{field.restrictions.required && (
+																			<span
+																				style={{
+																					backgroundColor: "red",
+																					borderRadius: "8px",
+																					padding: ".2rem .7rem",
+																					color: "#FFF"
+																				}}
+																			>
+																				Required
+																			</span>
+																		)}
+																	</td>
+																	<td className={styles["Dictionary_type"]}>
+																		{field.valueType === "string" ? "TEXT" : ""}
+																	</td>
+																	<td
+																		className={
+																			styles["Dictionary_permissibleValues"]
+																		}
+																	>
+																		{PermissibleValue}
+																	</td>
+																	<td className={styles["Dictionary_notes"]}>
+																		{field.meta.format}
+																	</td>
+																</tr>
+															);
+														})}
+													</tbody>
+												</table>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-						);
-					})}
+								);
+							})}
+						</div>
+					</div>
 				</div>
 			</section>
 		</>

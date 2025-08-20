@@ -14,6 +14,7 @@
 }
 html {
 	font-size: 62.5%;
+	text-wrap-style: pretty;
 }
 body {
 	padding: 0;
@@ -515,7 +516,6 @@ table {
 		padding-left: 0;
 		text-align: left;
 		white-space: nowrap;
-		text-wrap-style: pretty;
 		@include mediaOver("md") {
 			white-space: unset;
 		}

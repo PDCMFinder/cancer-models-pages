@@ -6,7 +6,6 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 import FloatingButton from "../../components/FloatingWidget/FloatingButton";
-import HierarchyTree from "../../components/HierarchyTree/HierarchyTree";
 import ModelTypeIcon from "../../components/Icons/ModelTypeIcon";
 import ImageChecker from "../../components/ImageChecker/ImageChecker";
 import Loader from "../../components/Loader/Loader";
@@ -25,7 +24,7 @@ import { modelTourSteps } from "../../utils/tourSteps";
 import ModelIdentifiers from "../ModelIdentifiers/ModelIdentifiers";
 import styles from "./Model.module.scss";
 
-const DynamicHierarchyTree = dynamic(
+const HierarchyTree = dynamic(
 	() => import("../../components/HierarchyTree/HierarchyTree"),
 	{
 		loading: () => (
@@ -234,7 +233,7 @@ const ModelPage = ({
 					<div className="row">
 						<ShowHide showOver={bpLarge} windowWidth={windowWidth || 0}>
 							<aside className="col-12 col-lg-2">
-								<div className="pt-5 sticky top-0">
+								<div className="pt-5 position-sticky top-0">
 									<p className="h4">Data available</p>
 									<ul className="ul-noStyle">
 										<li className="mb-2">
