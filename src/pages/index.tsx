@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
+import DataCountCard from "../components/DataCountCard/DataCountCard";
 import Loader from "../components/Loader/Loader";
 import SearchBar from "../components/SearchBar/SearchBar";
 import ShowHide from "../components/ShowHide/ShowHide";
@@ -27,7 +28,7 @@ const Home: NextPage = () => {
 					<div className={styles.header_searchBackground}></div>
 					<ShowHide windowWidth={windowWidth || 0} showOver={bpLarge}>
 						<div className={styles.header_graphicElement}>
-							{/* <DataCountCard layout="vertical" iconSize="2em" /> */}
+							<DataCountCard layout="vertical" iconSize="2em" />
 						</div>
 					</ShowHide>
 					<div
@@ -41,7 +42,7 @@ const Home: NextPage = () => {
 							<div
 								className={`${styles.header_graphicElement} mt-3 position-relative`}
 							>
-								{/* <DataCountCard layout="vertical" iconSize="2em" /> */}
+								<DataCountCard layout="vertical" iconSize="2em" />
 							</div>
 						</ShowHide>
 					</div>

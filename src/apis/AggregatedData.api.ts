@@ -59,14 +59,38 @@ export async function getModelsByDiagnosis() {
 	return response.json().then((d) => mergeObjectsIntoCountObject(d));
 }
 
-export async function getModelsByType(): Promise<Record<string, number>> {
-	let response = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}/models_by_type?order=count.desc`
+async function getModelCountByType(type: string): Promise<number> {
+	const response = await fetch(
+		`${process.env.NEXT_PUBLIC_API_URL}/search?facet.cancermodelsorg.model_type=${type}&pageSize=1` // can't be pageSize 0 as it errors out
 	);
+
 	if (!response.ok) {
 		throw new Error("Network response was not ok");
 	}
-	return response.json().then((d) => mergeObjectsIntoCountObject(d));
+
+	return response.json().then((d) => d.totalHits);
+}
+
+export async function getModelsByType(): Promise<Record<string, number>> {
+	const modelTypes = ["PDX", "cell line", "organoid", "other"];
+
+	const responses = await Promise.allSettled(
+		modelTypes.map((type) => getModelCountByType(type))
+	);
+
+	const modelCounts: Record<string, number> = {};
+
+	responses.forEach((result, i) => {
+		const type = modelTypes[i];
+		if (result.status === "fulfilled") {
+			modelCounts[type] = result.value;
+		} else {
+			console.error(`Error fetching count for ${type}:`, result.reason);
+			modelCounts[type] = 0;
+		}
+	});
+
+	return modelCounts;
 }
 
 export async function getModelsByProvider(): Promise<Record<string, number>> {

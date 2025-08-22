@@ -67,7 +67,7 @@ const Dictionary: NextPage = () => {
 								);
 
 								return (
-									<div className="row" id={schema.name}>
+									<div className="row" id={schema.name} key={schema.name}>
 										<div className="col-12" key={schema.name}>
 											<h2>{TableTitle}</h2>
 											<p>{schema.description}</p>
