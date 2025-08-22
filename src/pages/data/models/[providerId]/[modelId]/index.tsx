@@ -5,7 +5,7 @@ import { GetStaticPaths, GetStaticProps } from "next/types";
 import { useQuery } from "react-query";
 import { getAllModelData } from "../../../../../apis/ModelDetails.api";
 import ModelPage from "../../../../../components/ModelPage/ModelPage";
-import allModelsWithProviders from "../../../../../utils/allModelsWithProviderId.json";
+import allModelsWithProviders from "../../../../../utils/data/allModelsWithProviderId.json";
 
 const DynamicLoader = dynamic(
 	() => import("../../../../../components/Loader/Loader"),

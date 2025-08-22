@@ -1,9 +1,6 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { getDataSourcesByProject } from "../apis/Search.api";
-import { addProvidersToProjectData } from "../utils/projects";
-import projectsSettings from "../utils/projectSettings.json";
+import { useEffect, useMemo, useState } from "react";
+import projectsAndProviders from "../utils/data/projectsAndProviders.json";
 
 export type ProjectData = {
 	project_abbreviation: string;
@@ -20,41 +17,34 @@ export type ProjectData = {
 export const useActiveProject = () => {
 	const router = useRouter();
 	const { project: projectFromUrl } = router.query;
-	const [activeProject, setActiveProject] = useState<string>();
+	const [activeProject, setActiveProject] =
+		useState<string | undefined>(undefined);
 
 	useEffect(() => {
+		if (!router.isReady) return;
+
 		const randomProjectIndex = Math.floor(
-			Math.random() * projectsSettings.length
+			Math.random() * projectsAndProviders.length
 		);
-		if (router.isReady) {
-			if (projectFromUrl) {
-				if (Array.isArray(projectFromUrl)) {
-					setActiveProject(projectFromUrl[0]);
-				} else {
-					setActiveProject(projectFromUrl);
-				}
-			} else {
-				setActiveProject(
-					projectsSettings[randomProjectIndex].project_abbreviation
-				);
-			}
+
+		if (projectFromUrl) {
+			const project = Array.isArray(projectFromUrl)
+				? projectFromUrl[0]
+				: projectFromUrl;
+			setActiveProject(project);
+		} else {
+			setActiveProject(
+				projectsAndProviders[randomProjectIndex].project_abbreviation
+			);
 		}
 	}, [projectFromUrl, router.isReady]);
 
-	const { data: dataSourcesByProject, isLoading: isLoadingProviders } =
-		useQuery(
-			["projectDataSources", activeProject],
-			() => getDataSourcesByProject(activeProject ?? ""),
-			{
-				enabled: !!activeProject // Ensure query only runs when activeProject is set
-			}
-		);
-
-	const activeProjectData = (projectsSettings.find(
-		(project) => project.project_abbreviation === activeProject
-	) as ProjectData) || { providers: [] };
-
-	addProvidersToProjectData(activeProjectData, dataSourcesByProject ?? []);
+	// Use useMemo to derive activeProjectData after state is stable
+	const activeProjectData = useMemo(() => {
+		return projectsAndProviders.find(
+			(project) => project.project_abbreviation === activeProject
+		) as ProjectData | undefined;
+	}, [activeProject]);
 
 	const handleProjectClick = (projectName: string) => {
 		if (projectName !== activeProject) {
@@ -70,6 +60,9 @@ export const useActiveProject = () => {
 			);
 		}
 	};
+
+	const isLoadingProviders =
+		activeProject === undefined || activeProjectData === undefined;
 
 	return {
 		setActiveProject,

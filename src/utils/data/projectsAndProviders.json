@@ -1,0 +1,319 @@
+[
+	{
+		"project_abbreviation": "ACC-PCMC",
+		"project_full_name": "Alleanza Contro il Cancro - Patient-derived Cancer Model Collection",
+		"project_settings": {
+			"main_color": "#008F30",
+			"secondary_color": "#FFFFFF",
+			"logo": "/cancer-models-pages/img/providers/ACC-PCMC.png"
+		},
+		"project_description": "Alliance Against Cancer has the mission to bring technological and organizational innovation from basic research to clinical practice, raising and unifying the level of care, treatment, and rehabilitation of cancer patients throughout the country.",
+		"providers": [
+			{
+				"data_source": "IRCCS-CRO",
+				"provider_name": "IRCCS, Centro di Riferimento Oncologico di Aviano"
+			},
+			{
+				"data_source": "IRCCS-CSS",
+				"provider_name": "Fondazione IRCCS Casa Sollievo della Sofferenza"
+			},
+			{
+				"data_source": "IRCCS-DEB",
+				"provider_name": "National Institute of Research in Gastroenterology 'Saverio de Bellis'"
+			},
+			{
+				"data_source": "IRCCS-HSM-GE",
+				"provider_name": "IRCCS Ospedale Policlinico San Martino"
+			},
+			{
+				"data_source": "IRCCS-ICH",
+				"provider_name": "IRCCS Istituto Clinico Humanitas"
+			},
+			{
+				"data_source": "IRCCS-IDI",
+				"provider_name": "Istituto Dermopatico Dell'Immacolata"
+			},
+			{
+				"data_source": "IRCCS-IOR",
+				"provider_name": "Istituto Ortopedico Rizzoli"
+			},
+			{
+				"data_source": "IRCCS-IRE",
+				"provider_name": "IRCCS Regina Elena National Cancer Institute"
+			},
+			{
+				"data_source": "IRCCS-IRFMN",
+				"provider_name": "Istituto di Ricerche Farmacologiche Mario Negri IRCCS"
+			},
+			{
+				"data_source": "IRCCS-IRST",
+				"provider_name": "The Istituto Romagnolo per lo Studio dei Tumori 'Dino Amadori'"
+			},
+			{
+				"data_source": "IRCCS-ITGPII",
+				"provider_name": "IRCCS Istituto Tumori Giovanni Paolo II"
+			},
+			{
+				"data_source": "IRCCS-OPBG",
+				"provider_name": "Ospedale Pediatrico Bambino Gesù"
+			},
+			{
+				"data_source": "IRCCS-PAS",
+				"provider_name": "Istituto Nazionale Tumori-IRCCS Fondazione G. Pascale"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "EurOPDX",
+		"project_full_name": "EurOPDX",
+		"project_settings": {
+			"main_color": "#6D4694",
+			"secondary_color": "#FFFFFF",
+			"logo": "/cancer-models-pages/img/providers/europdx.png"
+		},
+		"project_description": "The EurOPDX Consortium is a scientific network of non-for-profit research institutions organised by a Consortium Agreement, and currently funded by Membership Fees contributed by each member institution according to its level of membership. One of our activities is to leverage funding for the Consortium infrastructure, as well as for specific collaborative research projects.",
+		"providers": [
+			{
+				"data_source": "Curie-BC",
+				"provider_name": "Institut Curie - LIP - BC"
+			},
+			{
+				"data_source": "Curie-LC",
+				"provider_name": "Institut Curie - LIP - LC"
+			},
+			{
+				"data_source": "Curie-OC",
+				"provider_name": "Institut Curie - LIP - OC"
+			},
+			{
+				"data_source": "IRCCS-CRC",
+				"provider_name": "Candiolo Cancer Institute - Colorectal"
+			},
+			{
+				"data_source": "IRCCS-GC",
+				"provider_name": "Candiolo Cancer Institute-Gastric"
+			},
+			{
+				"data_source": "LIH",
+				"provider_name": "Luxembourg Institute of Health-Glioma"
+			},
+			{
+				"data_source": "NKI",
+				"provider_name": "Netherlands Cancer Institute"
+			},
+			{
+				"data_source": "TRACE",
+				"provider_name": "TRACE-PDTX platform"
+			},
+			{
+				"data_source": "UMCG",
+				"provider_name": "University Medical Center Groningen"
+			},
+			{
+				"data_source": "UOC-BC",
+				"provider_name": "Caldas Lab - University of Cambridge"
+			},
+			{
+				"data_source": "UOM-BC",
+				"provider_name": "The University of Manchester"
+			},
+			{
+				"data_source": "VHIO-BC",
+				"provider_name": "Vall d'Hebron Institute of Oncology"
+			},
+			{
+				"data_source": "VHIO-CRC",
+				"provider_name": "Val D'Hebron Cancer Institute- colorectal"
+			},
+			{
+				"data_source": "VHIO-PC",
+				"provider_name": "Vall d'Hebron Institute of Oncology"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "HCMI",
+		"project_full_name": "Human Cancer Models Initiative",
+		"project_settings": {
+			"main_color": "#FF6C01",
+			"secondary_color": "#000000",
+			"logo": "/cancer-models-pages/img/providers/HCMI.png"
+		},
+		"project_description": "The Human Cancer Models Initiative (HCMI) is an international consortium that is generating novel, next-generation, tumor-derived culture models that are annotated with genomic, clinical, and biospecimen data. HCMI uses current culture techniques to develop cancer models for translational cancer research and other experiments.",
+		"providers": [
+			{
+				"data_source": "BROD",
+				"provider_name": "Broad Institute"
+			},
+			{
+				"data_source": "CSHL",
+				"provider_name": "Cold Spring Harbor Laboratory"
+			},
+			{
+				"data_source": "SANG",
+				"provider_name": "Wellcome Sanger Institute"
+			},
+			{
+				"data_source": "WCMC",
+				"provider_name": "Weill Cornell Medical College"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "PDXNet",
+		"project_full_name": "PDX Development and Trial Centers Research Network",
+		"project_settings": {
+			"main_color": "#47E4C2",
+			"secondary_color": "#000000",
+			"logo": "/cancer-models-pages/img/providers/pdxnet.png"
+		},
+		"project_description": "PDXNet is an inclusive consortium that welcomes collaborations, in part through funded supplements. Please get in touch with us to discuss how we can work together to advance new cancer treatments.",
+		"providers": [
+			{
+				"data_source": "HCI-BCM",
+				"provider_name": "HCI-Baylor College of Medicine"
+			},
+			{
+				"data_source": "MDAnderson",
+				"provider_name": "MD Anderson Cancer Center"
+			},
+			{
+				"data_source": "UCD",
+				"provider_name": "University of California - Davis"
+			},
+			{
+				"data_source": "Wistar-MDAnderson-Penn",
+				"provider_name": "Wistar-MDAnderson-Penn"
+			},
+			{
+				"data_source": "WUSTL",
+				"provider_name": "Washington University in St. Louis"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "PIVOT",
+		"project_full_name": "Pediatric Preclinical In Vivo Testing Consortium",
+		"project_settings": {
+			"main_color": "#5065A7",
+			"secondary_color": "#FFFFFF",
+			"logo": "/cancer-models-pages/img/providers/pivot.png"
+		},
+		"project_description": "The PIVOT consortium collaborates with industry partners on preclinical testing of molecularly targeted agents developed for adult cancers to evaluate their applicability to the treatment of pediatric cancer.",
+		"providers": [
+			{
+				"data_source": "CCIA",
+				"provider_name": "Children's Cancer Institute"
+			},
+			{
+				"data_source": "CHOP",
+				"provider_name": "Children's Hospital of Philadelphia"
+			},
+			{
+				"data_source": "GCCRI",
+				"provider_name": "UT Health San Antonio Greehey Children's Cancer Research Institute"
+			},
+			{
+				"data_source": "LurieChildrens",
+				"provider_name": "Ann & Robert H Lurie Children's Hospital of Chicago"
+			},
+			{
+				"data_source": "MDAnderson-CCH",
+				"provider_name": "MD Anderson Children's Cancer Hospital"
+			},
+			{
+				"data_source": "SJCRH",
+				"provider_name": "St. Jude Children's Research Hospital"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "STCC",
+		"project_full_name": "Singapore Translational Cancer Consortium",
+		"project_settings": {
+			"main_color": "#213C83",
+			"secondary_color": "#FFFFFF",
+			"logo": "/cancer-models-pages/img/providers/STCC.jpg"
+		},
+		"project_description": "STCC is a nationally coordinated initiative and network to synergise cancer research and translational capabilities across Singapore.",
+		"providers": [
+			{
+				"data_source": "CDH",
+				"provider_name": "The Cancer Discovery Hub"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "MURAL",
+		"project_full_name": "Melbourne Urology Research Alliance",
+		"project_settings": {
+			"main_color": "#6C2067",
+			"secondary_color": "#FFFFFF",
+			"logo": "/cancer-models-pages/img/providers/MURAL.png"
+		},
+		"project_description": "Platform of preclinical models and world class facilities. Leading contributors to national and international networks and collaborations, integrating and co-ordinating outcomes worldwide.",
+		"providers": [
+			{
+				"data_source": "MBDI",
+				"provider_name": "Monash Biomedicine Discovery Institute - Melbourne Urological Research Alliance"
+			}
+		]
+	},
+	{
+		"project_abbreviation": "More",
+		"project_settings": {
+			"main_color": "#003E48",
+			"secondary_color": "#FFFFFF"
+		},
+		"providers": [
+			{
+				"data_source": "CMP",
+				"provider_name": "Cell Model Passports"
+			},
+			{
+				"data_source": "CRL",
+				"provider_name": "Charles River Laboratories"
+			},
+			{
+				"data_source": "CUIMC",
+				"provider_name": "Columbia University Irving Medical Center"
+			},
+			{
+				"data_source": "DFCI-CPDM",
+				"provider_name": "Center for Patient Derived Models, Dana-Farber Cancer Institute"
+			},
+			{
+				"data_source": "HKU",
+				"provider_name": "The University of Hong Kong, Queen Mary Hospital"
+			},
+			{
+				"data_source": "JAX",
+				"provider_name": "The Jackson laboratory"
+			},
+			{
+				"data_source": "PDMR",
+				"provider_name": "Patient-Derived Model Repository"
+			},
+			{
+				"data_source": "PMLB",
+				"provider_name": "Princess Margaret Living Biobank"
+			},
+			{
+				"data_source": "PMLB-Organoid",
+				"provider_name": "Princess Margaret Living Biobank - Organoid Centre"
+			},
+			{
+				"data_source": "TTUHSC",
+				"provider_name": "Texas Tech University Health Sciences Center"
+			},
+			{
+				"data_source": "UMCU",
+				"provider_name": "University Medical Center Utrecht - Clevers Group - Hubrecht Institute"
+			},
+			{
+				"data_source": "VHIO-PMP",
+				"provider_name": "Vall d'Hebron Institute of Oncology"
+			}
+		]
+	}
+]
