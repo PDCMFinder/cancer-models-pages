@@ -350,8 +350,7 @@ const Search: NextPage = () => {
 																	.split(".")[2]
 																	.replaceAll("_", " ")
 																	.replace(":", ": ")
-																	.replaceAll(",", ", ")
-																	.replaceAll(" boolean", "")}
+																	.replaceAll(",", ", ")}
 																: {filterValues.join(", ")}
 															</li>
 														)

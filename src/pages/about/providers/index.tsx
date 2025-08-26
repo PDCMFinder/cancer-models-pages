@@ -152,7 +152,7 @@ const Providers: NextPage<ProvidersProps> = ({ allProvidersBasics }) => {
 		useActiveProject();
 
 	const activeProviderBasics = allProvidersBasics.filter((providerBasic) =>
-		activeProjectData.providers?.some(
+		activeProjectData?.providers?.some(
 			(provider) => provider?.data_source === providerBasic.abbreviation
 		)
 	);
@@ -161,7 +161,7 @@ const Providers: NextPage<ProvidersProps> = ({ allProvidersBasics }) => {
 		<>
 			<Header />
 			{/* Decided to move this here instead of outside this return so Header doesn't blink */}
-			{activeProjectData.project_abbreviation === null ? (
+			{activeProjectData?.project_abbreviation === null ? (
 				<div style={{ height: "50vh" }}>
 					<Loader />
 				</div>
@@ -172,39 +172,39 @@ const Providers: NextPage<ProvidersProps> = ({ allProvidersBasics }) => {
 							<div className="col-12">
 								<ProjectButtons
 									direction="row"
-									activeProject={activeProjectData.project_abbreviation}
+									activeProject={activeProjectData?.project_abbreviation || ""}
 									onClick={handleProjectClick}
 								/>
 							</div>
 						</div>
-						{activeProjectData.project_description &&
-							activeProjectData.project_settings.logo && (
+						{activeProjectData?.project_description &&
+							activeProjectData?.project_settings.logo && (
 								<div className="row mb-5 justify-content-center">
 									<div className="col-12 col-lg-8">
 										<Card
 											contentClassName="py-4"
 											header={
 												<h2 className="m-0">
-													{activeProjectData.project_full_name ??
-														activeProjectData.project_abbreviation}
+													{activeProjectData?.project_full_name ??
+														activeProjectData?.project_abbreviation}
 												</h2>
 											}
 										>
 											<div className="row">
 												<div className="col-8 offset-2 col-md-3 offset-md-0">
 													<Image
-														src={activeProjectData.project_settings.logo}
-														alt={`${activeProjectData.project_abbreviation} logo`}
+														src={activeProjectData?.project_settings.logo}
+														alt={`${activeProjectData?.project_abbreviation} logo`}
 														width={150}
 														height={150}
 														className="w-100 h-auto mx-auto mb-2"
 													/>
 												</div>
 												<div className="col-12 col-md-9">
-													<p>{activeProjectData.project_description}</p>
+													<p>{activeProjectData?.project_description}</p>
 													<p>
 														<Link
-															href={`/search?filters=project_name%3A${activeProjectData.project_abbreviation}`}
+															href={`/search?filters=project_name%3A${activeProjectData?.project_abbreviation}`}
 														>
 															Explore project&apos;s models
 														</Link>
