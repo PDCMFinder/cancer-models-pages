@@ -7,6 +7,7 @@ import DataCountCard from "../components/DataCountCard/DataCountCard";
 import Loader from "../components/Loader/Loader";
 import SearchBar from "../components/SearchBar/SearchBar";
 import ShowHide from "../components/ShowHide/ShowHide";
+import Tooltip from "../components/Tooltip/Tooltip";
 import { useActiveProject } from "../hooks/useActiveProject";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import breakPoints from "../utils/breakpoints";
@@ -124,25 +125,43 @@ const Home: NextPage = () => {
 											key={provider?.data_source}
 											className="col text-center"
 										>
-											<Link
-												href={`/search?filters=data_source%3A${provider?.data_source}`}
-												title={`Explore all ${provider?.data_source} models`}
-												style={{ height: "100px" }}
-												className="mb-1 d-flex"
+											<Tooltip
+												style={{ width: "100%" }}
+												position="bottom"
+												content={
+													<div
+														// style={{ width: "300px" }}
+														className="w-min"
+													>
+														<Link className="text-white mr-1" href="#bar">
+															See models
+														</Link>
+														<Link className="text-white ml-1" href="#bar">
+															Learn more
+														</Link>
+													</div>
+												}
 											>
-												<Image
-													src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
-													alt={`${provider?.provider_name} logo`}
-													title={provider?.provider_name}
-													className="w-auto h-auto m-auto"
-													width={300}
-													height={100}
-													style={{
-														maxHeight: "100px",
-														maxWidth: "75%"
-													}}
-												/>
-											</Link>
+												<Link
+													href={`/search?filters=data_source%3A${provider?.data_source}`}
+													title={`Explore all ${provider?.data_source} models`}
+													style={{ height: "100px" }}
+													className="mb-1 d-flex w-100"
+												>
+													<Image
+														src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
+														alt={`${provider?.provider_name} logo`}
+														title={provider?.provider_name}
+														className="w-auto h-auto m-auto"
+														width={300}
+														height={100}
+														style={{
+															maxHeight: "100px",
+															maxWidth: "75%"
+														}}
+													/>
+												</Link>
+											</Tooltip>
 											<p className="text-small text-muted">
 												{provider?.provider_name}
 											</p>
