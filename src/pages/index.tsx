@@ -108,7 +108,7 @@ const Home: NextPage = () => {
 												</h3>
 												<p className="mb-lg-0">
 													<Link
-														href={`/search?filters=project_name%3A${activeProjectData?.project_abbreviation}`}
+														href={`/search?project=${activeProjectData?.project_abbreviation}`}
 													>
 														Explore project&apos;s models
 													</Link>
@@ -129,24 +129,25 @@ const Home: NextPage = () => {
 												style={{ width: "100%" }}
 												position="bottom"
 												content={
-													<div
-														// style={{ width: "300px" }}
-														className="w-min"
-													>
-														<Link className="text-white mr-1" href="#bar">
+													<div className="w-min">
+														<Link
+															className="text-white mr-1"
+															href={`/search?query=${provider?.data_source.toLocaleLowerCase()}`}
+														>
 															See models
 														</Link>
-														<Link className="text-white ml-1" href="#bar">
+														<Link
+															className="text-white ml-1"
+															href={`/about/providers/${provider?.data_source}`}
+														>
 															Learn more
 														</Link>
 													</div>
 												}
 											>
-												<Link
-													href={`/search?filters=data_source%3A${provider?.data_source}`}
-													title={`Explore all ${provider?.data_source} models`}
+												<div
 													style={{ height: "100px" }}
-													className="mb-1 d-flex w-100"
+													className="d-flex w-100"
 												>
 													<Image
 														src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
@@ -160,7 +161,7 @@ const Home: NextPage = () => {
 															maxWidth: "75%"
 														}}
 													/>
-												</Link>
+												</div>
 											</Tooltip>
 											<p className="text-small text-muted">
 												{provider?.provider_name}

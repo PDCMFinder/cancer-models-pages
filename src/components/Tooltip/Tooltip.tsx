@@ -12,12 +12,20 @@ type TooltipProps = {
 
 const Tooltip = (props: TooltipProps) => {
 	const [isHovering, setIsHovering] = useState(false);
+	const tooltipClasses = [
+		"w-min",
+		props.position === "bottom" ? "pb-2" : "pr-2",
+		"position-md-relative",
+		props.className,
+		styles.Tooltip,
+		props.position === "bottom" ? styles["Tooltip-bottom"] : null
+	]
+		.filter(Boolean)
+		.join(" ");
 
 	return (
 		<div
-			className={`w-min pr-2 position-md-relative ${props.className ?? ""} ${
-				styles.Tooltip
-			} ${props.position === "bottom" ? styles["Tooltip-bottom"] : ""}`}
+			className={tooltipClasses}
 			onMouseOver={() => setIsHovering(true)}
 			onMouseLeave={() => setIsHovering(false)}
 			style={props.style}

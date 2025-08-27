@@ -46,14 +46,17 @@ export type SearchState = {
 };
 
 const resultsPerPage = 10;
+const maxModelsToCompare = 4;
 
 const Search: NextPage = () => {
-	const maxModelsToCompare = 4;
 	const { windowWidth = 0 } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
 	const router = useRouter();
 	const urlSearchParams = useSearchParams();
 	const urlQuery = urlSearchParams.get("query") ?? "";
+	const urlProject = urlSearchParams.get("project")?.toLocaleLowerCase() ?? "";
+	const urlProvider =
+		urlSearchParams.get("provider")?.toLocaleLowerCase() ?? "";
 	const [showMobileFacets, setShowMobileFacets] = useState(false);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
 	const [driverInstance, setDriverInstance] =
@@ -67,8 +70,24 @@ const Search: NextPage = () => {
 		modelsToCompare.length >= 2 && modelsToCompare.length <= maxModelsToCompare;
 
 	useEffect(() => {
-		setSearchState((prev) => ({ ...prev, searchQuery: urlQuery }));
-	}, [urlQuery]);
+		if (urlProject) {
+			setSearchState((prev) => ({
+				...prev,
+				selectedFacets: {
+					...prev.selectedFacets,
+					["facet.cancermodelsorg.project"]: [urlProject]
+				},
+				searchQuery: urlQuery,
+				selectedProvider: urlProvider
+			}));
+		} else {
+			setSearchState((prev) => ({
+				...prev,
+				searchQuery: urlQuery,
+				selectedProvider: urlProvider
+			}));
+		}
+	}, [urlQuery, urlProject, urlProvider]);
 
 	useEffect(() => {
 		const loadDriver = async () => {
@@ -108,12 +127,7 @@ const Search: NextPage = () => {
 	};
 
 	const { data: searchResultsData } = useQuery(
-		[
-			"search-results",
-			searchState.page,
-			searchState.selectedFacets,
-			searchState.searchQuery
-		],
+		["search-results", searchState],
 		async () =>
 			getSearchResults(
 				searchState.page,
@@ -184,6 +198,9 @@ const Search: NextPage = () => {
 				disabled={Object.keys(searchState.selectedFacets).length === 0}
 				onClick={() => {
 					setSearchState((prev) => ({ ...prev, selectedFacets: {} }));
+					router.push({
+						pathname: "/search"
+					});
 				}}
 			>
 				Clear

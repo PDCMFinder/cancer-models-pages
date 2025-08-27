@@ -56,11 +56,12 @@ const Provider: NextPage<ProviderProps> = ({ providerData }: ProviderProps) => {
 							<Button
 								color="dark"
 								priority="primary"
-								href={`/search?filters=data_source:${providerData.abbreviation.replace(
+								href={`/search?query=${providerData.abbreviation.replace(
 									" ",
 									"-"
 								)}`}
 								htmlTag="a"
+								target="_self"
 							>
 								<>See all {providerData.abbreviation} models</>
 							</Button>
