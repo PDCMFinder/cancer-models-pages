@@ -9,6 +9,7 @@ type Props = {
 };
 
 const SearchBar = ({ defaultValue, onSubmit }: Props) => {
+	const inputWidth = "clamp(0px, 600px, 1000px)";
 	const searchRef = useRef<null | HTMLInputElement>(null);
 	useEffect(() => {
 		if (searchRef.current !== null) {
@@ -26,11 +27,11 @@ const SearchBar = ({ defaultValue, onSubmit }: Props) => {
 			<div className="d-md-flex align-end col-gap-2">
 				<div>
 					<Label
-						label="Search for CMO model ID or histology"
+						label="Search for CMO model ID, provider ID or histology"
 						forId="search-bar"
 						name="search-bar"
 						className="text-white"
-						style={{ width: "clamp(0px, 500px, 1000px)", maxWidth: "100%" }}
+						style={{ width: inputWidth, maxWidth: "100%" }}
 					/>
 					<Input
 						inputRef={searchRef}
@@ -39,7 +40,7 @@ const SearchBar = ({ defaultValue, onSubmit }: Props) => {
 						placeholder="Eg. CRL-2835, Breast Carcinoma"
 						defaultValue={defaultValue}
 						className="m-0"
-						style={{ height: "42px", width: "clamp(0px, 500px, 100%)" }} // same size as button
+						style={{ height: "42px", width: inputWidth }} // same size as button
 					/>
 				</div>
 				<Button

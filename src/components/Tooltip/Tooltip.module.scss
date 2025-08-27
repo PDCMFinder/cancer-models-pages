@@ -15,6 +15,7 @@
 		line-height: 1;
 		z-index: 9998;
 		filter: drop-shadow(0 0 0.25rem $--content-bgColor);
+		white-space: nowrap;
 	}
 	&_arrow {
 		display: none;
@@ -38,6 +39,30 @@
 			top: 50%;
 			transform: translateY(-50%);
 			margin: 0;
+		}
+	}
+	&.Tooltip-bottom {
+		.Tooltip {
+			&_content {
+				top: 100%;
+				transform: translate(-50%, 0.5rem);
+			}
+			@include mediaOver("md") {
+				&_content {
+					top: 100%;
+					left: 50%;
+					transform: translate(-50%, 0.5rem);
+				}
+				&_arrow {
+					top: calc(100% - 1px);
+					left: 50%;
+					transform: translateX(-50%);
+					border-bottom: var(--arrow-width) solid $--content-bgColor;
+					border-left: var(--arrow-width) solid transparent;
+					border-right: var(--arrow-width) solid transparent;
+					border-top: none;
+				}
+			}
 		}
 	}
 	&_children {
