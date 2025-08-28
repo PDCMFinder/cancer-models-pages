@@ -47,6 +47,7 @@ export type SearchState = {
 
 const resultsPerPage = 10;
 const maxModelsToCompare = 4;
+const URL_FILTERS_SEPARATOR = " AND ";
 
 const Search: NextPage = () => {
 	const { windowWidth = 0 } = useWindowDimensions();
@@ -54,9 +55,7 @@ const Search: NextPage = () => {
 	const router = useRouter();
 	const urlSearchParams = useSearchParams();
 	const urlQuery = urlSearchParams.get("query") ?? "";
-	const urlProject = urlSearchParams.get("project")?.toLocaleLowerCase() ?? "";
-	const urlProvider =
-		urlSearchParams.get("provider")?.toLocaleLowerCase() ?? "";
+	const urlFilters = urlSearchParams.get("filters") ?? "";
 	const [showMobileFacets, setShowMobileFacets] = useState(false);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
 	const [driverInstance, setDriverInstance] =
@@ -69,25 +68,31 @@ const Search: NextPage = () => {
 	const canCompareModels =
 		modelsToCompare.length >= 2 && modelsToCompare.length <= maxModelsToCompare;
 
+	let parsedUrlFilters: Record<string, string[]> = {};
+	urlFilters.split(URL_FILTERS_SEPARATOR).forEach((b) => {
+		const filterSelection = b?.split(":");
+		const filterName = filterSelection[0];
+		const filterOptions = filterSelection[1]
+			?.split(",")
+			.map((option) => option.toLowerCase());
+
+		parsedUrlFilters[`facet.cancermodelsorg.${filterName}`] = filterOptions;
+	});
+
 	useEffect(() => {
-		if (urlProject) {
-			setSearchState((prev) => ({
-				...prev,
-				selectedFacets: {
-					...prev.selectedFacets,
-					["facet.cancermodelsorg.project"]: [urlProject]
-				},
-				searchQuery: urlQuery,
-				selectedProvider: urlProvider
-			}));
-		} else {
-			setSearchState((prev) => ({
-				...prev,
-				searchQuery: urlQuery,
-				selectedProvider: urlProvider
-			}));
-		}
-	}, [urlQuery, urlProject, urlProvider]);
+		const updatedFacets = {
+			...(Object.entries(urlFilters).length ? parsedUrlFilters : {})
+		};
+
+		setSearchState((prev) => ({
+			...prev,
+			selectedFacets: {
+				...prev.selectedFacets,
+				...updatedFacets
+			},
+			searchQuery: urlQuery
+		}));
+	}, [urlQuery, urlFilters]);
 
 	useEffect(() => {
 		const loadDriver = async () => {
@@ -143,36 +148,64 @@ const Search: NextPage = () => {
 	);
 
 	const handleFacetChange = (sectionName: string, facetValue: string) => {
-		const newState = structuredClone(searchState.selectedFacets);
-		const section = newState[sectionName] ?? [];
+		const newFacetState = { ...searchState.selectedFacets };
 
-		if (section.includes(facetValue)) {
-			const updatedSection = section.filter((value) => value !== facetValue);
-			if (updatedSection.length > 0) {
-				newState[sectionName] = updatedSection;
-			} else {
+		const section = newFacetState[sectionName] || [];
+		const isFacetSelected = section.includes(facetValue);
+
+		if (isFacetSelected) {
+			newFacetState[sectionName] = section.filter(
+				(value) => value !== facetValue
+			);
+			if (newFacetState[sectionName].length === 0) {
 				// delete empty keys (not really needed but lets handle it here)
-				delete newState[sectionName];
+				delete newFacetState[sectionName];
 			}
 		} else {
-			newState[sectionName] = [...section, facetValue];
+			newFacetState[sectionName] = [...section, facetValue];
 		}
 
-		setSearchState((prev) => ({ ...prev, selectedFacets: newState }));
+		const prefix = "facet.cancermodelsorg.";
+		const facetString = Object.entries(newFacetState)
+			.map(([key, values]) => `${key.replace(prefix, "")}:${values.join(",")}`)
+			.join(URL_FILTERS_SEPARATOR);
+
+		const currentQuery = { ...router.query };
+		if (facetString) {
+			currentQuery.filters = facetString;
+		} else {
+			delete currentQuery.filters;
+		}
+
+		window.scrollTo(0, 370);
+		router.push({ pathname: "/search", query: currentQuery }, undefined, {
+			scroll: false,
+			shallow: true
+		});
+
+		setSearchState((prev) => ({ ...prev, selectedFacets: newFacetState }));
 	};
 
 	const handleSearchBarSubmit = (value: string) => {
 		if (value === "") {
-			router.push({
-				pathname: "/search"
+			router.push({ pathname: "/search" }, undefined, {
+				scroll: false,
+				shallow: true
 			});
 
 			return;
 		}
 		setSearchState((prev) => ({ ...prev, searchQuery: value }));
-		router.push({
-			pathname: "/search",
-			query: { query: value }
+		const currentQuery = { ...router.query };
+		if (value) {
+			currentQuery.query = value;
+		} else {
+			delete currentQuery.query;
+		}
+
+		router.push({ query: currentQuery }, undefined, {
+			scroll: false,
+			shallow: true
 		});
 	};
 
@@ -198,8 +231,9 @@ const Search: NextPage = () => {
 				disabled={Object.keys(searchState.selectedFacets).length === 0}
 				onClick={() => {
 					setSearchState((prev) => ({ ...prev, selectedFacets: {} }));
-					router.push({
-						pathname: "/search"
+					router.push({ pathname: "/search" }, undefined, {
+						scroll: false,
+						shallow: true
 					});
 				}}
 			>

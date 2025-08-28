@@ -108,7 +108,7 @@ const Home: NextPage = () => {
 												</h3>
 												<p className="mb-lg-0">
 													<Link
-														href={`/search?project=${activeProjectData?.project_abbreviation}`}
+														href={`/search?filters=project%3A${activeProjectData?.project_abbreviation}`}
 													>
 														Explore project&apos;s models
 													</Link>
