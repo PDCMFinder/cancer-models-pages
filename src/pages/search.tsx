@@ -178,9 +178,9 @@ const Search: NextPage = () => {
 		}
 
 		window.scrollTo(0, 370);
-		router.push({
-			pathname: "/search",
-			query: currentQuery
+		router.push({ pathname: "/search", query: currentQuery }, undefined, {
+			scroll: false,
+			shallow: true
 		});
 
 		setSearchState((prev) => ({ ...prev, selectedFacets: newFacetState }));
@@ -188,8 +188,9 @@ const Search: NextPage = () => {
 
 	const handleSearchBarSubmit = (value: string) => {
 		if (value === "") {
-			router.push({
-				pathname: "/search"
+			router.push({ pathname: "/search" }, undefined, {
+				scroll: false,
+				shallow: true
 			});
 
 			return;
@@ -202,8 +203,9 @@ const Search: NextPage = () => {
 			delete currentQuery.query;
 		}
 
-		router.push({
-			query: currentQuery
+		router.push({ query: currentQuery }, undefined, {
+			scroll: false,
+			shallow: true
 		});
 	};
 
@@ -229,8 +231,9 @@ const Search: NextPage = () => {
 				disabled={Object.keys(searchState.selectedFacets).length === 0}
 				onClick={() => {
 					setSearchState((prev) => ({ ...prev, selectedFacets: {} }));
-					router.push({
-						pathname: "/search"
+					router.push({ pathname: "/search" }, undefined, {
+						scroll: false,
+						shallow: true
 					});
 				}}
 			>
