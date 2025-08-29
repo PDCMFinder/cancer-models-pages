@@ -18,7 +18,6 @@ const Home: NextPage = () => {
 	const router = useRouter();
 	const { windowWidth } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
-	// const modelCount = useQuery("modelCount", () => getModelCount());
 	const { activeProjectData, handleProjectClick, isLoadingProviders } =
 		useActiveProject();
 

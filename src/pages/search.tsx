@@ -286,6 +286,7 @@ const Search: NextPage = () => {
 							<SearchBar
 								onSubmit={handleSearchBarSubmit}
 								defaultValue={urlQuery ?? searchState.searchQuery}
+								inputWidth="700px"
 							/>
 							<Button
 								priority="primary"
