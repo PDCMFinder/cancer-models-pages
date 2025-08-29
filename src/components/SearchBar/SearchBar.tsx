@@ -19,7 +19,10 @@ const SearchBar = ({ defaultValue, inputWidth = "100%", onSubmit }: Props) => {
 
 	const handleOnSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		onSubmit?.(searchRef?.current?.value ?? "");
+		if (!searchRef?.current?.value) {
+			return;
+		}
+		onSubmit?.(searchRef?.current?.value);
 	};
 
 	return (
@@ -41,6 +44,7 @@ const SearchBar = ({ defaultValue, inputWidth = "100%", onSubmit }: Props) => {
 						defaultValue={defaultValue}
 						className="m-0"
 						style={{ height: "42px", width: inputWidth, maxWidth: "100%" }} // same size as button
+						required
 					/>
 				</div>
 				<Button

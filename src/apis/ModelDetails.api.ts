@@ -55,7 +55,7 @@ const getBioStudiesTitleSearchResults = async (
 	// out of the first 10 results, get the one that the title has the id
 	// we're not using .includes since there might be a partial match (eg. CMP_10 includes CMP_1)
 	const accessionId = await searchResultsResponse.json().then((d) => {
-		const { hits, totalHits }: { hits: SearchHit[]; totalHits: number } = d;
+		const { hits }: { hits: SearchHit[] } = d;
 
 		return (
 			hits.find((study) => {
@@ -113,6 +113,7 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 
 	// here we access the piece of data we need
 	// returns objects
+	const biostudiesAccessionId = allData.accno ?? null;
 	const cancerGrade = data["name:Cancer Grade"]?.[0]?.value ?? null;
 	const cancerStage = data["name:Cancer Stage"]?.[0]?.value ?? null;
 	const cancerSystem = data["name:Cancer System"]?.[0]?.value ?? null;
@@ -134,6 +135,7 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 	const dateSubmitted = data["name:ReleaseDate"]?.[0]?.value ?? null;
 
 	return {
+		biostudiesAccessionId,
 		cancerGrade,
 		cancerStage,
 		cancerSystem,

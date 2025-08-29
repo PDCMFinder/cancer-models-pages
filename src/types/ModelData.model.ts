@@ -8,19 +8,20 @@ export type AllModelData = {
 	drugDosing: Treatment[][];
 	patientTreatment: Treatment[][];
 	qualityData: QualityData[];
-  relatedModel: RelatedModel[];
+	relatedModel: RelatedModel[];
 	modelImages: ModelImage[];
 	publications: Publication[];
 };
 
-export type RelatedModelRoles = "parent of" | "child of"
+export type RelatedModelRoles = "parent of" | "child of";
 
 export type RelatedModel = {
-  role: RelatedModelRoles;
-  relatedModelId: string;
-}
+	role: RelatedModelRoles;
+	relatedModelId: string;
+};
 
 export type ParsedModelMetadata = {
+	biostudiesAccessionId: string;
 	histology: string;
 	providerName: string;
 	cancerSystem: string;
@@ -62,8 +63,8 @@ export type MolecularData = {
 	modelId: string;
 	dataSource: string;
 	sampleId: string;
-  sampleType: string;
-  engraftedTumourPassage: string;
+	sampleType: string;
+	engraftedTumourPassage: string;
 	dataType: string;
 	platformName: string;
 	externalDbLinks: ExternalDbLink[];
@@ -146,9 +147,9 @@ export type ModelImage = {
 export type Publication = {
 	pmid: string;
 	doi: {
-    id: string,
-    url: string
-  };
+		id: string;
+		url: string;
+	};
 	pubYear: string;
 	title: string;
 	authorString: string;

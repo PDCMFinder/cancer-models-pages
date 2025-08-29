@@ -710,7 +710,9 @@ const ModelPage = ({
 																		<td>
 																			<Link
 																				className="m-0"
-																				href="#"
+																				href={`https://wwwdev.ebi.ac.uk/biostudies/CancerModelsOrg/studies/${metadata.biostudiesAccessionId}`}
+																				target="_blank"
+																				rel="noopener noreferrer"
 																				onClick={() => {
 																					ReactGA.event("view_data", {
 																						category: "event"
