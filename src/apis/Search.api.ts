@@ -124,7 +124,7 @@ export const getSearchResults = async (
 		? await Promise.all(
 				searchResultsIds.map(async (id: string) => {
 					const modelData = await fetch(
-						`https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${id}`
+						`https://www.ebi.ac.uk/biostudies/api/v1/studies/${id}`
 					);
 
 					if (!modelData.ok) {

@@ -177,14 +177,25 @@ const ModelPage = ({
 							<h1 className="m-0 mb-2" id="tour_model-id">
 								{metadata.modelId}
 							</h1>
-							<div className="d-flex align-items-center">
-								<ModelTypeIcon
-									modelType={metadata.modelType}
-									size="1.5em"
-									className="mb-1 mr-4"
-									hideOther={true}
-									id="tour_model-type"
-								/>
+							<div className="d-flex align-center">
+								<Tooltip
+									content={
+										<p
+											className="text-small m-0 text-capitalize"
+											style={{ width: "max-content", maxWidth: "300px" }}
+										>
+											{metadata.modelType} model
+										</p>
+									}
+									className="w-max"
+								>
+									<ModelTypeIcon
+										modelType={metadata.modelType}
+										size="1.5em"
+										hideOther={true}
+										id="tour_model-type"
+									/>
+								</Tooltip>
 							</div>
 							{/* {cellModelData?.modelName && (
 								<p className="mt-2 mb-0">
@@ -710,7 +721,7 @@ const ModelPage = ({
 																		<td>
 																			<Link
 																				className="m-0"
-																				href={`https://wwwdev.ebi.ac.uk/biostudies/CancerModelsOrg/studies/${metadata.biostudiesAccessionId}`}
+																				href={`https://www.ebi.ac.uk/biostudies/CancerModelsOrg/studies/${metadata.biostudiesAccessionId}`}
 																				target="_blank"
 																				rel="noopener noreferrer"
 																				onClick={() => {

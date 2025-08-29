@@ -77,7 +77,8 @@ const getBioStudiesTitleSearchResults = async (
 	}
 
 	const modelDataResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${accessionId}`
+		// this can't use /CancerModelsOrg, that's why we don't use env API URL
+		`https://www.ebi.ac.uk/biostudies/api/v1/studies/${accessionId}`
 	);
 
 	if (!modelDataResponse.ok) {
