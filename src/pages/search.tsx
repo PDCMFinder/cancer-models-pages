@@ -228,7 +228,10 @@ const Search: NextPage = () => {
 				className="m-0"
 				priority="secondary"
 				color="dark"
-				disabled={Object.keys(searchState.selectedFacets).length === 0}
+				disabled={
+					Object.keys(searchState.selectedFacets).length === 0 &&
+					!searchState.searchQuery
+				}
 				onClick={() => {
 					setSearchState((prev) => ({ ...prev, selectedFacets: {} }));
 					router.push({ pathname: "/search" }, undefined, {
@@ -240,7 +243,7 @@ const Search: NextPage = () => {
 				Clear
 			</Button>
 		),
-		[searchState.selectedFacets]
+		[searchState.selectedFacets, searchState.searchQuery]
 	);
 
 	const memoizedSearchFacets = useMemo(
