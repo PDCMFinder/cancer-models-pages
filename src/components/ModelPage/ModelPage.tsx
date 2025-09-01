@@ -22,6 +22,7 @@ import breakPoints from "../../utils/breakpoints";
 import imageIsBrokenChecker from "../../utils/imageIsBrokenChecker";
 import { modelTourSteps } from "../../utils/tourSteps";
 import ModelIdentifiers from "../ModelIdentifiers/ModelIdentifiers";
+import ModelPurchaseButton from "../ModelPurchaseButton/ModelPurchaseButton";
 import styles from "./Model.module.scss";
 
 const HierarchyTree = dynamic(
@@ -209,10 +210,26 @@ const ModelPage = ({
 							)}
 						</div>
 						<div
-							className="col-12 col-md-12 col-lg-6 text-right"
+							className="col-12 col-md-12 col-lg-6 text-right mt-3 mt-md-0"
 							id="tour_model-providerInfo"
 						>
-							<h3 className="my-0 mb-3 mb-lg-0 lh-1">
+							{extLinks.externalModelLinksByType.supplier?.length > 0 &&
+								extLinks.externalModelLinksByType.supplier.map(
+									(supplier, index) => {
+										const isLastSupplier =
+											index !==
+											extLinks.externalModelLinksByType.supplier.length - 1;
+
+										return (
+											<ModelPurchaseButton
+												key={supplier.resourceLabel + supplier.linkLabel}
+												supplier={supplier}
+												isLastSupplier={isLastSupplier}
+											/>
+										);
+									}
+								)}
+							<h3 className="mt-1 mt-md-2 mb-md-0 lh-1">
 								<Link
 									className="text-white text-noDecoration"
 									href={`/about/providers/${metadata.providerId.toLowerCase()}`}
@@ -220,6 +237,22 @@ const ModelPage = ({
 									{metadata.providerName}
 								</Link>
 							</h3>
+							{metadata.providerUrl && (
+								<Link
+									className="text-white mt-1"
+									href={metadata.providerUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+									onClick={() =>
+										ReactGA.event("provider_view_data", {
+											category: "event",
+											provider: metadata.providerId
+										})
+									}
+								>
+									View data at {metadata.providerId}
+								</Link>
+							)}
 							{metadata.licenseName && metadata.licenseUrl ? (
 								<div className="mt-5">
 									<p className="mb-0">
