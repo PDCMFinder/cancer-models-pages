@@ -22,6 +22,7 @@ export type RelatedModel = {
 
 export type ParsedModelMetadata = {
 	biostudiesAccessionId: string;
+	providerUrl: string;
 	histology: string;
 	providerName: string;
 	cancerSystem: string;
