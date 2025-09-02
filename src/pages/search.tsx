@@ -102,7 +102,10 @@ const Search: NextPage = () => {
 				showProgress: true,
 				prevBtnText: "← Prev",
 				nextBtnText: "Next →",
-				doneBtnText: "Done"
+				doneBtnText: "Done",
+				onDestroyed: () => {
+					setModelsToCompare([]);
+				}
 			});
 			setDriverInstance(driverInstance);
 		};
@@ -276,7 +279,7 @@ const Search: NextPage = () => {
 			</Head>
 			<header className={`py-5 ${styles.Search_header}`}>
 				<div className="container">
-					<div className="row">
+					<div className="row" id="tour_searchBar">
 						<div className="col-12">
 							{/* OK to hardcode total models */}
 							<h1 className="h2 text-white text-center mt-0">
@@ -430,7 +433,10 @@ const Search: NextPage = () => {
 						</div>
 					</div>
 					{modelsToCompare.length > 0 ? (
-						<div className="row position-sticky bottom-0 mt-5">
+						<div
+							className="row position-sticky bottom-0 mt-5"
+							style={{ zIndex: 9999 }}
+						>
 							<div className="col-10 offset-1">
 								<Card
 									className="bg-primary-quaternary mb-2"

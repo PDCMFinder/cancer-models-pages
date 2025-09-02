@@ -698,7 +698,7 @@ const ModelPage = ({
 							)}
 							<div id="molecular-data">
 								{molecularData.length > 0 && (
-									<div className="row mb-5 pt-3">
+									<div className="row mb-5 pt-3" id="tour_molecular-data">
 										<div className="col-12 mb-1">
 											<div className="d-flex align-flex-start align-md-center flex-column flex-md-row justify-content-between">
 												<h2 className="my-0">Molecular data</h2>

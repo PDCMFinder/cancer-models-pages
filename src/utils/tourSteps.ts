@@ -3,11 +3,9 @@ import { DriveStep } from "driver.js";
 // /search page
 export const searchTourSteps: DriveStep[] = [
 	{
-		element: "#searchBar",
+		element: "#tour_searchBar",
 		popover: {
-			title: "Cancer diagnosis search",
-			description:
-				"Search bar where you can input and search by cancer diagnosis Eg. Melanoma.",
+			title: "Search for provider ID, CancerModels.Org model ID, or histology",
 			side: "bottom",
 			align: "center"
 		}
@@ -19,15 +17,6 @@ export const searchTourSteps: DriveStep[] = [
 			description:
 				"Narrow your search results to suit your needs using one or multiple filter options.",
 			side: "right",
-			align: "center"
-		}
-	},
-	{
-		element: "#sortBy",
-		popover: {
-			title: "Change sorting order",
-			description: "Sort the current search results by different criteria.",
-			side: "left",
 			align: "center"
 		}
 	},
@@ -45,7 +34,7 @@ export const searchTourSteps: DriveStep[] = [
 		element: "#tour_searchResult",
 		popover: {
 			description:
-				"Check the bottom right checkbox ('Add to compare') to continue.",
+				"Check the bottom left checkbox ('Add to compare') and click next tocontinue.",
 			side: "top",
 			align: "center"
 		}
@@ -55,7 +44,7 @@ export const searchTourSteps: DriveStep[] = [
 		popover: {
 			title: "Compare",
 			description:
-				"Includes the models you've chosen to compare. Keep checking more boxes to add and then compare.",
+				"Includes the models you've chosen to compare. Keep checking more boxes to add and then compare. You can remove models you don't want to compare anymore. At least 2 models are needed at all times, and up to 4 models can be compared.",
 			side: "left",
 			align: "center"
 		}
@@ -180,16 +169,6 @@ export const modelTourSteps: DriveStep[] = [
 		}
 	},
 	{
-		element: "#tour_model-score",
-		popover: {
-			title: "Model score",
-			description:
-				"Score related to the amount of information available about the model, not the quality of the model.",
-			side: "top",
-			align: "center"
-		}
-	},
-	{
 		element: "#tour_model-providerInfo",
 		popover: {
 			title: "Model provider",
@@ -207,11 +186,6 @@ export const modelTourSteps: DriveStep[] = [
 			side: "top",
 			align: "center"
 		}
-		// onHighlightStarted: (element) => {
-		// 	if (!element) {
-		// 		driverObj.moveNext();
-		// 	}
-		// },
 	},
 	{
 		element: "#engraftments",
@@ -244,7 +218,7 @@ export const modelTourSteps: DriveStep[] = [
 		}
 	},
 	{
-		element: "#molecular-data",
+		element: "#tour_molecular-data",
 		popover: {
 			title: "Model molecular data",
 			description:

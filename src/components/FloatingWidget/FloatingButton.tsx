@@ -52,7 +52,8 @@ const FloatingButton = ({
 					fromRight !== undefined ? `${fromRight}px !important` : undefined,
 				bottom:
 					fromBottom !== undefined ? `${fromBottom}px !important` : undefined,
-				left: fromLeft !== undefined ? `${fromLeft}px !important` : undefined
+				left: fromLeft !== undefined ? `${fromLeft}px !important` : undefined,
+				zIndex: 9998
 			}}
 		>
 			{children}
