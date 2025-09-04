@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { getLatestDataReleaseInformation } from "../apis/AggregatedData.api";
 import { getSearchFacets } from "../apis/Search.api";
@@ -24,71 +24,76 @@ const Overview: NextPage = () => {
 		Record<string, Record<string, number>>
 	>({});
 
-	useQuery("searchFacets", getSearchFacets, {
-		onSuccess: (data) => {
-			const facets = [
-				{
-					outputKey: "modelType",
-					facetName: "facet.cancermodelsorg.model_type"
-				},
-				{
-					outputKey: "datasetAvailable",
-					facetName: "facet.cancermodelsorg.dataset_available"
-				},
-				{
-					outputKey: "patientSex",
-					facetName: "facet.cancermodelsorg.patient_sex"
-				},
-				{
-					outputKey: "tumourType",
-					facetName: "facet.cancermodelsorg.tumour_type"
-				},
-				{
-					outputKey: "patientEthnicity",
-					facetName: "facet.cancermodelsorg.patient_ethnicity_group"
-				},
-				{
-					outputKey: "patientAge",
-					facetName: "facet.cancermodelsorg.patient_age"
-				},
-				{
-					outputKey: "cancerSystem",
-					facetName: "facet.cancermodelsorg.cancer_system"
-				}
-			] as const;
+	const { data: searchFacetsData } = useQuery("searchFacets", getSearchFacets);
 
-			const criteria = facets.map((f) => ({ key: "name", value: f.facetName }));
+	useEffect(() => {
+		if (!searchFacetsData) return;
 
-			const selectedData = findMultipleByKeyValues(data, criteria);
+		const facets = [
+			{
+				outputKey: "modelType",
+				facetName: "facet.cancermodelsorg.model_type"
+			},
+			{
+				outputKey: "datasetAvailable",
+				facetName: "facet.cancermodelsorg.dataset_available"
+			},
+			{
+				outputKey: "patientSex",
+				facetName: "facet.cancermodelsorg.patient_sex"
+			},
+			{
+				outputKey: "tumourType",
+				facetName: "facet.cancermodelsorg.tumour_type"
+			},
+			{
+				outputKey: "patientEthnicity",
+				facetName: "facet.cancermodelsorg.patient_ethnicity_group"
+			},
+			{
+				outputKey: "patientAge",
+				facetName: "facet.cancermodelsorg.patient_age"
+			},
+			{
+				outputKey: "cancerSystem",
+				facetName: "facet.cancermodelsorg.cancer_system"
+			}
+		] as const;
 
-			type FacetNode = { value: string; hits: number };
-			const toCountMap = (nodes: FacetNode[] = []) => {
-				const counts: Record<string, number> = {};
+		const criteria = facets.map((f) => ({
+			key: "name",
+			value: f.facetName
+		}));
 
-				nodes.forEach((node) => {
-					counts[node.value] = node.hits;
-				});
+		const selectedData = findMultipleByKeyValues(searchFacetsData, criteria);
 
-				return Object.fromEntries(
-					Object.entries(counts).sort(([, a], [, b]) => b - a)
-				);
-			};
+		type FacetNode = { value: string; hits: number };
+		const toCountMap = (nodes: FacetNode[] = []) => {
+			const counts: Record<string, number> = {};
 
-			const nextChartData = facets.reduce<
-				Record<string, Record<string, number>>
-			>((acc, f) => {
+			nodes.forEach((node) => {
+				counts[node.value] = node.hits;
+			});
+
+			return Object.fromEntries(
+				Object.entries(counts).sort(([, a], [, b]) => b - a)
+			);
+		};
+
+		const nextChartData = facets.reduce<Record<string, Record<string, number>>>(
+			(acc, f) => {
 				const children: FacetNode[] =
 					selectedData[`name:${f.facetName}`]?.[0]?.children ?? [];
 
 				acc[f.outputKey] = toCountMap(children);
 
 				return acc;
-			}, {});
+			},
+			{}
+		);
 
-			setChartData(nextChartData);
-		}
-	});
-
+		setChartData(nextChartData);
+	}, [searchFacetsData]);
 	const { data: dataReleaseData, isLoading: isDataLoading } = useQuery(
 		"dataReleaseData",
 		getLatestDataReleaseInformation
