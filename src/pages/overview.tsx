@@ -208,7 +208,7 @@ const Overview: NextPage = () => {
 										title="Models by patient ethnicity"
 										x={Object.keys(chartData.patientEthnicity)}
 										y={Object.values(chartData.patientEthnicity)}
-										dataEndPoint="patient_ethnicity"
+										dataEndPoint="patient_ethnicity_group"
 									/>
 								</Card>
 							</div>
