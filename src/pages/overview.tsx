@@ -1,14 +1,23 @@
 import { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import Link from "next/link";
+import { useMemo, useState } from "react";
 import { useQuery } from "react-query";
+import { getLatestDataReleaseInformation } from "../apis/AggregatedData.api";
 import { getSearchFacets } from "../apis/Search.api";
 import Button from "../components/Button/Button";
 import Card from "../components/Card/Card";
 import BarChart from "../components/Charts/BarChart";
-import { tumourTypeColors } from "../components/Charts/colors";
+import {
+	datasetCountColors,
+	patientAgeColors,
+	tumourTypeColors
+} from "../components/Charts/colors";
 import PieChart from "../components/Charts/PieChart";
+import RadialChart from "../components/Charts/RadialChart";
+import SunBurstChart from "../components/Charts/SunBurstChart";
 import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
+import { transformPatientAgeSunBurstData } from "../utils/transformPatientAgeSunBurstData";
 
 const Overview: NextPage = () => {
 	const [chartData, setChartData] = useState<
@@ -60,7 +69,6 @@ const Overview: NextPage = () => {
 					counts[node.value] = node.hits;
 				});
 
-				// Sort by hits in descending order
 				return Object.fromEntries(
 					Object.entries(counts).sort(([, a], [, b]) => b - a)
 				);
@@ -80,6 +88,20 @@ const Overview: NextPage = () => {
 			setChartData(nextChartData);
 		}
 	});
+
+	const { data: dataReleaseData, isLoading: isDataLoading } = useQuery(
+		"dataReleaseData",
+		getLatestDataReleaseInformation
+	);
+
+	const totalModelCount = useMemo(() => {
+		if (chartData.modelType) {
+			return Object.values(chartData.modelType).reduce(
+				(sum, value) => sum + value,
+				0
+			);
+		}
+	}, [chartData]);
 
 	return (
 		<>
@@ -107,36 +129,35 @@ const Overview: NextPage = () => {
 					</div>
 				</div>
 			</header>
-			{/* <section>
+			<section>
 				<div className="container">
 					<div className="row">
 						<div className="col-12">
 							<h2>Current data release</h2>
 							<ul>
-								{queryResults.latestDataReleaseInfo.data ? (
-									<li>
-										Data release version:{" "}
-										{queryResults.latestDataReleaseInfo.data.tag_name}
-									</li>
+								{dataReleaseData && !isDataLoading ? (
+									<li>Data release version: {dataReleaseData.tag_name}</li>
 								) : null}
-								{queryResults.latestDataReleaseInfo.data ? (
+								{dataReleaseData && !isDataLoading ? (
+									<li>Date of publication: {dataReleaseData?.released_at}</li>
+								) : null}
+								{totalModelCount ? (
 									<li>
-										Date of publication:{" "}
-										{queryResults.latestDataReleaseInfo.data?.released_at}
+										Number of models:{" "}
+										{totalModelCount?.toLocaleString() ??
+											10342?.toLocaleString()}
 									</li>
 								) : null}
 								<li>
-									Number of models: {queryResults.modelCount.data ?? 10000}
-								</li>
-								<li>
-									Number of providers: {queryResults.providerCount.data ?? 56}
+									{/* from when we released github pages, hard to get from BioStudies api */}
+									Number of providers: {56}
 								</li>
 							</ul>
 							<Link href="/about/releases">Release log</Link>
 						</div>
 					</div>
 				</div>
-			</section> */}
+			</section>
 			<section>
 				<div className="container">
 					<div className="row mb-5">
@@ -163,6 +184,18 @@ const Overview: NextPage = () => {
 								</Card>
 							</div>
 						)}
+						{chartData.tumourType && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<PieChart
+										title="Models by tumour type"
+										data={chartData.tumourType}
+										dataEndPoint="tumour_type"
+										colors={tumourTypeColors}
+									/>
+								</Card>
+							</div>
+						)}
 						{chartData.patientEthnicity && (
 							<div className="col-md-12 col-lg-8 mb-4">
 								<Card className="py-0 px-2 h-100">
@@ -175,29 +208,25 @@ const Overview: NextPage = () => {
 								</Card>
 							</div>
 						)}
-						{/* {queryResults.modelsByPatientAge.data &&
-							!queryResults.modelsByPatientAge.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<SunBurstChart
-											title="Models by patient age"
-											values={queryResults.modelsByPatientAge.data.values}
-											labels={queryResults.modelsByPatientAge.data.labels}
-											parents={queryResults.modelsByPatientAge.data.parents}
-											dataEndPoint="patient_age"
-											colors={patientAgeColors}
-										/>
-									</Card>
-								</div>
-							)} */}
-						{chartData.tumourType && (
+						{chartData.patientAge && (
 							<div className="col-md-6 col-lg-4 mb-4">
 								<Card className="py-0 px-5 h-100">
-									<PieChart
-										title="Models by tumour type"
-										data={chartData.tumourType}
-										dataEndPoint="tumour_type"
-										colors={tumourTypeColors}
+									<SunBurstChart
+										title="Models by patient age"
+										values={
+											transformPatientAgeSunBurstData(chartData.patientAge)
+												.values
+										}
+										labels={
+											transformPatientAgeSunBurstData(chartData.patientAge)
+												.labels
+										}
+										parents={
+											transformPatientAgeSunBurstData(chartData.patientAge)
+												.parents
+										}
+										dataEndPoint="patient_age"
+										colors={patientAgeColors}
 									/>
 								</Card>
 							</div>
@@ -213,19 +242,19 @@ const Overview: NextPage = () => {
 								</Card>
 							</div>
 						)}
-						{/* {chartData.datasetAvailable && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<RadialChart
-											title="Models by available data"
-											data={chartData.datasetAvailable}
-											dataEndPoint="dataset_available"
-											colors={datasetCountColors}
-											totalModelCount={queryResults.modelCount.data ?? 0}
-										/>
-									</Card>
-								</div>
-							)} */}
+						{chartData.datasetAvailable && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<RadialChart
+										title="Models by available data"
+										data={chartData.datasetAvailable}
+										dataEndPoint="dataset_available"
+										colors={datasetCountColors}
+										totalModelCount={totalModelCount ?? 0}
+									/>
+								</Card>
+							</div>
+						)}
 					</div>
 					<div className="row">
 						<div className="col-12 text-center">
