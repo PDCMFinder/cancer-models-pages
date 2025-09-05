@@ -5,7 +5,7 @@ import RegexHighlighter from "../../components/RegexHighlighter/RegexHighlighter
 import ShowHide from "../../components/ShowHide/ShowHide";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import breakPoints from "../../utils/breakpoints";
-import metadataDictionaryData from "../../utils/metadataDictionaryData.json";
+import metadataDictionaryData from "../../utils/data/metadataDictionaryData.json";
 import styles from "./dictionary.module.scss";
 
 const Dictionary: NextPage = () => {
@@ -67,7 +67,7 @@ const Dictionary: NextPage = () => {
 								);
 
 								return (
-									<div className="row" id={schema.name}>
+									<div className="row" id={schema.name} key={schema.name}>
 										<div className="col-12" key={schema.name}>
 											<h2>{TableTitle}</h2>
 											<p>{schema.description}</p>

@@ -1,10 +1,13 @@
 import type { NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import Button from "../components/Button/Button";
+import DataCountCard from "../components/DataCountCard/DataCountCard";
 import Loader from "../components/Loader/Loader";
 import SearchBar from "../components/SearchBar/SearchBar";
 import ShowHide from "../components/ShowHide/ShowHide";
+import Tooltip from "../components/Tooltip/Tooltip";
 import { useActiveProject } from "../hooks/useActiveProject";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import breakPoints from "../utils/breakpoints";
@@ -15,7 +18,6 @@ const Home: NextPage = () => {
 	const router = useRouter();
 	const { windowWidth } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
-	// const modelCount = useQuery("modelCount", () => getModelCount());
 	const { activeProjectData, handleProjectClick, isLoadingProviders } =
 		useActiveProject();
 
@@ -26,7 +28,7 @@ const Home: NextPage = () => {
 					<div className={styles.header_searchBackground}></div>
 					<ShowHide windowWidth={windowWidth || 0} showOver={bpLarge}>
 						<div className={styles.header_graphicElement}>
-							{/* <DataCountCard layout="vertical" iconSize="2em" /> */}
+							<DataCountCard layout="vertical" iconSize="2em" />
 						</div>
 					</ShowHide>
 					<div
@@ -40,7 +42,7 @@ const Home: NextPage = () => {
 							<div
 								className={`${styles.header_graphicElement} mt-3 position-relative`}
 							>
-								{/* <DataCountCard layout="vertical" iconSize="2em" /> */}
+								<DataCountCard layout="vertical" iconSize="2em" />
 							</div>
 						</ShowHide>
 					</div>
@@ -54,7 +56,6 @@ const Home: NextPage = () => {
 								})
 							}
 						/>
-						{/* TODO: redirect to search page with current query */}
 					</div>
 				</div>
 			</header>
@@ -65,7 +66,7 @@ const Home: NextPage = () => {
 							<h2>Our data providers</h2>
 						</div>
 					</div>
-					{activeProjectData.project_abbreviation === null &&
+					{activeProjectData?.project_abbreviation === null &&
 					isLoadingProviders ? (
 						<div style={{ height: "50vh" }}>
 							<Loader />
@@ -75,21 +76,21 @@ const Home: NextPage = () => {
 							<div className="col-12 col-md-3 col-lg-2">
 								<ProjectButtons
 									direction="column"
-									activeProject={activeProjectData.project_abbreviation}
+									activeProject={activeProjectData?.project_abbreviation || ""}
 									onClick={handleProjectClick}
 								/>
 							</div>
 							<div className="col-12 col-md-9 col-lg-8 mt-5 mt-md-0">
 								{/* project logo and name */}
-								{activeProjectData.project_description &&
-								activeProjectData.project_settings.logo ? (
+								{activeProjectData?.project_description &&
+								activeProjectData?.project_settings.logo ? (
 									<>
 										<div className="row flex-lg-row-reverse mb-3">
 											<div className="col-12 col-md-6 col-lg-3">
 												<Image
-													src={activeProjectData.project_settings.logo}
-													alt={`${activeProjectData.project_full_name} logo`}
-													title={`${activeProjectData.project_full_name}`}
+													src={activeProjectData?.project_settings.logo || ""}
+													alt={`${activeProjectData?.project_full_name} logo`}
+													title={`${activeProjectData?.project_full_name}`}
 													className="w-50 h-auto mx-auto mb-2 mb-md-0 w-lg-auto mr-lg-0"
 													height={120}
 													width={120}
@@ -101,16 +102,16 @@ const Home: NextPage = () => {
 											</div>
 											<div className="col-12 col-md-6 col-lg-9">
 												<h3 className="mt-0">
-													{activeProjectData.project_full_name ??
-														activeProjectData.project_abbreviation}
+													{activeProjectData?.project_full_name ??
+														activeProjectData?.project_abbreviation}
 												</h3>
-												{/* <p className="mb-lg-0">
+												<p className="mb-lg-0">
 													<Link
-														href={`/search?filters=project_name%3A${activeProjectData.project_abbreviation}`}
+														href={`/search?filters=project%3A${activeProjectData?.project_abbreviation}`}
 													>
 														Explore project&apos;s models
 													</Link>
-												</p> */}
+												</p>
 											</div>
 										</div>
 										<hr className="mb-3" />
@@ -118,30 +119,49 @@ const Home: NextPage = () => {
 								) : null}
 								{/* provider logos */}
 								<div className="row row-cols-2 row-cols-md-3 row-cols-lg-4">
-									{activeProjectData.providers?.map((provider) => (
+									{activeProjectData?.providers?.map((provider) => (
 										<div
 											key={provider?.data_source}
 											className="col text-center"
 										>
-											{/* <Link
-												href={`/search?filters=data_source%3A${provider?.data_source}`}
-												title={`Explore all ${provider?.data_source} models`}
-												style={{ height: "100px" }}
-												className="mb-1 d-flex"
+											<Tooltip
+												style={{ width: "100%" }}
+												position="bottom"
+												content={
+													<div className="w-min">
+														<Link
+															className="text-white mr-1"
+															href={`/search?query=${provider?.data_source.toLocaleLowerCase()}`}
+														>
+															See models
+														</Link>
+														<Link
+															className="text-white ml-1"
+															href={`/about/providers/${provider?.data_source}`}
+														>
+															Learn more
+														</Link>
+													</div>
+												}
 											>
-											</Link> */}
-											<Image
-												src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
-												alt={`${provider?.provider_name} logo`}
-												title={provider?.provider_name}
-												className="w-auto h-auto m-auto"
-												width={300}
-												height={100}
-												style={{
-													maxHeight: "100px",
-													maxWidth: "75%"
-												}}
-											/>
+												<div
+													style={{ height: "100px" }}
+													className="d-flex w-100"
+												>
+													<Image
+														src={`/cancer-models-pages/img/providers/${provider?.data_source}.png`}
+														alt={`${provider?.provider_name} logo`}
+														title={provider?.provider_name}
+														className="w-auto h-auto m-auto"
+														width={300}
+														height={100}
+														style={{
+															maxHeight: "100px",
+															maxWidth: "75%"
+														}}
+													/>
+												</div>
+											</Tooltip>
 											<p className="text-small text-muted">
 												{provider?.provider_name}
 											</p>

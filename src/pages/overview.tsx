@@ -1,25 +1,10 @@
 import { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useQueries } from "react-query";
-import {
-	getLatestDataReleaseInformation,
-	getModelCount,
-	getModelsByCancerSystem,
-	getModelsByDatasetAvailability,
-	getModelsByDiagnosis,
-	getModelsByMutatedGene,
-	getModelsByPatientAge,
-	getModelsByPatientEthnicity,
-	getModelsByPatientSex,
-	getModelsByPrimarySite,
-	getModelsByProvider,
-	getModelsByRareCancer,
-	getModelsByTreatment,
-	getModelsByTumourType,
-	getModelsByType,
-	getProviderCount
-} from "../apis/AggregatedData.api";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "react-query";
+import { getLatestDataReleaseInformation } from "../apis/AggregatedData.api";
+import { getSearchFacets } from "../apis/Search.api";
 import Button from "../components/Button/Button";
 import Card from "../components/Card/Card";
 import BarChart from "../components/Charts/BarChart";
@@ -29,99 +14,99 @@ import {
 	tumourTypeColors
 } from "../components/Charts/colors";
 import PieChart from "../components/Charts/PieChart";
-import PolarBarChart from "../components/Charts/PolarBarChart";
 import RadialChart from "../components/Charts/RadialChart";
-import SunBurstChart, {
-	transformSunBurstData
-} from "../components/Charts/SunBurstChart";
+import SunBurstChart from "../components/Charts/SunBurstChart";
+import findMultipleByKeyValues from "../utils/findMultipleByKeyValues";
+import { transformPatientAgeSunBurstData } from "../utils/transformPatientAgeSunBurstData";
 
 const Overview: NextPage = () => {
-	const queries = useQueries([
-		{
-			queryKey: "modelsByPrimarySite",
-			queryFn: getModelsByPrimarySite
-		},
-		{
-			queryKey: "modelsByType",
-			queryFn: getModelsByType
-		},
-		{
-			queryKey: "modelsByCancerSystem",
-			queryFn: getModelsByCancerSystem
-		},
-		{
-			queryKey: "modelsByTreatment",
-			queryFn: getModelsByTreatment
-		},
-		{
-			queryKey: "modelsByMutatedGene",
-			queryFn: getModelsByMutatedGene
-		},
-		{
-			queryKey: "modelsByPatientSex",
-			queryFn: getModelsByPatientSex
-		},
-		{
-			queryKey: "modelsByTumourType",
-			queryFn: getModelsByTumourType
-		},
-		{
-			queryKey: "modelsByPatientEthnicity",
-			queryFn: getModelsByPatientEthnicity
-		},
-		{
-			queryKey: "modelsByPatientAge",
-			queryFn: getModelsByPatientAge,
-			select: transformSunBurstData
-		},
-		{
-			queryKey: "providerCount",
-			queryFn: getProviderCount
-		},
-		{
-			queryKey: "modelCount",
-			queryFn: getModelCount
-		},
-		{
-			queryKey: "latestDataReleaseInfo",
-			queryFn: getLatestDataReleaseInformation
-		},
-		{
-			queryKey: "modelsByDiagnosis",
-			queryFn: getModelsByDiagnosis
-		},
-		{
-			queryKey: "modelsByProvider",
-			queryFn: getModelsByProvider
-		},
-		{
-			queryKey: "modelsByDatasetAvailability",
-			queryFn: getModelsByDatasetAvailability
-		},
-		{
-			queryKey: "modelsByRareCancer",
-			queryFn: getModelsByRareCancer
-		}
-	]);
+	const [chartData, setChartData] = useState<
+		Record<string, Record<string, number>>
+	>({});
 
-	const queryResults = {
-		modelsByPrimarySite: queries[0],
-		modelsByType: queries[1],
-		modelsByCancerSystem: queries[2],
-		modelsByTreatment: queries[3],
-		modelsByMutatedGene: queries[4],
-		modelsByPatientSex: queries[5],
-		modelsByTumourType: queries[6],
-		modelsByPatientEthnicity: queries[7],
-		modelsByPatientAge: queries[8],
-		providerCount: queries[9],
-		modelCount: queries[10],
-		latestDataReleaseInfo: queries[11],
-		modelsByDiagnosis: queries[12],
-		modelsByProvider: queries[13],
-		modelsByDatasetAvailability: queries[14],
-		modelsByRareCancer: queries[15]
-	};
+	const { data: searchFacetsData } = useQuery("searchFacets", getSearchFacets);
+
+	useEffect(() => {
+		if (!searchFacetsData) return;
+
+		const facets = [
+			{
+				outputKey: "modelType",
+				facetName: "facet.cancermodelsorg.model_type"
+			},
+			{
+				outputKey: "datasetAvailable",
+				facetName: "facet.cancermodelsorg.dataset_available"
+			},
+			{
+				outputKey: "patientSex",
+				facetName: "facet.cancermodelsorg.patient_sex"
+			},
+			{
+				outputKey: "tumourType",
+				facetName: "facet.cancermodelsorg.tumour_type"
+			},
+			{
+				outputKey: "patientEthnicity",
+				facetName: "facet.cancermodelsorg.patient_ethnicity_group"
+			},
+			{
+				outputKey: "patientAge",
+				facetName: "facet.cancermodelsorg.patient_age"
+			},
+			{
+				outputKey: "cancerSystem",
+				facetName: "facet.cancermodelsorg.cancer_system"
+			}
+		] as const;
+
+		const criteria = facets.map((f) => ({
+			key: "name",
+			value: f.facetName
+		}));
+
+		const selectedData = findMultipleByKeyValues(searchFacetsData, criteria);
+
+		type FacetNode = { value: string; hits: number };
+		const toCountMap = (nodes: FacetNode[] = []) => {
+			const counts: Record<string, number> = {};
+
+			nodes.forEach((node) => {
+				counts[node.value] = node.hits;
+			});
+
+			return Object.fromEntries(
+				Object.entries(counts).sort(([, a], [, b]) => b - a)
+			);
+		};
+
+		const nextChartData = facets.reduce<Record<string, Record<string, number>>>(
+			(acc, f) => {
+				const children: FacetNode[] =
+					selectedData[`name:${f.facetName}`]?.[0]?.children ?? [];
+
+				acc[f.outputKey] = toCountMap(children);
+
+				return acc;
+			},
+			{}
+		);
+
+		setChartData(nextChartData);
+	}, [searchFacetsData]);
+	const { data: dataReleaseData, isLoading: isDataLoading } = useQuery(
+		"dataReleaseData",
+		getLatestDataReleaseInformation
+	);
+
+	const totalModelCount = useMemo(() => {
+		if (chartData.modelType) {
+			return Object.values(chartData.modelType).reduce(
+				(sum, value) => sum + value,
+				0
+			);
+		}
+	}, [chartData]);
 
 	return (
 		<>
@@ -155,23 +140,22 @@ const Overview: NextPage = () => {
 						<div className="col-12">
 							<h2>Current data release</h2>
 							<ul>
-								{queryResults.latestDataReleaseInfo.data ? (
-									<li>
-										Data release version:{" "}
-										{queryResults.latestDataReleaseInfo.data.tag_name}
-									</li>
+								{dataReleaseData && !isDataLoading ? (
+									<li>Data release version: {dataReleaseData.tag_name}</li>
 								) : null}
-								{queryResults.latestDataReleaseInfo.data ? (
+								{dataReleaseData && !isDataLoading ? (
+									<li>Date of publication: {dataReleaseData?.released_at}</li>
+								) : null}
+								{totalModelCount ? (
 									<li>
-										Date of publication:{" "}
-										{queryResults.latestDataReleaseInfo.data?.released_at}
+										Number of models:{" "}
+										{totalModelCount?.toLocaleString() ??
+											10342?.toLocaleString()}
 									</li>
 								) : null}
 								<li>
-									Number of models: {queryResults.modelCount.data ?? 10000}
-								</li>
-								<li>
-									Number of providers: {queryResults.providerCount.data ?? 56}
+									{/* from when we released github pages, hard to get from BioStudies api */}
+									Number of providers: {56}
 								</li>
 							</ul>
 							<Link href="/about/releases">Release log</Link>
@@ -182,179 +166,100 @@ const Overview: NextPage = () => {
 			<section>
 				<div className="container">
 					<div className="row mb-5">
-						{queryResults.modelsByPrimarySite.data &&
-							!queryResults.modelsByPrimarySite.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by primary site"
-											data={queryResults.modelsByPrimarySite.data}
-											dataEndPoint="primary_site"
-											holeRadius={100}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByType.data &&
-							!queryResults.modelsByType.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by model type"
-											data={queryResults.modelsByType.data}
-											dataEndPoint="model_type"
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByCancerSystem.data &&
-							!queryResults.modelsByCancerSystem.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by cancer system"
-											data={queryResults.modelsByCancerSystem.data}
-											dataEndPoint="cancer_system"
-											holeRadius={100}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByMutatedGene.data &&
-							!queryResults.modelsByMutatedGene.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-2">
-										<PolarBarChart
-											title="Models by mutated gene"
-											data={queryResults.modelsByMutatedGene.data}
-											dataEndPoint="markers_with_mutation_data"
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByPatientEthnicity.data &&
-							!queryResults.modelsByPatientEthnicity.isLoading && (
-								<div className="col-md-12 col-lg-8 mb-4">
-									<Card className="py-0 px-2 h-100">
-										<BarChart
-											title="Models by patient ethnicity"
-											x={Object.keys(
-												queryResults.modelsByPatientEthnicity.data
-											)}
-											y={Object.values(
-												queryResults.modelsByPatientEthnicity.data
-											)}
-											dataEndPoint="patient_ethnicity"
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByDiagnosis.data &&
-							!queryResults.modelsByDiagnosis.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by diagnosis"
-											data={queryResults.modelsByDiagnosis.data}
-											dataEndPoint="search_terms"
-											holeRadius={100}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByPatientAge.data &&
-							!queryResults.modelsByPatientAge.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<SunBurstChart
-											title="Models by patient age"
-											values={queryResults.modelsByPatientAge.data.values}
-											labels={queryResults.modelsByPatientAge.data.labels}
-											parents={queryResults.modelsByPatientAge.data.parents}
-											dataEndPoint="patient_age"
-											colors={patientAgeColors}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByTumourType.data &&
-							!queryResults.modelsByTumourType.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by tumour type"
-											data={queryResults.modelsByTumourType.data}
-											dataEndPoint="tumour_type"
-											colors={tumourTypeColors}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByTreatment.data &&
-							!queryResults.modelsByTreatment.isLoading && (
-								<div className="col-md-12 mb-4">
-									<Card className="py-0 px-2 h-100">
-										<BarChart
-											title="Models by treatment"
-											x={Object.keys(queryResults.modelsByTreatment.data)}
-											y={Object.values(queryResults.modelsByTreatment.data)}
-											dataEndPoint="patient_treatments"
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByPatientSex.data &&
-							!queryResults.modelsByPatientSex.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by patient sex"
-											data={queryResults.modelsByPatientSex.data}
-											dataEndPoint="patient_sex"
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByDatasetAvailability.data &&
-							!queryResults.modelsByDatasetAvailability.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<RadialChart
-											title="Models by available data"
-											data={queryResults.modelsByDatasetAvailability.data}
-											dataEndPoint="dataset_available"
-											colors={datasetCountColors}
-											totalModelCount={queryResults.modelCount.data ?? 0}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByProvider.data &&
-							!queryResults.modelsByProvider.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by provider"
-											data={queryResults.modelsByProvider.data}
-											dataEndPoint="data_source"
-											holeRadius={100}
-										/>
-									</Card>
-								</div>
-							)}
-						{queryResults.modelsByRareCancer.data &&
-							!queryResults.modelsByRareCancer.isLoading && (
-								<div className="col-md-6 col-lg-4 mb-4">
-									<Card className="py-0 px-5 h-100">
-										<PieChart
-											title="Models by rare cancer"
-											data={queryResults.modelsByRareCancer.data}
-											dataEndPoint="search_terms"
-											holeRadius={100}
-										/>
-									</Card>
-								</div>
-							)}
+						{chartData.modelType && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<PieChart
+										title="Models by model type"
+										data={chartData.modelType}
+										dataEndPoint="model_type"
+									/>
+								</Card>
+							</div>
+						)}
+						{chartData.cancerSystem && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<PieChart
+										title="Models by cancer system"
+										data={chartData.cancerSystem}
+										dataEndPoint="cancer_system"
+										holeRadius={100}
+									/>
+								</Card>
+							</div>
+						)}
+						{chartData.tumourType && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<PieChart
+										title="Models by tumour type"
+										data={chartData.tumourType}
+										dataEndPoint="tumour_type"
+										colors={tumourTypeColors}
+									/>
+								</Card>
+							</div>
+						)}
+						{chartData.patientEthnicity && (
+							<div className="col-md-12 col-lg-8 mb-4">
+								<Card className="py-0 px-2 h-100">
+									<BarChart
+										title="Models by patient ethnicity"
+										x={Object.keys(chartData.patientEthnicity)}
+										y={Object.values(chartData.patientEthnicity)}
+										dataEndPoint="patient_ethnicity_group"
+									/>
+								</Card>
+							</div>
+						)}
+						{chartData.patientAge && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<SunBurstChart
+										title="Models by patient age"
+										values={
+											transformPatientAgeSunBurstData(chartData.patientAge)
+												.values
+										}
+										labels={
+											transformPatientAgeSunBurstData(chartData.patientAge)
+												.labels
+										}
+										parents={
+											transformPatientAgeSunBurstData(chartData.patientAge)
+												.parents
+										}
+										dataEndPoint="patient_age"
+										colors={patientAgeColors}
+									/>
+								</Card>
+							</div>
+						)}
+						{chartData.patientSex && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<PieChart
+										title="Models by patient sex"
+										data={chartData.patientSex}
+										dataEndPoint="patient_sex"
+									/>
+								</Card>
+							</div>
+						)}
+						{chartData.datasetAvailable && (
+							<div className="col-md-6 col-lg-4 mb-4">
+								<Card className="py-0 px-5 h-100">
+									<RadialChart
+										title="Models by available data"
+										data={chartData.datasetAvailable}
+										dataEndPoint="dataset_available"
+										colors={datasetCountColors}
+										totalModelCount={totalModelCount ?? 0}
+									/>
+								</Card>
+							</div>
+						)}
 					</div>
 					<div className="row">
 						<div className="col-12 text-center">

@@ -5,10 +5,11 @@ import Label from "../Input/Label";
 
 type Props = {
 	defaultValue?: string | undefined;
+	inputWidth?: string;
 	onSubmit?: (inputValue: string) => void;
 };
 
-const SearchBar = ({ defaultValue, onSubmit }: Props) => {
+const SearchBar = ({ defaultValue, inputWidth = "100%", onSubmit }: Props) => {
 	const searchRef = useRef<null | HTMLInputElement>(null);
 	useEffect(() => {
 		if (searchRef.current !== null) {
@@ -18,28 +19,32 @@ const SearchBar = ({ defaultValue, onSubmit }: Props) => {
 
 	const handleOnSubmit = (e: FormEvent) => {
 		e.preventDefault();
-		onSubmit?.(searchRef?.current?.value ?? "");
+		if (!searchRef?.current?.value) {
+			return;
+		}
+		onSubmit?.(searchRef?.current?.value);
 	};
 
 	return (
 		<form onSubmit={(e) => handleOnSubmit(e)}>
 			<div className="d-md-flex align-end col-gap-2">
-				<div>
+				<div className="w-100">
 					<Label
-						label="Search for CMO model ID or histology"
+						label="Search for provider ID, CMO model ID, or histology"
 						forId="search-bar"
 						name="search-bar"
 						className="text-white"
-						style={{ width: "clamp(0px, 500px, 1000px)", maxWidth: "100%" }}
+						style={{ width: inputWidth, maxWidth: "100%" }}
 					/>
 					<Input
 						inputRef={searchRef}
 						name="search-bar"
 						type="search"
-						placeholder="Eg. CRL-2835, Breast Carcinoma"
+						placeholder="Eg. JAX, CRL-2835, Breast Carcinoma"
 						defaultValue={defaultValue}
 						className="m-0"
-						style={{ height: "42px", width: "clamp(0px, 500px, 100%)" }} // same size as button
+						style={{ height: "42px", width: inputWidth, maxWidth: "100%" }} // same size as button
+						required
 					/>
 				</div>
 				<Button

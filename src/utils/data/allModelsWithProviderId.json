@@ -525,7 +525,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4404-2"
+		"modelId": "WISTAR-WM4404-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -717,7 +717,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3915-2"
+		"modelId": "WISTAR-WM3915-2"
 	},
 	{
 		"providerId": "CMP",
@@ -1041,7 +1041,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4335-1"
+		"modelId": "WISTAR-WM4335-1"
 	},
 	{
 		"providerId": "SJCRH",
@@ -1793,7 +1793,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WDD203"
+		"modelId": "WISTAR-WDD203"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -1965,7 +1965,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4249"
+		"modelId": "WISTAR-WM4249"
 	},
 	{
 		"providerId": "WUSTL",
@@ -1985,7 +1985,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4125"
+		"modelId": "WISTAR-WM4125"
 	},
 	{
 		"providerId": "WUSTL",
@@ -2305,7 +2305,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WRR214"
+		"modelId": "WISTAR-WRR214"
 	},
 	{
 		"providerId": "CRL",
@@ -2473,7 +2473,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4191"
+		"modelId": "WISTAR-WM4191"
 	},
 	{
 		"providerId": "WUSTL",
@@ -2545,7 +2545,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3936-1"
+		"modelId": "WISTAR-WM3936-1"
 	},
 	{
 		"providerId": "CRL",
@@ -2725,7 +2725,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4301"
+		"modelId": "WISTAR-WM4301"
 	},
 	{
 		"providerId": "Curie-BC",
@@ -2733,7 +2733,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4068"
+		"modelId": "WISTAR-WM4068"
 	},
 	{
 		"providerId": "PDMR",
@@ -2917,7 +2917,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4243"
+		"modelId": "WISTAR-WM4243"
 	},
 	{
 		"providerId": "PDMR",
@@ -3253,7 +3253,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4460"
+		"modelId": "WISTAR-WM4460"
 	},
 	{
 		"providerId": "SJCRH",
@@ -3353,7 +3353,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4552-1"
+		"modelId": "WISTAR-WM4552-1"
 	},
 	{
 		"providerId": "PDMR",
@@ -3457,7 +3457,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4431"
+		"modelId": "WISTAR-WM4431"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -3801,7 +3801,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3932"
+		"modelId": "WISTAR-WM3932"
 	},
 	{
 		"providerId": "PDMR",
@@ -3933,7 +3933,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3913"
+		"modelId": "WISTAR-WM3913"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -4025,7 +4025,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4251"
+		"modelId": "WISTAR-WM4251"
 	},
 	{
 		"providerId": "PDMR",
@@ -4205,7 +4205,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4350"
+		"modelId": "WISTAR-WM4350"
 	},
 	{
 		"providerId": "CHOP",
@@ -4309,7 +4309,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3921"
+		"modelId": "WISTAR-WM3921"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -4401,7 +4401,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4351-3"
+		"modelId": "WISTAR-WM4351-3"
 	},
 	{
 		"providerId": "TTUHSC",
@@ -4461,7 +4461,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4254"
+		"modelId": "WISTAR-WM4254"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -4729,7 +4729,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3913-2"
+		"modelId": "WISTAR-WM3913-2"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -4857,7 +4857,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3961"
+		"modelId": "WISTAR-WM3961"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -4869,7 +4869,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4352"
+		"modelId": "WISTAR-WM4352"
 	},
 	{
 		"providerId": "CRL",
@@ -4917,7 +4917,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4070-1"
+		"modelId": "WISTAR-WM4070-1"
 	},
 	{
 		"providerId": "PMLB",
@@ -5213,7 +5213,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4258-2"
+		"modelId": "WISTAR-WM4258-2"
 	},
 	{
 		"providerId": "JAX",
@@ -5389,7 +5389,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4260"
+		"modelId": "WISTAR-WM4260"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -5469,7 +5469,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4039-1"
+		"modelId": "WISTAR-WM4039-1"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -5845,7 +5845,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4323"
+		"modelId": "WISTAR-WM4323"
 	},
 	{
 		"providerId": "PDMR",
@@ -6441,7 +6441,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3907-1"
+		"modelId": "WISTAR-WM3907-1"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -6521,7 +6521,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3936-2"
+		"modelId": "WISTAR-WM3936-2"
 	},
 	{
 		"providerId": "CMP",
@@ -6537,11 +6537,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4266"
+		"modelId": "WISTAR-WM4266"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4298-2"
+		"modelId": "WISTAR-WM4298-2"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -6793,7 +6793,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4205-3"
+		"modelId": "WISTAR-WM4205-3"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -6837,7 +6837,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4404-1"
+		"modelId": "WISTAR-WM4404-1"
 	},
 	{
 		"providerId": "UMCU",
@@ -7073,7 +7073,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4364-1"
+		"modelId": "WISTAR-WM4364-1"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -7081,7 +7081,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WLH6215"
+		"modelId": "WISTAR-WLH6215"
 	},
 	{
 		"providerId": "PDMR",
@@ -7169,7 +7169,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3939-2"
+		"modelId": "WISTAR-WM3939-2"
 	},
 	{
 		"providerId": "Curie-BC",
@@ -7261,7 +7261,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4399"
+		"modelId": "WISTAR-WM4399"
 	},
 	{
 		"providerId": "CMP",
@@ -7297,7 +7297,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3901-1"
+		"modelId": "WISTAR-WM3901-1"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -7337,7 +7337,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3924"
+		"modelId": "WISTAR-WM3924"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -7549,7 +7549,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3928"
+		"modelId": "WISTAR-WM3928"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -7857,7 +7857,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4205-2"
+		"modelId": "WISTAR-WM4205-2"
 	},
 	{
 		"providerId": "CMP",
@@ -7957,7 +7957,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4340"
+		"modelId": "WISTAR-WM4340"
 	},
 	{
 		"providerId": "UMCU",
@@ -8213,7 +8213,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WNB210"
+		"modelId": "WISTAR-WNB210"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -8233,7 +8233,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4367"
+		"modelId": "WISTAR-WM4367"
 	},
 	{
 		"providerId": "PDMR",
@@ -8617,7 +8617,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3994-3"
+		"modelId": "WISTAR-WM3994-3"
 	},
 	{
 		"providerId": "CMP",
@@ -8641,7 +8641,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4237-3"
+		"modelId": "WISTAR-WM4237-3"
 	},
 	{
 		"providerId": "CMP",
@@ -8657,7 +8657,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4033-2"
+		"modelId": "WISTAR-WM4033-2"
 	},
 	{
 		"providerId": "CMP",
@@ -8753,7 +8753,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4295-2"
+		"modelId": "WISTAR-WM4295-2"
 	},
 	{
 		"providerId": "CRL",
@@ -9065,7 +9065,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3903-1"
+		"modelId": "WISTAR-WM3903-1"
 	},
 	{
 		"providerId": "CMP",
@@ -9357,7 +9357,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4451"
+		"modelId": "WISTAR-WM4451"
 	},
 	{
 		"providerId": "PDMR",
@@ -9585,7 +9585,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3942"
+		"modelId": "WISTAR-WM3942"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -9645,7 +9645,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4077"
+		"modelId": "WISTAR-WM4077"
 	},
 	{
 		"providerId": "TTUHSC",
@@ -9813,7 +9813,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4257"
+		"modelId": "WISTAR-WM4257"
 	},
 	{
 		"providerId": "JAX",
@@ -9957,7 +9957,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3935"
+		"modelId": "WISTAR-WM3935"
 	},
 	{
 		"providerId": "CMP",
@@ -10217,7 +10217,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4299-2"
+		"modelId": "WISTAR-WM4299-2"
 	},
 	{
 		"providerId": "CMP",
@@ -10309,7 +10309,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4376-1"
+		"modelId": "WISTAR-WM4376-1"
 	},
 	{
 		"providerId": "JAX",
@@ -10689,7 +10689,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR wm4306-2"
+		"modelId": "WISTAR-wm4306-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -10701,7 +10701,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4182"
+		"modelId": "WISTAR-WM4182"
 	},
 	{
 		"providerId": "SJCRH",
@@ -11025,7 +11025,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4346"
+		"modelId": "WISTAR-WM4346"
 	},
 	{
 		"providerId": "UMCU",
@@ -11033,7 +11033,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3937"
+		"modelId": "WISTAR-WM3937"
 	},
 	{
 		"providerId": "JAX",
@@ -11237,7 +11237,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4391"
+		"modelId": "WISTAR-WM4391"
 	},
 	{
 		"providerId": "BROD",
@@ -11265,7 +11265,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4299-4"
+		"modelId": "WISTAR-WM4299-4"
 	},
 	{
 		"providerId": "CMP",
@@ -11337,7 +11337,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4543-1"
+		"modelId": "WISTAR-WM4543-1"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -11349,7 +11349,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4420-3"
+		"modelId": "WISTAR-WM4420-3"
 	},
 	{
 		"providerId": "JAX",
@@ -11869,7 +11869,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3933"
+		"modelId": "WISTAR-WM3933"
 	},
 	{
 		"providerId": "CMP",
@@ -12033,7 +12033,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4265-2"
+		"modelId": "WISTAR-WM4265-2"
 	},
 	{
 		"providerId": "CMP",
@@ -12833,7 +12833,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4045"
+		"modelId": "WISTAR-WM4045"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -13085,7 +13085,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4329"
+		"modelId": "WISTAR-WM4329"
 	},
 	{
 		"providerId": "TTUHSC",
@@ -13301,7 +13301,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4237-4"
+		"modelId": "WISTAR-WM4237-4"
 	},
 	{
 		"providerId": "PDMR",
@@ -13357,7 +13357,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4390"
+		"modelId": "WISTAR-WM4390"
 	},
 	{
 		"providerId": "CSHL",
@@ -13737,7 +13737,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4330"
+		"modelId": "WISTAR-WM4330"
 	},
 	{
 		"providerId": "PDMR",
@@ -13773,7 +13773,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4089"
+		"modelId": "WISTAR-WM4089"
 	},
 	{
 		"providerId": "CMP",
@@ -13817,7 +13817,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3927"
+		"modelId": "WISTAR-WM3927"
 	},
 	{
 		"providerId": "CMP",
@@ -13909,7 +13909,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4443"
+		"modelId": "WISTAR-WM4443"
 	},
 	{
 		"providerId": "CMP",
@@ -13985,7 +13985,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4237-2"
+		"modelId": "WISTAR-WM4237-2"
 	},
 	{
 		"providerId": "NKI",
@@ -14005,7 +14005,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3934"
+		"modelId": "WISTAR-WM3934"
 	},
 	{
 		"providerId": "UMCU",
@@ -14325,7 +14325,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4233"
+		"modelId": "WISTAR-WM4233"
 	},
 	{
 		"providerId": "CMP",
@@ -14593,7 +14593,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WGS170"
+		"modelId": "WISTAR-WGS170"
 	},
 	{
 		"providerId": "PDMR",
@@ -14613,7 +14613,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4518"
+		"modelId": "WISTAR-WM4518"
 	},
 	{
 		"providerId": "CSHL",
@@ -15093,7 +15093,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3901-2"
+		"modelId": "WISTAR-WM3901-2"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -15133,7 +15133,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3929"
+		"modelId": "WISTAR-WM3929"
 	},
 	{
 		"providerId": "PDMR",
@@ -15185,7 +15185,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4055"
+		"modelId": "WISTAR-WM4055"
 	},
 	{
 		"providerId": "PDMR",
@@ -15329,7 +15329,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4551"
+		"modelId": "WISTAR-WM4551"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -15369,7 +15369,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4365"
+		"modelId": "WISTAR-WM4365"
 	},
 	{
 		"providerId": "WUSTL",
@@ -15417,7 +15417,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WLM159"
+		"modelId": "WISTAR-WLM159"
 	},
 	{
 		"providerId": "CMP",
@@ -15445,7 +15445,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4445"
+		"modelId": "WISTAR-WM4445"
 	},
 	{
 		"providerId": "PDMR",
@@ -15665,7 +15665,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4549-1"
+		"modelId": "WISTAR-WM4549-1"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -15893,7 +15893,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3915-1"
+		"modelId": "WISTAR-WM3915-1"
 	},
 	{
 		"providerId": "MDAnderson-CCH",
@@ -16265,7 +16265,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4208"
+		"modelId": "WISTAR-WM4208"
 	},
 	{
 		"providerId": "CCIA",
@@ -16669,7 +16669,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4299-3"
+		"modelId": "WISTAR-WM4299-3"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -16693,7 +16693,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4150"
+		"modelId": "WISTAR-WM4150"
 	},
 	{
 		"providerId": "CMP",
@@ -16713,7 +16713,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4430"
+		"modelId": "WISTAR-WM4430"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -16869,7 +16869,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4096"
+		"modelId": "WISTAR-WM4096"
 	},
 	{
 		"providerId": "CMP",
@@ -16877,7 +16877,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WCS190"
+		"modelId": "WISTAR-WCS190"
 	},
 	{
 		"providerId": "JAX",
@@ -17033,7 +17033,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3972"
+		"modelId": "WISTAR-WM3972"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -17305,7 +17305,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4280"
+		"modelId": "WISTAR-WM4280"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -17529,7 +17529,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4369"
+		"modelId": "WISTAR-WM4369"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -17581,7 +17581,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4299-1"
+		"modelId": "WISTAR-WM4299-1"
 	},
 	{
 		"providerId": "CMP",
@@ -17729,7 +17729,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4360"
+		"modelId": "WISTAR-WM4360"
 	},
 	{
 		"providerId": "CCIA",
@@ -17933,7 +17933,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4264-1"
+		"modelId": "WISTAR-WM4264-1"
 	},
 	{
 		"providerId": "CRL",
@@ -18313,7 +18313,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3974"
+		"modelId": "WISTAR-WM3974"
 	},
 	{
 		"providerId": "CMP",
@@ -18533,7 +18533,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3918"
+		"modelId": "WISTAR-WM3918"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -18673,7 +18673,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4276-2"
+		"modelId": "WISTAR-WM4276-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -18785,7 +18785,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4262"
+		"modelId": "WISTAR-WM4262"
 	},
 	{
 		"providerId": "CCIA",
@@ -19169,7 +19169,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4442"
+		"modelId": "WISTAR-WM4442"
 	},
 	{
 		"providerId": "PDMR",
@@ -19361,7 +19361,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4400-2"
+		"modelId": "WISTAR-WM4400-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -19549,7 +19549,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4426"
+		"modelId": "WISTAR-WM4426"
 	},
 	{
 		"providerId": "PDMR",
@@ -19637,7 +19637,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4211-1"
+		"modelId": "WISTAR-WM4211-1"
 	},
 	{
 		"providerId": "PMLB",
@@ -19681,7 +19681,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4070-2"
+		"modelId": "WISTAR-WM4070-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -19753,7 +19753,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4336-2"
+		"modelId": "WISTAR-WM4336-2"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -19977,7 +19977,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4295-1"
+		"modelId": "WISTAR-WM4295-1"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -20025,7 +20025,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4160"
+		"modelId": "WISTAR-WM4160"
 	},
 	{
 		"providerId": "PMLB",
@@ -20085,7 +20085,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4440"
+		"modelId": "WISTAR-WM4440"
 	},
 	{
 		"providerId": "PDMR",
@@ -20273,7 +20273,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4481-1"
+		"modelId": "WISTAR-WM4481-1"
 	},
 	{
 		"providerId": "PDMR",
@@ -20505,7 +20505,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4336-5"
+		"modelId": "WISTAR-WM4336-5"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -20589,7 +20589,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3964"
+		"modelId": "WISTAR-WM3964"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -20633,7 +20633,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4263"
+		"modelId": "WISTAR-WM4263"
 	},
 	{
 		"providerId": "CSHL",
@@ -20793,7 +20793,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3988-1"
+		"modelId": "WISTAR-WM3988-1"
 	},
 	{
 		"providerId": "LurieChildrens",
@@ -20901,7 +20901,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4264-2"
+		"modelId": "WISTAR-WM4264-2"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -21041,7 +21041,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4007"
+		"modelId": "WISTAR-WM4007"
 	},
 	{
 		"providerId": "PDMR",
@@ -21089,7 +21089,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3941-1"
+		"modelId": "WISTAR-WM3941-1"
 	},
 	{
 		"providerId": "CMP",
@@ -21109,7 +21109,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4099"
+		"modelId": "WISTAR-WM4099"
 	},
 	{
 		"providerId": "WUSTL",
@@ -21185,11 +21185,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4295-3"
+		"modelId": "WISTAR-WM4295-3"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4353"
+		"modelId": "WISTAR-WM4353"
 	},
 	{
 		"providerId": "PDMR",
@@ -21229,7 +21229,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4067"
+		"modelId": "WISTAR-WM4067"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -21297,7 +21297,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4420-5"
+		"modelId": "WISTAR-WM4420-5"
 	},
 	{
 		"providerId": "VHIO-PMP",
@@ -21369,7 +21369,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4250"
+		"modelId": "WISTAR-WM4250"
 	},
 	{
 		"providerId": "VHIO-PMP",
@@ -21453,7 +21453,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4556"
+		"modelId": "WISTAR-WM4556"
 	},
 	{
 		"providerId": "PDMR",
@@ -22001,7 +22001,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4018-7"
+		"modelId": "WISTAR-WM4018-7"
 	},
 	{
 		"providerId": "WUSTL",
@@ -22129,7 +22129,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WCM214"
+		"modelId": "WISTAR-WCM214"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -22205,7 +22205,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4516"
+		"modelId": "WISTAR-WM4516"
 	},
 	{
 		"providerId": "CCIA",
@@ -22329,7 +22329,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4011-2"
+		"modelId": "WISTAR-WM4011-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -22361,7 +22361,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4257-2"
+		"modelId": "WISTAR-WM4257-2"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -22429,7 +22429,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4003"
+		"modelId": "WISTAR-WM4003"
 	},
 	{
 		"providerId": "PDMR",
@@ -22825,7 +22825,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4113"
+		"modelId": "WISTAR-WM4113"
 	},
 	{
 		"providerId": "IRCCS-IRE",
@@ -22925,7 +22925,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3991"
+		"modelId": "WISTAR-WM3991"
 	},
 	{
 		"providerId": "PDMR",
@@ -22965,7 +22965,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WRC897"
+		"modelId": "WISTAR-WRC897"
 	},
 	{
 		"providerId": "PDMR",
@@ -23197,7 +23197,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4314-2"
+		"modelId": "WISTAR-WM4314-2"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -23233,7 +23233,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WGK569"
+		"modelId": "WISTAR-WGK569"
 	},
 	{
 		"providerId": "CMP",
@@ -23429,7 +23429,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4071-2"
+		"modelId": "WISTAR-WM4071-2"
 	},
 	{
 		"providerId": "LIH",
@@ -23533,7 +23533,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3960"
+		"modelId": "WISTAR-WM3960"
 	},
 	{
 		"providerId": "CMP",
@@ -24037,7 +24037,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3963-2"
+		"modelId": "WISTAR-WM3963-2"
 	},
 	{
 		"providerId": "UOC-BC",
@@ -24201,7 +24201,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4319"
+		"modelId": "WISTAR-WM4319"
 	},
 	{
 		"providerId": "WUSTL",
@@ -24677,7 +24677,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4420-1"
+		"modelId": "WISTAR-WM4420-1"
 	},
 	{
 		"providerId": "UMCU",
@@ -24745,7 +24745,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3899"
+		"modelId": "WISTAR-WM3899"
 	},
 	{
 		"providerId": "PMLB",
@@ -24761,7 +24761,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3971"
+		"modelId": "WISTAR-WM3971"
 	},
 	{
 		"providerId": "HCI-BCM",
@@ -24865,7 +24865,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4024"
+		"modelId": "WISTAR-WM4024"
 	},
 	{
 		"providerId": "CMP",
@@ -25125,7 +25125,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4465-2"
+		"modelId": "WISTAR-WM4465-2"
 	},
 	{
 		"providerId": "SJCRH",
@@ -25141,7 +25141,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4228"
+		"modelId": "WISTAR-WM4228"
 	},
 	{
 		"providerId": "JAX",
@@ -25157,7 +25157,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4479"
+		"modelId": "WISTAR-WM4479"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -25609,7 +25609,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3909"
+		"modelId": "WISTAR-WM3909"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -25961,7 +25961,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4237-1"
+		"modelId": "WISTAR-WM4237-1"
 	},
 	{
 		"providerId": "UOC-BC",
@@ -26197,7 +26197,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4420-4"
+		"modelId": "WISTAR-WM4420-4"
 	},
 	{
 		"providerId": "PMLB-Organoid",
@@ -26213,7 +26213,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WSP172"
+		"modelId": "WISTAR-WSP172"
 	},
 	{
 		"providerId": "CMP",
@@ -26457,7 +26457,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4053-2"
+		"modelId": "WISTAR-WM4053-2"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -26465,7 +26465,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4073-1"
+		"modelId": "WISTAR-WM4073-1"
 	},
 	{
 		"providerId": "PDMR",
@@ -26541,11 +26541,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4314-1"
+		"modelId": "WISTAR-WM4314-1"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4242"
+		"modelId": "WISTAR-WM4242"
 	},
 	{
 		"providerId": "CSHL",
@@ -26585,7 +26585,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4210-1"
+		"modelId": "WISTAR-WM4210-1"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -26741,7 +26741,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3978"
+		"modelId": "WISTAR-WM3978"
 	},
 	{
 		"providerId": "WUSTL",
@@ -26981,7 +26981,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4173"
+		"modelId": "WISTAR-WM4173"
 	},
 	{
 		"providerId": "MBDI",
@@ -27369,7 +27369,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4555-1"
+		"modelId": "WISTAR-WM4555-1"
 	},
 	{
 		"providerId": "CRL",
@@ -27501,7 +27501,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4115"
+		"modelId": "WISTAR-WM4115"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -27513,7 +27513,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4398"
+		"modelId": "WISTAR-WM4398"
 	},
 	{
 		"providerId": "PDMR",
@@ -27837,7 +27837,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4285"
+		"modelId": "WISTAR-WM4285"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -27885,7 +27885,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR wm4331"
+		"modelId": "WISTAR-wm4331"
 	},
 	{
 		"providerId": "PDMR",
@@ -27993,7 +27993,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4419"
+		"modelId": "WISTAR-WM4419"
 	},
 	{
 		"providerId": "CMP",
@@ -28213,7 +28213,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4224"
+		"modelId": "WISTAR-WM4224"
 	},
 	{
 		"providerId": "CMP",
@@ -28229,7 +28229,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3997"
+		"modelId": "WISTAR-WM3997"
 	},
 	{
 		"providerId": "PDMR",
@@ -28237,7 +28237,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3994-2"
+		"modelId": "WISTAR-WM3994-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -28273,7 +28273,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4206"
+		"modelId": "WISTAR-WM4206"
 	},
 	{
 		"providerId": "CMP",
@@ -28617,7 +28617,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3703"
+		"modelId": "WISTAR-WM3703"
 	},
 	{
 		"providerId": "PDMR",
@@ -28881,7 +28881,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4011-3"
+		"modelId": "WISTAR-WM4011-3"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -29193,7 +29193,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4035"
+		"modelId": "WISTAR-WM4035"
 	},
 	{
 		"providerId": "PDMR",
@@ -29397,7 +29397,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4188"
+		"modelId": "WISTAR-WM4188"
 	},
 	{
 		"providerId": "CRL",
@@ -29525,7 +29525,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4037"
+		"modelId": "WISTAR-WM4037"
 	},
 	{
 		"providerId": "CMP",
@@ -29565,7 +29565,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4200"
+		"modelId": "WISTAR-WM4200"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -29581,7 +29581,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4339-1"
+		"modelId": "WISTAR-WM4339-1"
 	},
 	{
 		"providerId": "CMP",
@@ -29793,7 +29793,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3993"
+		"modelId": "WISTAR-WM3993"
 	},
 	{
 		"providerId": "CMP",
@@ -29917,7 +29917,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4318-1"
+		"modelId": "WISTAR-WM4318-1"
 	},
 	{
 		"providerId": "SJCRH",
@@ -30001,7 +30001,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4247"
+		"modelId": "WISTAR-WM4247"
 	},
 	{
 		"providerId": "IRCCS-OPBG",
@@ -30061,7 +30061,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4274"
+		"modelId": "WISTAR-WM4274"
 	},
 	{
 		"providerId": "LIH",
@@ -30101,7 +30101,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4525"
+		"modelId": "WISTAR-WM4525"
 	},
 	{
 		"providerId": "CRL",
@@ -30261,7 +30261,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4386"
+		"modelId": "WISTAR-WM4386"
 	},
 	{
 		"providerId": "CMP",
@@ -30449,7 +30449,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4351-2"
+		"modelId": "WISTAR-WM4351-2"
 	},
 	{
 		"providerId": "CMP",
@@ -30625,7 +30625,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3940"
+		"modelId": "WISTAR-WM3940"
 	},
 	{
 		"providerId": "SJCRH",
@@ -30777,7 +30777,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4380-2"
+		"modelId": "WISTAR-WM4380-2"
 	},
 	{
 		"providerId": "CCIA",
@@ -31113,7 +31113,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WRC604"
+		"modelId": "WISTAR-WRC604"
 	},
 	{
 		"providerId": "PDMR",
@@ -31237,7 +31237,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4388"
+		"modelId": "WISTAR-WM4388"
 	},
 	{
 		"providerId": "PDMR",
@@ -31397,7 +31397,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4292"
+		"modelId": "WISTAR-WM4292"
 	},
 	{
 		"providerId": "CMP",
@@ -31429,7 +31429,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4248"
+		"modelId": "WISTAR-WM4248"
 	},
 	{
 		"providerId": "JAX",
@@ -31573,7 +31573,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4196"
+		"modelId": "WISTAR-WM4196"
 	},
 	{
 		"providerId": "PDMR",
@@ -31729,7 +31729,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WGM222"
+		"modelId": "WISTAR-WGM222"
 	},
 	{
 		"providerId": "JAX",
@@ -31793,7 +31793,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4265-1"
+		"modelId": "WISTAR-WM4265-1"
 	},
 	{
 		"providerId": "TTUHSC",
@@ -32005,7 +32005,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4255"
+		"modelId": "WISTAR-WM4255"
 	},
 	{
 		"providerId": "PDMR",
@@ -32233,7 +32233,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4033-1"
+		"modelId": "WISTAR-WM4033-1"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -32537,7 +32537,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4073-2"
+		"modelId": "WISTAR-WM4073-2"
 	},
 	{
 		"providerId": "CRL",
@@ -32649,7 +32649,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4420-6"
+		"modelId": "WISTAR-WM4420-6"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -32905,7 +32905,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4286-1"
+		"modelId": "WISTAR-WM4286-1"
 	},
 	{
 		"providerId": "CCIA",
@@ -33001,7 +33001,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4336-4"
+		"modelId": "WISTAR-WM4336-4"
 	},
 	{
 		"providerId": "CMP",
@@ -33117,7 +33117,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4258-4"
+		"modelId": "WISTAR-WM4258-4"
 	},
 	{
 		"providerId": "PMLB",
@@ -33577,11 +33577,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4389"
+		"modelId": "WISTAR-WM4389"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4552-2"
+		"modelId": "WISTAR-WM4552-2"
 	},
 	{
 		"providerId": "CSHL",
@@ -33621,7 +33621,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4175"
+		"modelId": "WISTAR-WM4175"
 	},
 	{
 		"providerId": "CMP",
@@ -33881,7 +33881,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4180"
+		"modelId": "WISTAR-WM4180"
 	},
 	{
 		"providerId": "WUSTL",
@@ -34357,7 +34357,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4432"
+		"modelId": "WISTAR-WM4432"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -34453,7 +34453,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4486"
+		"modelId": "WISTAR-WM4486"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -34545,7 +34545,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3994-1"
+		"modelId": "WISTAR-WM3994-1"
 	},
 	{
 		"providerId": "CCIA",
@@ -34745,7 +34745,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4324"
+		"modelId": "WISTAR-WM4324"
 	},
 	{
 		"providerId": "CMP",
@@ -34817,7 +34817,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4568"
+		"modelId": "WISTAR-WM4568"
 	},
 	{
 		"providerId": "PMLB",
@@ -34961,7 +34961,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4521"
+		"modelId": "WISTAR-WM4521"
 	},
 	{
 		"providerId": "CRL",
@@ -35561,7 +35561,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WND238"
+		"modelId": "WISTAR-WND238"
 	},
 	{
 		"providerId": "JAX",
@@ -35577,7 +35577,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4231-2"
+		"modelId": "WISTAR-WM4231-2"
 	},
 	{
 		"providerId": "SJCRH",
@@ -35681,7 +35681,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3908"
+		"modelId": "WISTAR-WM3908"
 	},
 	{
 		"providerId": "CMP",
@@ -36073,7 +36073,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4454"
+		"modelId": "WISTAR-WM4454"
 	},
 	{
 		"providerId": "PDMR",
@@ -36137,7 +36137,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4023"
+		"modelId": "WISTAR-WM4023"
 	},
 	{
 		"providerId": "CMP",
@@ -36169,7 +36169,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3922-1"
+		"modelId": "WISTAR-WM3922-1"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -36329,11 +36329,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WLG158"
+		"modelId": "WISTAR-WLG158"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4008 -1"
+		"modelId": "WISTAR-WM4008 -1"
 	},
 	{
 		"providerId": "PDMR",
@@ -36401,7 +36401,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3973"
+		"modelId": "WISTAR-WM3973"
 	},
 	{
 		"providerId": "CSHL",
@@ -36757,7 +36757,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4400-1"
+		"modelId": "WISTAR-WM4400-1"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -36861,7 +36861,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4359-2"
+		"modelId": "WISTAR-WM4359-2"
 	},
 	{
 		"providerId": "CMP",
@@ -36917,11 +36917,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3983"
+		"modelId": "WISTAR-WM3983"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4061"
+		"modelId": "WISTAR-WM4061"
 	},
 	{
 		"providerId": "CSHL",
@@ -36985,7 +36985,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4235"
+		"modelId": "WISTAR-WM4235"
 	},
 	{
 		"providerId": "PMLB",
@@ -36997,7 +36997,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3965-2"
+		"modelId": "WISTAR-WM3965-2"
 	},
 	{
 		"providerId": "JAX",
@@ -37109,7 +37109,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4494"
+		"modelId": "WISTAR-WM4494"
 	},
 	{
 		"providerId": "PMLB",
@@ -37417,7 +37417,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4226"
+		"modelId": "WISTAR-WM4226"
 	},
 	{
 		"providerId": "IRCCS-IDI",
@@ -37481,7 +37481,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4495"
+		"modelId": "WISTAR-WM4495"
 	},
 	{
 		"providerId": "PDMR",
@@ -37733,7 +37733,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4052"
+		"modelId": "WISTAR-WM4052"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -37893,7 +37893,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4071-1"
+		"modelId": "WISTAR-WM4071-1"
 	},
 	{
 		"providerId": "HKU",
@@ -37973,7 +37973,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4408"
+		"modelId": "WISTAR-WM4408"
 	},
 	{
 		"providerId": "IRCCS-CRO",
@@ -38077,7 +38077,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4348"
+		"modelId": "WISTAR-WM4348"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -38261,7 +38261,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4198"
+		"modelId": "WISTAR-WM4198"
 	},
 	{
 		"providerId": "CRL",
@@ -38425,7 +38425,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4223"
+		"modelId": "WISTAR-WM4223"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -38581,7 +38581,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4505-2"
+		"modelId": "WISTAR-WM4505-2"
 	},
 	{
 		"providerId": "PDMR",
@@ -38621,7 +38621,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4267"
+		"modelId": "WISTAR-WM4267"
 	},
 	{
 		"providerId": "PDMR",
@@ -38705,7 +38705,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4304"
+		"modelId": "WISTAR-WM4304"
 	},
 	{
 		"providerId": "BROD",
@@ -38829,7 +38829,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4359-1"
+		"modelId": "WISTAR-WM4359-1"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -38873,7 +38873,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4031"
+		"modelId": "WISTAR-WM4031"
 	},
 	{
 		"providerId": "MDAnderson",
@@ -38981,7 +38981,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4174"
+		"modelId": "WISTAR-WM4174"
 	},
 	{
 		"providerId": "CCIA",
@@ -39389,7 +39389,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4342"
+		"modelId": "WISTAR-WM4342"
 	},
 	{
 		"providerId": "CSHL",
@@ -39445,7 +39445,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3926"
+		"modelId": "WISTAR-WM3926"
 	},
 	{
 		"providerId": "CMP",
@@ -39453,11 +39453,11 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WDB227"
+		"modelId": "WISTAR-WDB227"
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WRL159"
+		"modelId": "WISTAR-WRL159"
 	},
 	{
 		"providerId": "UMCU",
@@ -39893,7 +39893,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4032"
+		"modelId": "WISTAR-WM4032"
 	},
 	{
 		"providerId": "VHIO-PC",
@@ -39913,7 +39913,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WPM171"
+		"modelId": "WISTAR-WPM171"
 	},
 	{
 		"providerId": "TTUHSC",
@@ -40001,7 +40001,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4303"
+		"modelId": "WISTAR-WM4303"
 	},
 	{
 		"providerId": "SANG",
@@ -40061,7 +40061,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4239"
+		"modelId": "WISTAR-WM4239"
 	},
 	{
 		"providerId": "DFCI-CPDM",
@@ -40109,7 +40109,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM4231-1"
+		"modelId": "WISTAR-WM4231-1"
 	},
 	{
 		"providerId": "IRCCS-CRC",
@@ -40137,7 +40137,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WTH202"
+		"modelId": "WISTAR-WTH202"
 	},
 	{
 		"providerId": "PMLB",
@@ -40401,7 +40401,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WM3992"
+		"modelId": "WISTAR-WM3992"
 	},
 	{
 		"providerId": "CSHL",
@@ -41329,7 +41329,7 @@
 	},
 	{
 		"providerId": "Wistar-MDAnderson-Penn",
-		"modelId": "WISTAR WBM550"
+		"modelId": "WISTAR-WBM550"
 	},
 	{
 		"providerId": "PMLB",

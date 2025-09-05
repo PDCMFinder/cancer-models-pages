@@ -55,7 +55,7 @@ const getBioStudiesTitleSearchResults = async (
 	// out of the first 10 results, get the one that the title has the id
 	// we're not using .includes since there might be a partial match (eg. CMP_10 includes CMP_1)
 	const accessionId = await searchResultsResponse.json().then((d) => {
-		const { hits, totalHits }: { hits: SearchHit[]; totalHits: number } = d;
+		const { hits }: { hits: SearchHit[] } = d;
 
 		return (
 			hits.find((study) => {
@@ -77,7 +77,8 @@ const getBioStudiesTitleSearchResults = async (
 	}
 
 	const modelDataResponse = await fetch(
-		`https://wwwdev.ebi.ac.uk/biostudies/api/v1/studies/${accessionId}`
+		// this can't use /CancerModelsOrg, that's why we don't use env API URL
+		`https://www.ebi.ac.uk/biostudies/api/v1/studies/${accessionId}`
 	);
 
 	if (!modelDataResponse.ok) {
@@ -91,6 +92,7 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 	//we get/return these pieces of data
 	// case sensitive
 	const criteria = [
+		{ key: "name", value: "Provider URL" },
 		{ key: "name", value: "Cancer Grade" },
 		{ key: "name", value: "Cancer Stage" },
 		{ key: "name", value: "Cancer System" },
@@ -113,6 +115,8 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 
 	// here we access the piece of data we need
 	// returns objects
+	const biostudiesAccessionId = allData.accno ?? null;
+	const providerUrl = data["name:Provider URL"]?.[0]?.value ?? null;
 	const cancerGrade = data["name:Cancer Grade"]?.[0]?.value ?? null;
 	const cancerStage = data["name:Cancer Stage"]?.[0]?.value ?? null;
 	const cancerSystem = data["name:Cancer System"]?.[0]?.value ?? null;
@@ -134,6 +138,8 @@ const parseMetadata = (allData: BioStudiesModelData): ParsedModelMetadata => {
 	const dateSubmitted = data["name:ReleaseDate"]?.[0]?.value ?? null;
 
 	return {
+		biostudiesAccessionId,
+		providerUrl,
 		cancerGrade,
 		cancerStage,
 		cancerSystem,

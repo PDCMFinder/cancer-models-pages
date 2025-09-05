@@ -46,14 +46,16 @@ export type SearchState = {
 };
 
 const resultsPerPage = 10;
+const maxModelsToCompare = 4;
+const URL_FILTERS_SEPARATOR = " AND ";
 
 const Search: NextPage = () => {
-	const maxModelsToCompare = 4;
 	const { windowWidth = 0 } = useWindowDimensions();
 	const bpLarge = breakPoints.large;
 	const router = useRouter();
 	const urlSearchParams = useSearchParams();
 	const urlQuery = urlSearchParams.get("query") ?? "";
+	const urlFilters = urlSearchParams.get("filters") ?? "";
 	const [showMobileFacets, setShowMobileFacets] = useState(false);
 	const [modelsToCompare, setModelsToCompare] = useState<string[]>([]);
 	const [driverInstance, setDriverInstance] =
@@ -66,9 +68,31 @@ const Search: NextPage = () => {
 	const canCompareModels =
 		modelsToCompare.length >= 2 && modelsToCompare.length <= maxModelsToCompare;
 
+	let parsedUrlFilters: Record<string, string[]> = {};
+	urlFilters.split(URL_FILTERS_SEPARATOR).forEach((b) => {
+		const filterSelection = b?.split(":");
+		const filterName = filterSelection[0];
+		const filterOptions = filterSelection[1]
+			?.split(",")
+			.map((option) => option.toLowerCase());
+
+		parsedUrlFilters[`facet.cancermodelsorg.${filterName}`] = filterOptions;
+	});
+
 	useEffect(() => {
-		setSearchState((prev) => ({ ...prev, searchQuery: urlQuery }));
-	}, [urlQuery]);
+		const updatedFacets = {
+			...(Object.entries(urlFilters).length ? parsedUrlFilters : {})
+		};
+
+		setSearchState((prev) => ({
+			...prev,
+			selectedFacets: {
+				...prev.selectedFacets,
+				...updatedFacets
+			},
+			searchQuery: urlQuery
+		}));
+	}, [urlQuery, urlFilters]);
 
 	useEffect(() => {
 		const loadDriver = async () => {
@@ -78,7 +102,10 @@ const Search: NextPage = () => {
 				showProgress: true,
 				prevBtnText: "← Prev",
 				nextBtnText: "Next →",
-				doneBtnText: "Done"
+				doneBtnText: "Done",
+				onDestroyed: () => {
+					setModelsToCompare([]);
+				}
 			});
 			setDriverInstance(driverInstance);
 		};
@@ -108,12 +135,7 @@ const Search: NextPage = () => {
 	};
 
 	const { data: searchResultsData } = useQuery(
-		[
-			"search-results",
-			searchState.page,
-			searchState.selectedFacets,
-			searchState.searchQuery
-		],
+		["search-results", searchState],
 		async () =>
 			getSearchResults(
 				searchState.page,
@@ -129,36 +151,64 @@ const Search: NextPage = () => {
 	);
 
 	const handleFacetChange = (sectionName: string, facetValue: string) => {
-		const newState = structuredClone(searchState.selectedFacets);
-		const section = newState[sectionName] ?? [];
+		const newFacetState = { ...searchState.selectedFacets };
 
-		if (section.includes(facetValue)) {
-			const updatedSection = section.filter((value) => value !== facetValue);
-			if (updatedSection.length > 0) {
-				newState[sectionName] = updatedSection;
-			} else {
+		const section = newFacetState[sectionName] || [];
+		const isFacetSelected = section.includes(facetValue);
+
+		if (isFacetSelected) {
+			newFacetState[sectionName] = section.filter(
+				(value) => value !== facetValue
+			);
+			if (newFacetState[sectionName].length === 0) {
 				// delete empty keys (not really needed but lets handle it here)
-				delete newState[sectionName];
+				delete newFacetState[sectionName];
 			}
 		} else {
-			newState[sectionName] = [...section, facetValue];
+			newFacetState[sectionName] = [...section, facetValue];
 		}
 
-		setSearchState((prev) => ({ ...prev, selectedFacets: newState }));
+		const prefix = "facet.cancermodelsorg.";
+		const facetString = Object.entries(newFacetState)
+			.map(([key, values]) => `${key.replace(prefix, "")}:${values.join(",")}`)
+			.join(URL_FILTERS_SEPARATOR);
+
+		const currentQuery = { ...router.query };
+		if (facetString) {
+			currentQuery.filters = facetString;
+		} else {
+			delete currentQuery.filters;
+		}
+
+		window.scrollTo(0, 370);
+		router.push({ pathname: "/search", query: currentQuery }, undefined, {
+			scroll: false,
+			shallow: true
+		});
+
+		setSearchState((prev) => ({ ...prev, selectedFacets: newFacetState }));
 	};
 
 	const handleSearchBarSubmit = (value: string) => {
 		if (value === "") {
-			router.push({
-				pathname: "/search"
+			router.push({ pathname: "/search" }, undefined, {
+				scroll: false,
+				shallow: true
 			});
 
 			return;
 		}
 		setSearchState((prev) => ({ ...prev, searchQuery: value }));
-		router.push({
-			pathname: "/search",
-			query: { query: value }
+		const currentQuery = { ...router.query };
+		if (value) {
+			currentQuery.query = value;
+		} else {
+			delete currentQuery.query;
+		}
+
+		router.push({ query: currentQuery }, undefined, {
+			scroll: false,
+			shallow: true
 		});
 	};
 
@@ -181,15 +231,22 @@ const Search: NextPage = () => {
 				className="m-0"
 				priority="secondary"
 				color="dark"
-				disabled={Object.keys(searchState.selectedFacets).length === 0}
+				disabled={
+					Object.keys(searchState.selectedFacets).length === 0 &&
+					!searchState.searchQuery
+				}
 				onClick={() => {
 					setSearchState((prev) => ({ ...prev, selectedFacets: {} }));
+					router.push({ pathname: "/search" }, undefined, {
+						scroll: false,
+						shallow: true
+					});
 				}}
 			>
 				Clear
 			</Button>
 		),
-		[searchState.selectedFacets]
+		[searchState.selectedFacets, searchState.searchQuery]
 	);
 
 	const memoizedSearchFacets = useMemo(
@@ -222,7 +279,7 @@ const Search: NextPage = () => {
 			</Head>
 			<header className={`py-5 ${styles.Search_header}`}>
 				<div className="container">
-					<div className="row">
+					<div className="row" id="tour_searchBar">
 						<div className="col-12">
 							{/* OK to hardcode total models */}
 							<h1 className="h2 text-white text-center mt-0">
@@ -235,6 +292,7 @@ const Search: NextPage = () => {
 							<SearchBar
 								onSubmit={handleSearchBarSubmit}
 								defaultValue={urlQuery ?? searchState.searchQuery}
+								inputWidth="700px"
 							/>
 							<Button
 								priority="primary"
@@ -350,8 +408,7 @@ const Search: NextPage = () => {
 																	.split(".")[2]
 																	.replaceAll("_", " ")
 																	.replace(":", ": ")
-																	.replaceAll(",", ", ")
-																	.replaceAll(" boolean", "")}
+																	.replaceAll(",", ", ")}
 																: {filterValues.join(", ")}
 															</li>
 														)
@@ -376,7 +433,10 @@ const Search: NextPage = () => {
 						</div>
 					</div>
 					{modelsToCompare.length > 0 ? (
-						<div className="row position-sticky bottom-0 mt-5">
+						<div
+							className="row position-sticky bottom-0 mt-5"
+							style={{ zIndex: 9999 }}
+						>
 							<div className="col-10 offset-1">
 								<Card
 									className="bg-primary-quaternary mb-2"
