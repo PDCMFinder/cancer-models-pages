@@ -6,16 +6,12 @@ const routes = [
 	{ path: "/submit", name: "Submit" },
 	{ path: "/overview", name: "Overview" },
 	{
-		path: "/contact",
-		name: "Contact"
+		path: "/about",
+		name: "About"
 	},
 	{
 		name: "More",
 		children: [
-			{
-				path: "/about",
-				name: "About"
-			},
 			{
 				path: "/about/providers",
 				name: "Data Providers"
@@ -25,33 +21,12 @@ const routes = [
 				name: "Metadata Dictionary"
 			},
 			{
-				path: "/validation/validator",
-				name: "Metadata Validator"
-			},
-			{
-				path: "https://documenter.getpostman.com/view/6493399/2s8ZDbX1e7",
-				name: "API",
-				opensNewTab: true
-			},
-			{
 				path: "https://github.com/PDCMFinder/",
 				name: "Open source repositories",
 				opensNewTab: true
-			},
-			{
-				path: "/tutorials",
-				name: "Tutorials"
 			}
 		]
 	}
 ];
 
-// use same route name as above
-const routesWithGAEvents = [
-	{
-		routeName: "API",
-		eventName: "view_api"
-	}
-];
-
-module.exports = { routes, routesWithGAEvents };
+export default routes;

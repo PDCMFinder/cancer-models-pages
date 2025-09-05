@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import ReactGA from "react-ga4";
 import { NavProps } from "../../../../types/globalTypes";
 import { type Route } from "../../../types/Routes";
 import handleBodyClass from "../../../utils/handleBodyClass";
-import { routesWithGAEvents } from "../../../utils/routes";
 import ActiveLink from "../../ActiveLink/ActiveLink";
 import CloseIcon from "../../Icons/CloseIcon/CloseIcon";
 import Logotype from "../../Logotype/Logotype";
@@ -79,19 +77,7 @@ const NavMobile = (props: NavProps) => {
 
 										if (children) {
 											return children.map((child) => {
-												let path = child.path,
-													onClickProp;
-
-												const childGAEvent = routesWithGAEvents.find(
-													(route) => route.routeName === child.name
-												);
-
-												if (childGAEvent) {
-													onClickProp = () =>
-														ReactGA.event(childGAEvent.eventName, {
-															category: "event"
-														});
-												}
+												let path = child.path;
 
 												return (
 													<li key={path}>
@@ -99,7 +85,6 @@ const NavMobile = (props: NavProps) => {
 															className={`${styles.Navbar_item} link-text-light`}
 															activeClassName={styles["Navbar_item-active"]}
 															href={path}
-															onClick={onClickProp}
 														>
 															{child.name}
 														</ActiveLink>

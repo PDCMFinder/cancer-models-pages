@@ -1,6 +1,6 @@
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import breakPoints from "../../utils/breakpoints";
-import { routes } from "../../utils/routes";
+import routes from "../../utils/routes";
 import ShowHide from "../ShowHide/ShowHide";
 import NavDesktop from "./Navbar-desktop/Navbar-desktop";
 import NavMobile from "./Navbar-mobile/Navbar-mobile";

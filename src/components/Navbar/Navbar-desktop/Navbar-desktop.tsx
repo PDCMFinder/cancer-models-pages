@@ -1,8 +1,6 @@
 import Link from "next/link";
-import ReactGA from "react-ga4";
 import { NavProps } from "../../../../types/globalTypes";
 import { type Route } from "../../../types/Routes";
-import { routesWithGAEvents } from "../../../utils/routes";
 import ActiveLink from "../../ActiveLink/ActiveLink";
 import Button from "../../Button/Button";
 import Card from "../../Card/Card";
@@ -50,20 +48,7 @@ const NavDesktop = (props: NavProps) => {
 
 							if (children) {
 								let childrenItems = children.map((child) => {
-									let childPath = child.path,
-										childName = child.name,
-										onClickProp;
-
-									const childGAEvent = routesWithGAEvents.find(
-										(route) => route.routeName === childName
-									);
-
-									if (childGAEvent) {
-										onClickProp = () =>
-											ReactGA.event(childGAEvent.eventName, {
-												category: "event"
-											});
-									}
+									let childPath = child.path;
 
 									return (
 										<li key={childPath}>
@@ -72,7 +57,6 @@ const NavDesktop = (props: NavProps) => {
 												activeClassName={styles["Navbar_item_link-active"]}
 												href={childPath}
 												opensNewTab={child.opensNewTab}
-												onClick={onClickProp}
 											>
 												{child.name}
 											</ActiveLink>
