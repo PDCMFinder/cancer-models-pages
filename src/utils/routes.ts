@@ -29,12 +29,4 @@ const routes = [
 	}
 ];
 
-// use same route name as above
-const routesWithGAEvents = [
-	{
-		routeName: "API",
-		eventName: "view_api"
-	}
-];
-
-module.exports = { routes, routesWithGAEvents };
+export default routes;

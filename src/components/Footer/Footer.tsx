@@ -1,9 +1,8 @@
 import Link from "next/link";
-import ReactGA from "react-ga4";
 import { useQuery } from "react-query";
 import { getLatestDataReleaseInformation } from "../../apis/AggregatedData.api";
 import { Route } from "../../types/Routes";
-import { routes, routesWithGAEvents } from "../../utils/routes";
+import routes from "../../utils/routes";
 import ActiveLink from "../ActiveLink/ActiveLink";
 import SocialMediaIcons from "../Icons/SocialMediaIcons";
 import Logotype from "../Logotype/Logotype";
@@ -62,20 +61,6 @@ const Footer = () => {
 
 										if (route.name === "More" && children) {
 											return children.map((child) => {
-												let childName = child.name,
-													onClickProp;
-
-												const childGAEvent = routesWithGAEvents.find(
-													(route) => route.routeName === childName
-												);
-
-												if (childGAEvent) {
-													onClickProp = () =>
-														ReactGA.event(childGAEvent.eventName, {
-															category: "event"
-														});
-												}
-
 												return (
 													<li key={child.path}>
 														<ActiveLink
@@ -83,7 +68,6 @@ const Footer = () => {
 															activeClassName={styles["Footer_item-active"]}
 															href={child.path}
 															opensNewTab={child.opensNewTab}
-															onClick={onClickProp}
 														>
 															{child.name}
 														</ActiveLink>

@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "path";
-import { routes } from "../src/utils/routes.js";
+import routes from "../src/utils/routes.ts";
 
 const BASE_URL = "https://PDCMFinder.github.io/cancer-models-pages";
 
